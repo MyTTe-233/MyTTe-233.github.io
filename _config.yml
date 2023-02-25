@@ -4,4 +4,4 @@
 deploy:
   type: git
   repo: https://github.com/MyTTe-233/MyTTe-233.github.io.git
-  branch: gh-pages
+  branch: main
