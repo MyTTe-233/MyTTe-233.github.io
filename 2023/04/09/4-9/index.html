@@ -5,19 +5,22 @@
   
 
   
-  <title>真正的第一篇 | Hexo</title>
+  <title>2023/04/09：docker遇到的问题与解决 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="身为一个纯粹的小白，终于在各种靠谱不靠谱的教程下搭好了博客好似！">
+  <meta name="description" content="dockerfile-1以下为dockerfile   docker-compose up -d失败 百度到的解决方案一般针对[manifests 18.04]，问大佬后选择直接pull至仓库再拉取镜像，原因目前未知 docker run 之后镜像立即退出用网上添加 -it 以及 &#x2F;bin&#x2F;bash 可解决百度原因有三：1、docker容器运行必须有一个前台进程， 如果没有前台进程执行，容器认为空">
 <meta property="og:type" content="article">
-<meta property="og:title" content="真正的第一篇">
-<meta property="og:url" content="http://example.com/2023/02/27/Feb28/index.html">
+<meta property="og:title" content="2023&#x2F;04&#x2F;09：docker遇到的问题与解决">
+<meta property="og:url" content="http://example.com/2023/04/09/4-9/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="身为一个纯粹的小白，终于在各种靠谱不靠谱的教程下搭好了博客好似！">
+<meta property="og:description" content="dockerfile-1以下为dockerfile   docker-compose up -d失败 百度到的解决方案一般针对[manifests 18.04]，问大佬后选择直接pull至仓库再拉取镜像，原因目前未知 docker run 之后镜像立即退出用网上添加 -it 以及 &#x2F;bin&#x2F;bash 可解决百度原因有三：1、docker容器运行必须有一个前台进程， 如果没有前台进程执行，容器认为空">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-02-27T15:55:39.000Z">
-<meta property="article:modified_time" content="2023-02-27T16:01:51.789Z">
+<meta property="og:image" content="http://example.com/2023/04/09/4-9/2.png">
+<meta property="og:image" content="http://example.com/2023/04/09/4-9/22.png">
+<meta property="article:published_time" content="2023-04-09T07:51:57.000Z">
+<meta property="article:modified_time" content="2023-04-09T08:52:34.598Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2023/04/09/4-9/2.png">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -66,10 +69,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-Feb28" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-4-9" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2023/02/27/Feb28/" class="article-date">
-  <time datetime="2023-02-27T15:55:39.000Z" itemprop="datePublished">2023-02-27</time>
+    <a href="/2023/04/09/4-9/" class="article-date">
+  <time datetime="2023-04-09T07:51:57.000Z" itemprop="datePublished">2023-04-09</time>
 </a>
     
   </div>
@@ -80,7 +83,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      真正的第一篇
+      2023/04/09：docker遇到的问题与解决
     </h1>
   
 
@@ -88,12 +91,21 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>身为一个纯粹的小白，终于在各种靠谱不靠谱的教程下搭好了博客<br>好似！</p>
+        <h3 id="dockerfile-1"><a href="#dockerfile-1" class="headerlink" title="dockerfile-1"></a>dockerfile-1</h3><p>以下为dockerfile</p>
+
+
+<h4 id="docker-compose-up-d失败"><a href="#docker-compose-up-d失败" class="headerlink" title="docker-compose up -d失败"></a>docker-compose up -d失败</h4>
+<p>百度到的解决方案一般针对[manifests 18.04]，问大佬后选择直接pull至仓库再拉取镜像，原因目前未知</p>
+<h4 id="docker-run-之后镜像立即退出"><a href="#docker-run-之后镜像立即退出" class="headerlink" title="docker run 之后镜像立即退出"></a>docker run 之后镜像立即退出</h4><p>用网上添加 -it 以及 /bin/bash 可解决<br>百度原因有三：<br>1、docker容器运行必须有一个前台进程， 如果没有前台进程执行，容器认为空闲，就会自行退出<br>2、容器运行的命令如果不是那些一直挂起的命令（ 运行top，tail、循环等），就是会自动退出<br>3、这个是 docker 的机制问题</p>
+<h4 id="进入网页后显示当前无法使用"><a href="#进入网页后显示当前无法使用" class="headerlink" title="进入网页后显示当前无法使用"></a>进入网页后显示当前无法使用</h4><img src="/2023/04/09/4-9/2.png" class="">
+<p>用命令行进入如下：</p>
+<img src="/2023/04/09/4-9/22.png" class="">
+<p>目前找到的解决方法：<br>1.使用ssh（无效）<br>2.查看是否使用网络代理<br>不知道在一众复制黏贴中有没有能用的</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/02/27/Feb28/" data-id="cleodn7qg0001bwud0hdu2gk0" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2023/04/09/4-9/" data-id="clg9636990000n0udf1xxctv8" class="article-share-link">Share</a>
       
       
     </footer>
@@ -102,19 +114,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2023/03/17/water/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          水
-        
-      </div>
-    </a>
   
-  
-    <a href="/2023/02/25/text/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2023/04/01/3-31/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">text</div>
+      <div class="article-nav-title">2023/03/31：一些囫囵吞枣式的记录</div>
     </a>
   
 </nav>
@@ -151,19 +154,19 @@
       <ul>
         
           <li>
-            <a href="/2023/04/01/3-31/">3/31</a>
+            <a href="/2023/04/09/4-9/">2023/04/09：docker遇到的问题与解决</a>
           </li>
         
           <li>
-            <a href="/2023/03/19/1/">3/18</a>
+            <a href="/2023/04/01/3-31/">2023/03/31：一些囫囵吞枣式的记录</a>
+          </li>
+        
+          <li>
+            <a href="/2023/03/19/1/">2023/03/18</a>
           </li>
         
           <li>
             <a href="/2023/03/17/water/">水</a>
-          </li>
-        
-          <li>
-            <a href="/2023/02/27/Feb28/">真正的第一篇</a>
           </li>
         
           <li>
