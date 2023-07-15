@@ -64,6 +64,51 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-week1plus" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/07/15/week1plus/" class="article-date">
+  <time datetime="2023-07-15T15:22:24.000Z" itemprop="datePublished">2023-07-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/07/15/week1plus/">2023/07/10：夏令营week1记录:出题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>目前应该还没法用<br>结构：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ project/</span><br><span class="line">$ ├── docker-compose.yml</span><br><span class="line">$ ├── Dockerfile</span><br><span class="line">$ └── web</span><br><span class="line">$      ├── index.php  </span><br><span class="line">$      └── connect.php</span><br></pre></td></tr></table></figure>
+<p>connect.php:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ &lt;?php</span><br><span class="line">$ define(<span class="string">&#x27;DB_HOST&#x27;</span>,<span class="string">&#x27;db&#x27;</span>);</span><br><span class="line">$ define(<span class="string">&#x27;DB_USER&#x27;</span>,<span class="string">&#x27;kali&#x27;</span>);</span><br><span class="line">$ //define(<span class="string">&#x27;DB_PORT&#x27;</span>,3306);</span><br><span class="line">$ define(<span class="string">&#x27;DB_PWD&#x27;</span>,<span class="string">&#x27;kali&#x27;</span>);</span><br><span class="line">$ define(<span class="string">&#x27;DB_CHARSET&#x27;</span>,<span class="string">&#x27;utf8&#x27;</span>);</span><br><span class="line">$ define(<span class="string">&#x27;DB_DBNAME&#x27;</span>,<span class="string">&#x27;kali&#x27;</span>);</span><br><span class="line">$ ?&gt;</span><br></pre></td></tr></table></figure>
+<p>index.php:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"> &lt;html&gt;</span><br><span class="line"> &lt;head&gt;</span><br><span class="line">    &lt;title&gt;</span><br><span class="line">        veryeasysql</span><br><span class="line">    &lt;/title&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;./index.css&quot;&gt;</span><br><span class="line">    &lt;style&gt;body&#123;height:100%&#125;&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;div class=&quot;index_01&quot;&gt;</span><br><span class="line">&lt;table style=&quot;width:100%;height:100;&quot;&gt;</span><br><span class="line">    &lt;tr&gt;</span><br><span class="line">        &lt;table width=350 height=230 class=&quot;index_table&quot;&gt;</span><br><span class="line">        &lt;form method =&quot;POST&quot; action=&quot;&quot; name=&quot;check&quot;&gt;</span><br><span class="line">        &lt;tr style=&quot;font-size: 25px;&quot;&gt;</span><br><span class="line">            &lt;td colspan=&quot;2&quot; style=&quot;font-size: 35px;&quot;&gt;查询&lt;/td&gt;</span><br><span class="line">        &lt;/tr&gt;</span><br><span class="line">        &lt;tr&gt;</span><br><span class="line">            &lt;td style=&quot;font-size: 25px;&quot;&gt;账号&lt;/td&gt;</span><br><span class="line">            &lt;td&gt;&lt;input type=&quot;name&quot; maxlength=&quot;30&quot; name=&quot;uid&quot; placeholder=&quot;请输入账号&quot; style=&quot;width:180px;font-size: 20px;border-radius: 8px;&quot;&gt;&lt;/td&gt;</span><br><span class="line">        &lt;/tr&gt;</span><br><span class="line">        &lt;tr&gt;</span><br><span class="line">            &lt;td style=&quot;font-size: 25px;&quot;&gt;密码&lt;/td&gt;</span><br><span class="line">            &lt;td&gt;&lt;input type=&quot;password&quot; type=&quot;password&quot; maxlength=&quot;30&quot; name=&quot;password&quot; placeholder=&quot;请输入密码&quot; style=&quot;width:180px;font-size: 20px;border-radius: 8px;&quot;&gt;&lt;/td&gt;</span><br><span class="line">        &lt;/tr&gt;</span><br><span class="line">        &lt;td colspan=&quot;2&quot;&gt;</span><br><span class="line">        &lt;input type=&quot;submit&quot; name=&quot;check&quot; value=&quot;check&quot; class=&quot;btn&quot;&gt;</span><br><span class="line">        &lt;/td&gt;</span><br><span class="line">    </span><br><span class="line">        &lt;/from&gt;</span><br><span class="line">        &lt;/table&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line"> &lt;/table&gt;</span><br><span class="line"> &lt;/div&gt;</span><br><span class="line"> &lt;/body&gt;</span><br><span class="line"> &lt;/html&gt;</span><br><span class="line"></span><br><span class="line"> &lt;?php</span><br><span class="line">    require_once &quot;connect.php&quot;;</span><br><span class="line">    </span><br><span class="line">    class DB&#123;</span><br><span class="line">    function connect()&#123;</span><br><span class="line">        @$link=mysqli_connect(DB_HOST,DB_USER,DB_PWD);</span><br><span class="line">        mysqli_set_charset($link,DB_CHARSET);</span><br><span class="line">        mysqli_select_db($link,DB_DBNAME) or die(&#x27;fail&#x27;);</span><br><span class="line">        if(mysqli_connect_errno())&#123;</span><br><span class="line">            die(&#x27;fail to connect&#x27;.mysqli_connect_errno());</span><br><span class="line">        &#125;return $link;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">    </span><br><span class="line">    $id=$_POST[&#x27;uid&#x27;];</span><br><span class="line">    $password=$_POST[&#x27;password&#x27;];</span><br><span class="line">    session_start();</span><br><span class="line">    $_SESSION[&quot;uid&quot;]=$id;</span><br><span class="line">    $mal = new DB();</span><br><span class="line">    $link = $mal-&gt;connect();</span><br><span class="line">    $sql=&quot;select username, password from users where username= &#x27;$id&#x27; and password = &#x27;$password&#x27;&quot;;</span><br><span class="line">    $result = mysqli_query($link,$sql);</span><br><span class="line">    var_dump($result);</span><br><span class="line">    $row = mysqli_fetch_array($result);</span><br><span class="line">    if($row!=0)&#123;</span><br><span class="line">        echo &#x27;id:&#x27;.$row[&#x27;username&#x27;];</span><br><span class="line">        echo &quot;&lt;br&gt;&quot;;</span><br><span class="line">        echo &quot;&lt;br&gt;&quot;;</span><br><span class="line">        echo &quot;password:&quot;.$row[&#x27;password&#x27;];</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        print_r(mysql_error());</span><br><span class="line">        echo &quot;&lt;br&gt;&quot;;</span><br><span class="line">        echo &quot;&lt;br&gt;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"> ?&gt;</span><br></pre></td></tr></table></figure>
+<p>docker-compose.yml:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">$ version: <span class="string">&#x27;3&#x27;</span></span><br><span class="line">$ services:</span><br><span class="line">$  web:</span><br><span class="line">$    build:</span><br><span class="line">$      context: .</span><br><span class="line">$      dockerfile: Dockerfile</span><br><span class="line">$    ports:</span><br><span class="line">$      - 400:80</span><br><span class="line">$    restart: always</span><br><span class="line">$    depends_on:</span><br><span class="line">$      - db</span><br><span class="line">$  db:</span><br><span class="line">$    image: mysql:5.5</span><br><span class="line">$    ports:</span><br><span class="line">$      - 3306:3306</span><br><span class="line">$    restart: always</span><br><span class="line">$    environment:</span><br><span class="line">$      MYSQL_ROOT_PASSWORD: kali</span><br><span class="line">$      MYSQL_DATABASE: kali</span><br><span class="line">$      MYSQL_USER: kali</span><br><span class="line">$      MYSQL_PASSWORD: kali</span><br></pre></td></tr></table></figure>
+<p>Dockerfile:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ FROM php:7.4-apache</span><br><span class="line"></span><br><span class="line">$ RUN docker-php-ext-install mysqli</span><br><span class="line"></span><br><span class="line">$ COPY web /var/www/html</span><br><span class="line"></span><br><span class="line">$ CMD apachectl -D FOREGROUND</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/07/15/week1plus/" data-id="clk469dtg0000ssud5wkc5k5r" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-week1" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2023/07/13/week1/" class="article-date">
@@ -78,7 +123,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/07/13/week1/">2023/07/10：夏令营week1记录</a>
+      <a class="article-title" href="/2023/07/13/week1/">2023/07/10：夏令营week1记录:mysql笔记</a>
     </h1>
   
 
@@ -576,56 +621,12 @@ sql99优点：表连接的条件是独立的，连接之后，如果还需要进
 
 
   
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/01/17/hello-world/" class="article-date">
-  <time datetime="2023-01-17T12:20:48.170Z" itemprop="datePublished">2023-01-17</time>
-</a>
+
+
+  <nav id="page-nav">
     
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/01/17/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/01/17/hello-world/" data-id="cleodn7q50000bwud01po0kkp" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+  </nav>
 
 </section>
         
@@ -656,7 +657,11 @@ sql99优点：表连接的条件是独立的，连接之后，如果还需要进
       <ul>
         
           <li>
-            <a href="/2023/07/13/week1/">2023/07/10：夏令营week1记录</a>
+            <a href="/2023/07/15/week1plus/">2023/07/10：夏令营week1记录:出题</a>
+          </li>
+        
+          <li>
+            <a href="/2023/07/13/week1/">2023/07/10：夏令营week1记录:mysql笔记</a>
           </li>
         
           <li>
@@ -669,10 +674,6 @@ sql99优点：表连接的条件是独立的，连接之后，如果还需要进
         
           <li>
             <a href="/2023/04/18/jihua/">2023/04/18：一点大致计划</a>
-          </li>
-        
-          <li>
-            <a href="/2023/04/09/4-9/">2023/04/09：docker遇到的问题与解决</a>
           </li>
         
       </ul>
