@@ -18,7 +18,7 @@
 <meta property="og:image" content="http://example.com/2023/04/27/aaaa/lab2.png">
 <meta property="og:image" content="http://example.com/2023/04/27/aaaa/lab3.png">
 <meta property="article:published_time" content="2023-04-27T12:05:50.000Z">
-<meta property="article:modified_time" content="2023-04-27T15:21:01.600Z">
+<meta property="article:modified_time" content="2023-07-24T12:37:20.795Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2023/04/27/aaaa/lab1.png">
@@ -113,6 +113,20 @@
 <p>这个是github上找的方法比官方给的省事<br>可能因为网络问题用官方改数据包的方式可能失败</p>
 <h4 id="2-1"><a href="#2-1" class="headerlink" title="2"></a>2</h4><p>将Content-Type改为image/jpeg或png即可</p>
 <h4 id="3-1"><a href="#3-1" class="headerlink" title="3"></a>3</h4><p>emm burp好像遇到了点问题似乎改不了包 折腾太久了先放着<br>这一题的防护比上次更严格，要先将php传入file文件夹里才能绕过检测</p>
+<h2 id="Cross-site-scripting"><a href="#Cross-site-scripting" class="headerlink" title="Cross-site scripting"></a>Cross-site scripting</h2><h3 id="apprentice-2"><a href="#apprentice-2" class="headerlink" title="apprentice"></a>apprentice</h3><h4 id="1-2"><a href="#1-2" class="headerlink" title="1"></a>1</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;alert(1)&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>直接输入搜索框即可</p>
+<h4 id="2-2"><a href="#2-2" class="headerlink" title="2"></a>2</h4><p>随便点开一个帖子，把alert添加到评论里即可</p>
+<h4 id="3-2"><a href="#3-2" class="headerlink" title="3"></a>3</h4><p>检测为双引号闭合</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;&gt;&lt;img src=1 onerror=&quot;alert(1)&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>搜索框输入</p>
+<h4 id="4-1"><a href="#4-1" class="headerlink" title="4"></a>4</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=1 onerror=&quot;alert(1)&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>还是搜索框</p>
+<h4 id="5-1"><a href="#5-1" class="headerlink" title="5"></a>5</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="6-1"><a href="#6-1" class="headerlink" title="6"></a>6</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line">#### 7</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#### 8</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#### 9</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#### 10</span><br></pre></td></tr></table></figure>
+<p>```</p>
 
       
     </div>
@@ -162,7 +176,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">February 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">January 2023</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">January 2023</a></li></ul>
     </div>
   </div>
 
@@ -175,23 +189,23 @@
       <ul>
         
           <li>
+            <a href="/2023/07/28/sstilab/">2023/7/28：sstilab记录</a>
+          </li>
+        
+          <li>
+            <a href="/2023/07/28/ImaginaryCTF2023/">2023/7/28：ImaginaryCTF2023记录</a>
+          </li>
+        
+          <li>
+            <a href="/2023/07/28/haxonbox/">2023/7/28：hack the box记录</a>
+          </li>
+        
+          <li>
             <a href="/2023/07/21/xsslab/">2023/7/21：夏令营week2记录:xsslab</a>
           </li>
         
           <li>
             <a href="/2023/07/16/week1plus/">2023/07/15：夏令营week1记录:出题</a>
-          </li>
-        
-          <li>
-            <a href="/2023/07/16/weekpro/">2023/07/16：夏令营week1记录:sql-lab</a>
-          </li>
-        
-          <li>
-            <a href="/2023/07/13/week1/">2023/07/10：夏令营week1记录:mysql笔记</a>
-          </li>
-        
-          <li>
-            <a href="/2023/04/28/warmup/">2023/04/18：FCTF2023：warmup&amp;正式比赛</a>
           </li>
         
       </ul>

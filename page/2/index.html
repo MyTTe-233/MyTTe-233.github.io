@@ -64,6 +64,153 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-4-9" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/04/09/4-9/" class="article-date">
+  <time datetime="2023-04-09T07:51:57.000Z" itemprop="datePublished">2023-04-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/04/09/4-9/">2023/04/09：docker遇到的问题与解决</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="dockerfile-1"><a href="#dockerfile-1" class="headerlink" title="dockerfile-1"></a>dockerfile-1</h3><p>以下为dockerfile</p>
+
+
+<h4 id="docker-compose-up-d失败"><a href="#docker-compose-up-d失败" class="headerlink" title="docker-compose up -d失败"></a>docker-compose up -d失败</h4>
+<p>百度到的解决方案一般针对[manifests 18.04]，问大佬后选择直接pull至仓库再拉取镜像，原因目前未知</p>
+<h4 id="docker-run-之后镜像立即退出"><a href="#docker-run-之后镜像立即退出" class="headerlink" title="docker run 之后镜像立即退出"></a>docker run 之后镜像立即退出</h4><p>用网上添加 -it 以及 /bin/bash 可解决<br>百度原因有三：<br>1、docker容器运行必须有一个前台进程， 如果没有前台进程执行，容器认为空闲，就会自行退出<br>2、容器运行的命令如果不是那些一直挂起的命令（ 运行top，tail、循环等），就是会自动退出<br>3、这个是 docker 的机制问题</p>
+<h4 id="进入网页后显示当前无法使用"><a href="#进入网页后显示当前无法使用" class="headerlink" title="进入网页后显示当前无法使用"></a>进入网页后显示当前无法使用</h4><img src="/2023/04/09/4-9/2.png" class="">
+<p>用命令行进入如下：</p>
+<img src="/2023/04/09/4-9/22.png" class="">
+<p>目前找到的解决方法：<br>1.使用ssh（无效）<br>2.查看是否使用网络代理<br>不知道在一众复制黏贴中有没有能用的</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/04/09/4-9/" data-id="clk6k5tlj00022gud3056e424" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-3-31" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/04/01/3-31/" class="article-date">
+  <time datetime="2023-04-01T14:47:08.000Z" itemprop="datePublished">2023-04-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/04/01/3-31/">2023/03/31：一些囫囵吞枣式的记录</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一些复现（？）<br>反正就是没做出来的题，在这记录一下，一些反思啥的</p>
+<h3 id="hxp-CTF-2022-valentine"><a href="#hxp-CTF-2022-valentine" class="headerlink" title="hxp CTF 2022 - valentine"></a>hxp CTF 2022 - valentine</h3><p>这里留下一个官方wp的链接：<a target="_blank" rel="noopener" href="https://hxp.io/blog/101/hxp-CTF-2022-valentine/">https://hxp.io/blog/101/hxp-CTF-2022-valentine/</a><br>纯英文导致阅读障碍，看的不是很懂，水平可怜，若有问题见谅</p>
+<p>首先，当然是判断漏洞类型，这题的注入是&lt;% %&gt;形式，写的时候只知道这好像是模板类的注入，但是尝试后没啥收获，不知道咋入手，下面是官方解答：</p>
+<img src="/2023/04/01/3-31/jieda.png" class="">
+<p>emmm没多练是这样的，记得大佬有说过多练提高速度，显然目前的水平还不足以独立的写完<br>这题要利用的似乎是一个比较新的漏洞</p>
+<img src="/2023/04/01/3-31/kkk.png" class="">
+<p>在这篇wp提到了题目的来源（应该这么表达吧），似乎用了一个比较新的方式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ &lt;.- global.process.mainModule.constructor._load(`child_process`).execSync(`/readflag`).toString() .&gt;</span><br></pre></td></tr></table></figure>
+<p>感觉是对症下药式的<br>以及我以前一直不太注意的Dockerfile也很重要:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ENV NODE_ENV=production</span><br></pre></td></tr></table></figure>
+<p>这个环境变量会在下一步用于缓存获得flag<br>感觉很新，说实话看得云里雾里的</p>
+<p>啊这个更详细<a target="_blank" rel="noopener" href="https://maoutis.github.io/writeups/Web%20Hacking/valentine/">https://maoutis.github.io/writeups/Web%20Hacking/valentine/</a><br>这里详细地介绍了整个思路和各种尝试</p>
+<img src="/2023/04/01/3-31/111.png" class="">
+<p>在得知使用了ejs模板后，这个作者发现可以使用一些别的符号代替&lt;% %&gt;，为模板注入提供了可能，就可以用&lt;. .&gt;来注入需要的模板<br>然后是靠express中的view options重写文件来传入命令？有点懵，不过view options似乎是还未更新可以利用的bug，这两个wp都利用这点</p>
+<p>先告一段落</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/04/01/3-31/" data-id="clk6k5tli00012gud1vww1usa" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/03/19/1/" class="article-date">
+  <time datetime="2023-03-19T04:53:18.000Z" itemprop="datePublished">2023-03-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/03/19/1/">2023/03/18</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一些BUUCTF记录</p>
+<h3 id="SecretFile"><a href="#SecretFile" class="headerlink" title="SecretFile"></a>SecretFile</h3><p>很明显是要去找flag文件</p>
+<img src="/2023/03/19/1/secret1.png" class="">
+<p>刚开始面对这个界面有点懵，啥也没有，看了源码才知道把连接调得和背景色一样</p>
+<img src="/2023/03/19/1/a2.png" class="">
+<p>进来是这样的<br>bp抓包返回可以看到secr3t.php文件，下面是文件内容，用php伪协议包含就行</p>
+<img src="/2023/03/19/1/a1.png" class="">
+<p>感觉更像一个恶作剧<br>（是的这有点简单了但我主要想试试图片发出来啥效果()）</p>
+<h3 id="BabySQli1"><a href="#BabySQli1" class="headerlink" title="BabySQli1"></a>BabySQli1</h3><p>源码：<a target="_blank" rel="noopener" href="https://github.com/imaginiso/GXY_CTF/tree/master/Web/BabySqli">https://github.com/imaginiso/GXY_CTF/tree/master/Web/BabySqli</a><br>感觉跟CTF After Dark的一题很像（Injection Perfection应该是这个）该题要求以管理员的账号登录，但查看源码可以得知把or和一些字符屏蔽了，需要让联合查询产生虚拟数据<br>（还给密码上了md5，被这个卡了真难受）</p>
+<h3 id="BuyFlag"><a href="#BuyFlag" class="headerlink" title="BuyFlag"></a>BuyFlag</h3><img src="/2023/03/19/1/1.png" class="">
+<p>源码提示如上<br>该题需要对password和money传参，绕过is_numeric()和strcmp()函数（wp说是根据php版本和取值猜出来是strcmp，看来审计要多看）根据提示，抓包中cookie中user=0要改为1，然后%20绕过is_numeric和数组绕过strcmp，跟冬令营的php很像</p>
+<h3 id="PingPingPing"><a href="#PingPingPing" class="headerlink" title="PingPingPing"></a>PingPingPing</h3><p>这题是看别人博客时突然想去看一下时做的<br>上CSDN看一下有两个比较有印象的wp:<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44348894/article/details/105352676?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522167914286516800217238563%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=167914286516800217238563&amp;biz_id=0&amp;utm_medium=distribute.wap_search_result.none-task-blog-2~all~top_positive~default-1-105352676-null-null.wap_search_all_course_earnings_v1&amp;utm_term=pingpingping&amp;spm=1018.2118.3001.4187">https://blog.csdn.net/weixin_44348894/article/details/105352676?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522167914286516800217238563%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=167914286516800217238563&amp;biz_id=0&amp;utm_medium=distribute.wap_search_result.none-task-blog-2~all~top_positive~default-1-105352676-null-null.wap_search_all_course_earnings_v1&amp;utm_term=pingpingping&amp;spm=1018.2118.3001.4187</a><br>这个方法用sh代替了bash，将cat flag.php用base64编码后执行<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_45414878/article/details/109557567">https://blog.csdn.net/qq_45414878/article/details/109557567</a><br>这篇同上用sh，额外提到了cat ls或cat *直接查看当前目录所有内容，但自己试的时候用他cat ls的payload会被过滤；两篇最后字符串拼接的方法相同但第一篇作者说会被屏蔽，自己试时同第二篇可以绕过，单纯因为ag在前在后？<br>（这种怎么也是1分啊）</p>
+<h4 id="水"><a href="#水" class="headerlink" title="水"></a>水</h4><p>周五时用chrome接bp代理结果没法用一直超时，不知道是证书还是啥原因挺麻的早知道就重新安装了</p>
+<p>补:折腾到现在，大概是Proxy SwitchyOmega这个插件的问题，直接改本地服务器代理就行（真是浪费人生，好像我经常把时间花在一些弱智的问题上）然后旧版的hackbar好像是用不了的（就是那个改付费要破解的），火狐跟谷歌都一样，无法load url也不能发送，百度无果，不知道啥情况<br>解决这些问题还是偶然发现学长给的bp压缩包里有附带的说明书，近在眼前的答案没发现…</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/03/19/1/" data-id="clk6k5tle00002gud997khv9u" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-water" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2023/03/17/water/" class="article-date">
@@ -97,42 +244,6 @@
     </div>
     <footer class="article-footer">
       <a data-url="http://example.com/2023/03/17/water/" data-id="clk6k5tlm00072gudg330c4yu" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-text" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/02/25/text/" class="article-date">
-  <time datetime="2023-02-25T12:44:55.000Z" itemprop="datePublished">2023-02-25</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/02/25/text/">text</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="for-text"><a href="#for-text" class="headerlink" title="for text"></a>for text</h2>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/02/25/text/" data-id="clk6k5tlm00062gudcck2ck1g" class="article-share-link">Share</a>
       
       
     </footer>
@@ -214,7 +325,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">February 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">January 2023</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">January 2023</a></li></ul>
     </div>
   </div>
 
@@ -227,23 +338,23 @@
       <ul>
         
           <li>
+            <a href="/2023/07/28/sstilab/">2023/7/28：sstilab记录</a>
+          </li>
+        
+          <li>
+            <a href="/2023/07/28/ImaginaryCTF2023/">2023/7/28：ImaginaryCTF2023记录</a>
+          </li>
+        
+          <li>
+            <a href="/2023/07/28/haxonbox/">2023/7/28：hack the box记录</a>
+          </li>
+        
+          <li>
             <a href="/2023/07/21/xsslab/">2023/7/21：夏令营week2记录:xsslab</a>
           </li>
         
           <li>
             <a href="/2023/07/16/week1plus/">2023/07/15：夏令营week1记录:出题</a>
-          </li>
-        
-          <li>
-            <a href="/2023/07/16/weekpro/">2023/07/16：夏令营week1记录:sql-lab</a>
-          </li>
-        
-          <li>
-            <a href="/2023/07/13/week1/">2023/07/10：夏令营week1记录:mysql笔记</a>
-          </li>
-        
-          <li>
-            <a href="/2023/04/28/warmup/">2023/04/18：FCTF2023：warmup&amp;正式比赛</a>
           </li>
         
       </ul>

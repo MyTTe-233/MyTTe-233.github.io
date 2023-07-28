@@ -5,21 +5,19 @@
   
 
   
-  <title>2023/04/18：FCTF2023：warmup&amp;正式比赛 | Hexo</title>
+  <title>2023/7/28：hack the box记录 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="无所谓会不会，主要是图一乐又菜又爱玩才能进步 warm upviewsource没啥好说的，F12 filechecker先再次复习下再继续  啊这（找了网上的payload，这题先随便传个图片上去，然后把那些二进制的内容删掉改成 1$ #! &amp;#123;&amp;#123;lipsum.__globals__.os.popen(&quot;cat &#x2F;flag&quot;).read()&amp;#125;&amp;#1">
+  <meta name="description" content="Challenges-&gt;active challenges Phonebook没写出来··············分割线·······················进入靶机注意到这是个登录界面，尝试单双引号测试，显示登录失败，注意到url后?message提供错误信息，可以在url中修改改变红框内的报错信息，但没啥用。下面有个蓝色框的贴士输入“\”页面无法连接，输入“*”进入搜索界面，输入">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2023&#x2F;04&#x2F;18：FCTF2023：warmup&amp;正式比赛">
-<meta property="og:url" content="http://example.com/2023/04/28/warmup/index.html">
+<meta property="og:title" content="2023&#x2F;7&#x2F;28：hack the box记录">
+<meta property="og:url" content="http://example.com/2023/07/28/haxonbox/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="无所谓会不会，主要是图一乐又菜又爱玩才能进步 warm upviewsource没啥好说的，F12 filechecker先再次复习下再继续  啊这（找了网上的payload，这题先随便传个图片上去，然后把那些二进制的内容删掉改成 1$ #! &amp;#123;&amp;#123;lipsum.__globals__.os.popen(&quot;cat &#x2F;flag&quot;).read()&amp;#125;&amp;#1">
+<meta property="og:description" content="Challenges-&gt;active challenges Phonebook没写出来··············分割线·······················进入靶机注意到这是个登录界面，尝试单双引号测试，显示登录失败，注意到url后?message提供错误信息，可以在url中修改改变红框内的报错信息，但没啥用。下面有个蓝色框的贴士输入“\”页面无法连接，输入“*”进入搜索界面，输入">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/2023/04/28/warmup/az.png">
-<meta property="article:published_time" content="2023-04-28T08:08:35.000Z">
-<meta property="article:modified_time" content="2023-05-05T16:04:29.370Z">
+<meta property="article:published_time" content="2023-07-28T08:38:23.000Z">
+<meta property="article:modified_time" content="2023-07-28T09:15:28.082Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2023/04/28/warmup/az.png">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -68,10 +66,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-warmup" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-haxonbox" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2023/04/28/warmup/" class="article-date">
-  <time datetime="2023-04-28T08:08:35.000Z" itemprop="datePublished">2023-04-28</time>
+    <a href="/2023/07/28/haxonbox/" class="article-date">
+  <time datetime="2023-07-28T08:38:23.000Z" itemprop="datePublished">2023-07-28</time>
 </a>
     
   </div>
@@ -82,7 +80,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      2023/04/18：FCTF2023：warmup&amp;正式比赛
+      2023/7/28：hack the box记录
     </h1>
   
 
@@ -90,19 +88,15 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>无所谓会不会，主要是图一乐<br>又菜又爱玩才能进步</p>
-<h4 id="warm-up"><a href="#warm-up" class="headerlink" title="warm up"></a>warm up</h4><h5 id="viewsource"><a href="#viewsource" class="headerlink" title="viewsource"></a>viewsource</h5><p>没啥好说的，F12</p>
-<h5 id="filechecker"><a href="#filechecker" class="headerlink" title="filechecker"></a>filechecker</h5><p>先再次复习下再继续</p>
-<img src="/2023/04/28/warmup/az.png" class="">
-<p>啊这（<br>找了网上的payload，这题先随便传个图片上去，然后把那些二进制的内容删掉改成</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="comment">#! &#123;&#123;lipsum.__globals__.os.popen(&quot;cat /flag&quot;).read()&#125;&#125;</span></span><br></pre></td></tr></table></figure>
-<p>这题应该是借文件上传利用SSTI获得flag，写的时候一直想怎么注入cat flag命令结果是这样的方式，多刷吧还是没办法马上反应过来(想着怎么利用bin那句命令结果忘了之前的SSIT了emm)<br>FCTF{realflag_5vycRgpY1Ekhrdk5wLcJoynj3QOH2JUoUfbCG0he}</p>
-<h5 id="javadeserialize"><a href="#javadeserialize" class="headerlink" title="javadeserialize"></a>javadeserialize</h5><p>emm这个折腾的有点久有点问题<br>——————————————————————————<br>捋一捋IDEA的使用，好像哪里不大对<br>在IDEA的使用上折腾有点久，最开始时一直报错，至少现在能打开了能运行了（ 还在调试题目的源文件，复制黏贴时文件有点问题，复制的文件不是“可执行类”，没法达到想要的效果，单纯的复制文件不会被真正导入，再慢慢找问题。可能忘记改pom?<br>——————————————————————————<br>最开始用IDEA时手忙脚乱，似乎把题目文件结构破坏了，尝试了很多次，初次IDEA不熟悉它的工作方式犯了不少低级错误，甚至忘了Maven,因为添加目录为库时没操作好让程序报错，还以为又是自己把文件损坏了（</p>
-<h4 id="正式赛"><a href="#正式赛" class="headerlink" title="正式赛"></a>正式赛</h4>
+        <p>Challenges-&gt;active challenges</p>
+<h2 id="Phonebook"><a href="#Phonebook" class="headerlink" title="Phonebook"></a>Phonebook</h2><p>没写出来<br>··············分割线·······················<br>进入靶机注意到这是个登录界面，尝试单双引号测试，显示登录失败，注意到url后?message提供错误信息，可以在url中修改改变红框内的报错信息，但没啥用。下面有个蓝色框的贴士<br>输入“\”页面无法连接，输入“*”进入搜索界面，输入1得到用户信息，然后卡了<br>··············分割线·······················<br>writeup:<a target="_blank" rel="noopener" href="https://blog.csdn.net/galaxy3000/article/details/122975302?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522169052768016800184190415%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=169052768016800184190415&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-122975302-null-null.142%5Ev91%5Ekoosearch_v1,239%5Ev3%5Einsert_chatgpt&amp;utm_term=hackthebox%20phonebook&amp;spm=1018.2226.3001.4187">https://blog.csdn.net/galaxy3000/article/details/122975302?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522169052768016800184190415%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=169052768016800184190415&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-122975302-null-null.142^v91^koosearch_v1,239^v3^insert_chatgpt&amp;utm_term=hackthebox%20phonebook&amp;spm=1018.2226.3001.4187</a></p>
+<p>查看wp发现是模糊测试<br>这是啥？<br>通过向目标系统提供非预期的输入并监视异常结果来发现软件漏洞，用随机坏数据（也称做 fuzz）攻击一个程序，然后等着观察哪里遭到了破坏。模糊测试的技巧在于，将尽可能多的杂乱数据投入程序中。</p>
+<p>解题需要找出管理员密码，而登陆前的贴士告诉了管理员是谁，查找得管理员username为reese<br>接下来需要写脚本暴力破解，时间较久，但网络不太行出不来</p>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/04/28/warmup/" data-id="clk6k5tln00082gud2xyt54g8" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2023/07/28/haxonbox/" data-id="clkmq6uqa0001msudej3o1j8e" class="article-share-link">Share</a>
       
       
     </footer>
@@ -111,19 +105,19 @@
     
 <nav id="article-nav">
   
-    <a href="/2023/07/13/week1/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2023/07/28/ImaginaryCTF2023/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          2023/07/10：夏令营week1记录:mysql笔记
+          2023/7/28：ImaginaryCTF2023记录
         
       </div>
     </a>
   
   
-    <a href="/2023/04/27/aaaa/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2023/07/21/xsslab/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">2023/04/15：burplabs从0开始</div>
+      <div class="article-nav-title">2023/7/21：夏令营week2记录:xsslab</div>
     </a>
   
 </nav>
