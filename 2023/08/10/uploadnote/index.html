@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>2023/08/10：upload笔记 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="https:&#x2F;&#x2F;paper.seebug.org&#x2F;560&#x2F; 代码相关1234$_FILES\[‘file’][‘name’] 客户端文件名称$_FILES\[‘file’][‘type’] 文件的MIME类型$_FILES\[‘file’][‘size’] 文件大小 单位字节$_FILES\[‘file’][‘tmp_name’] 文件被上传后再服务器端临时文件名，可以在php.ini中指定 文件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2023&#x2F;08&#x2F;10：upload笔记">
+<meta property="og:url" content="http://example.com/2023/08/10/uploadnote/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="https:&#x2F;&#x2F;paper.seebug.org&#x2F;560&#x2F; 代码相关1234$_FILES\[‘file’][‘name’] 客户端文件名称$_FILES\[‘file’][‘type’] 文件的MIME类型$_FILES\[‘file’][‘size’] 文件大小 单位字节$_FILES\[‘file’][‘tmp_name’] 文件被上传后再服务器端临时文件名，可以在php.ini中指定 文件">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-08-10T12:33:46.000Z">
+<meta property="article:modified_time" content="2023-08-10T13:50:04.631Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-uploadnote" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/10/uploadnote/" class="article-date">
+  <time datetime="2023-08-10T12:33:46.000Z" itemprop="datePublished">2023-08-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2023/08/10：upload笔记
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a target="_blank" rel="noopener" href="https://paper.seebug.org/560/">https://paper.seebug.org/560/</a></p>
+<h2 id="代码相关"><a href="#代码相关" class="headerlink" title="代码相关"></a>代码相关</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$_FILES\[‘file’][‘name’] 客户端文件名称</span><br><span class="line">$_FILES\[‘file’][‘type’] 文件的MIME类型</span><br><span class="line">$_FILES\[‘file’][‘size’] 文件大小 单位字节</span><br><span class="line">$_FILES\[‘file’][‘tmp_name’] 文件被上传后再服务器端临时文件名，可以在php.ini中指定</span><br></pre></td></tr></table></figure>
+<p>文件上传结束后，默认的被储存在临时文件夹中，这时必须把他从临时目录中删除或移动到其他地方，可使用<code>copy()</code>或<code>move_uploaded_file()</code><br>可能存在错误使用的函数：<code>empty()、isset()、strpos()、rename()、iconv()、copy()</code></p>
+<h2 id="校验过程"><a href="#校验过程" class="headerlink" title="校验过程"></a>校验过程</h2><p>1.客户端javascript检测<br>（上传文件）<br>2.服务端MIME检测<br>3.目录路径检测<br>4.文件扩展名检测<br>5.文件内容检测</p>
+<h2 id="校验方式与绕过"><a href="#校验方式与绕过" class="headerlink" title="校验方式与绕过"></a>校验方式与绕过</h2><h3 id="javascript检测（upload-lab-pass-1）"><a href="#javascript检测（upload-lab-pass-1）" class="headerlink" title="javascript检测（upload-lab pass 1）"></a>javascript检测（upload-lab pass 1）</h3><p>通常验证上传文件的扩展名是否符合验证条件</p>
+<h4 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h4><p>1.浏览器禁用js<br>2.F12修改js代码绕过验证<br>3.使用burp抓包直接提交，绕过js验证</p>
+<h3 id="MIME（content-type字段校验）（upload-lab-pass-2）"><a href="#MIME（content-type字段校验）（upload-lab-pass-2）" class="headerlink" title="MIME（content-type字段校验）（upload-lab pass 2）"></a>MIME（content-type字段校验）（upload-lab pass 2）</h3><p>MIME type代表互联网媒体类型，在html文件中可以使用content-type属性表示，描述了文件类型的互联网标准。Response对象通过设置ContentType使客户端浏览器，区分不同种类的数据，并根据不同的MIME调用浏览器内不同的程序嵌入模块来处理相应的数据。</p>
+<h4 id="方法-1"><a href="#方法-1" class="headerlink" title="方法"></a>方法</h4><p>使用Burp截取上传数据包，修改Content-Type的值</p>
+<h3 id="文件扩展名检测"><a href="#文件扩展名检测" class="headerlink" title="文件扩展名检测"></a>文件扩展名检测</h3><h4 id="方法-1：-htaccess（upload-lab-pass-4）"><a href="#方法-1：-htaccess（upload-lab-pass-4）" class="headerlink" title="方法 1：.htaccess（upload-lab pass 4）"></a>方法 1：.htaccess（upload-lab pass 4）</h4><p>配合Apache的.htaccess文件上传解析漏洞<br>通过htaccess文件可以实现改变文件扩展名等操作绕过检测</p>
+<h4 id="方法-2：解析缺陷绕过（upload-lab-pass-18）"><a href="#方法-2：解析缺陷绕过（upload-lab-pass-18）" class="headerlink" title="方法 2：解析缺陷绕过（upload-lab pass 18）"></a>方法 2：解析缺陷绕过（upload-lab pass 18）</h4><p>Apache的解析漏洞主要特性为Apache是从后面开始检查后缀，按最后一个合法后缀执行，将木马的后缀进行修改为允许上传的类型后，即可成功绕过验证，最终拿到权限。<br>例如将后缀修改为<code>.7z、.cab、.zip、.bmp</code></p>
+<h4 id="方法-3：目录路径检测解析绕过"><a href="#方法-3：目录路径检测解析绕过" class="headerlink" title="方法 3：目录路径检测解析绕过"></a>方法 3：目录路径检测解析绕过</h4><p>例如，将保存文件的相对路径<code>uploadimg/</code>改为<code>uploadimg/1.asp/</code>，<code>filename=&quot;yijuhua.asp&quot;</code>改为<code>filename=&quot;yijuhua.asp/1.jpg&quot;</code>，上传文件的名字为<code>yijuhua.asp/1.jpg</code>时服务器会从头部查找查找”.”号，然后查找”/“，如果有则内存截断，原文件会被解析为<code>/yijuhua.asp</code></p>
+<h4 id="方法-4：解析缺陷绕过（与上类似）"><a href="#方法-4：解析缺陷绕过（与上类似）" class="headerlink" title="方法 4：解析缺陷绕过（与上类似）"></a>方法 4：解析缺陷绕过（与上类似）</h4><p>例如，将保存文件的相对路径<code>uploadimg/</code>改为<code>uploadimg/1.php</code>，<code>filename=&quot;yijuhua.php&quot;</code>改为<code>filename=&quot;yijuhua.jpg&quot;</code>，文件的名字为<code>1.php;yijuhua.jpg</code>会作为php解析，原理类似。</p>
+<h4 id="方法-5：黑名单绕过"><a href="#方法-5：黑名单绕过" class="headerlink" title="方法 5：黑名单绕过"></a>方法 5：黑名单绕过</h4><p>1.使用大小写绕过（针对对大小写不敏感的系统如windows）<br>2.使用黑名单外的脚本类型，如：php5,asa 和 cer等（IIS默认支持解析.asp,.cdx, .asa,.cer等）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">PHP: .php, .php2, .php3, .php4, .php5, .php6, .php7, .phps, .phps, .pht, .phtm, .phtml, .pgif, .shtml, .htaccess, .phar, .inc, .hphp, .ctp, .module</span><br><span class="line">    Working in PHPv8: .php, .php4, .php5, .phtml, .module, .inc, .hphp, .ctp</span><br><span class="line"></span><br><span class="line">ASP: .asp, .aspx, .config, .ashx, .asmx, .aspq, .axd, .cshtm, .cshtml, .rem, .soap, .vbhtm, .vbhtml, .asa, .cer, .shtml</span><br><span class="line"></span><br><span class="line">Jsp: .jsp, .jspx, .jsw, .jsv, .jspf, .wss, .do, .action</span><br><span class="line"></span><br><span class="line">Coldfusion: .cfm, .cfml, .cfc, .dbm</span><br><span class="line"></span><br><span class="line">Flash: .swf</span><br><span class="line"></span><br><span class="line">Perl: .pl, .cgi</span><br><span class="line"></span><br><span class="line">Erlang Yaws Web Server: .yaws</span><br></pre></td></tr></table></figure>
+<p>3.配合操作系统文件命令规则<br>4.双扩展名之间使用00截断，绕过验证上传恶意代码：<code>test.php%00.jpg</code><br>5.超长文件名截断上传（windows 258byte | linux 4096byte）<br>6.空格及点绕过<br>7.<code>::$DATA</code>绕过</p>
+<h4 id="方法-6：服务端检测文件内容配合文件包含漏洞"><a href="#方法-6：服务端检测文件内容配合文件包含漏洞" class="headerlink" title="方法 6：服务端检测文件内容配合文件包含漏洞"></a>方法 6：服务端检测文件内容配合文件包含漏洞</h4><p>如：先上传一个内容为木马的txt后缀文件，因为后缀名的关系没有检验内容；然后再上传一个php的文件，内容为<code>&lt;?php Include(“上传的txt文件路径”);?&gt;</code>，php文件就会去引用txt文件的内容，从而绕过校验</p>
+<h4 id="方法-7：PHP特性（使用数组绕过）"><a href="#方法-7：PHP特性（使用数组绕过）" class="headerlink" title="方法 7：PHP特性（使用数组绕过）"></a>方法 7：PHP特性（使用数组绕过）</h4><p>如：<code>file_put_contents()</code>函数的第二个参数，可以是数组；然后，如果代码里用正则匹配 bad word 的时候，对一个数组进行正则匹配没用</p>
+<h4 id="方法-8：服务端检测文件头（upload-lab-pass-15）"><a href="#方法-8：服务端检测文件头（upload-lab-pass-15）" class="headerlink" title="方法 8：服务端检测文件头（upload-lab pass 15）"></a>方法 8：服务端检测文件头（upload-lab pass 15）</h4><p>不同文件头（PHP使用getimagesize函数验证）：<br>PNG： 文件头标识 (8 bytes) 89 50 4E 47 0D 0A 1A 0A<br>JPEG： 文件头标识 (2 bytes): 0xff, 0xd8 (SOI) (JPEG 文件标识)<br>GIF： 文件头标识 (6 bytes) 47 49 46 38 39(37) 61<br>在恶意脚本前加上允许上传文件的头标识</p>
+<h4 id="方法-8：竞争上传（upload-lab-pass-17）"><a href="#方法-8：竞争上传（upload-lab-pass-17）" class="headerlink" title="方法 8：竞争上传（upload-lab pass 17）"></a>方法 8：竞争上传（upload-lab pass 17）</h4><p>原代码存在逻辑漏洞，如先上传文件，检测不通过后再删除，此时可以使用多线程并发的访问上传的文件，总会有一次在上传文件到删除文件这个时间段内访问到上传的php文件</p>
+<h4 id="方法-9：二次渲染（upload-lab-pass-16）"><a href="#方法-9：二次渲染（upload-lab-pass-16）" class="headerlink" title="方法 9：二次渲染（upload-lab pass 16）"></a>方法 9：二次渲染（upload-lab pass 16）</h4><p>GIF:<br>首先将GIF文件与php一句话木马合并，再将上传后的文件下载与合并后的文件对比（如010_Editor），在未被渲染的部分写一句话木马<br>PNG:<br>需要脚本构造图片</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$p = array(0xa3, 0x9f, 0x67, 0xf7, 0x0e, 0x93, 0x1b, 0x23,</span><br><span class="line">           0xbe, 0x2c, 0x8a, 0xd0, 0x80, 0xf9, 0xe1, 0xae,</span><br><span class="line">           0x22, 0xf6, 0xd9, 0x43, 0x5d, 0xfb, 0xae, 0xcc,</span><br><span class="line">           0x5a, 0x01, 0xdc, 0x5a, 0x01, 0xdc, 0xa3, 0x9f,</span><br><span class="line">           0x67, 0xa5, 0xbe, 0x5f, 0x76, 0x74, 0x5a, 0x4c,</span><br><span class="line">           0xa1, 0x3f, 0x7a, 0xbf, 0x30, 0x6b, 0x88, 0x2d,</span><br><span class="line">           0x60, 0x65, 0x7d, 0x52, 0x9d, 0xad, 0x88, 0xa1,</span><br><span class="line">           0x66, 0x44, 0x50, 0x33);</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">$img = imagecreatetruecolor(32, 32);</span><br><span class="line"> </span><br><span class="line">for ($y = 0; $y &lt; sizeof($p); $y += 3) &#123;</span><br><span class="line">   $r = $p[$y];</span><br><span class="line">   $g = $p[$y+1];</span><br><span class="line">   $b = $p[$y+2];</span><br><span class="line">   $color = imagecolorallocate($img, $r, $g, $b);</span><br><span class="line">   imagesetpixel($img, round($y / 3), 0, $color);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">imagepng($img,&#x27;./1.png&#x27;);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>1.准备png图片<br>2.在cmd使用php命令执行该脚本生成新png图片<br>3.使用新图片上传<br>4.在文件包含漏洞处进行传参</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/08/10/uploadnote/" data-id="cll59g8v10002agudgi1ybycm" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/08/10/xssnote/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          2023/08/10：xss笔记
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/08/10/sstinote/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">2023/08/10：ssti笔记</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">August 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">January 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/08/10/xssnote/">2023/08/10：xss笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/10/uploadnote/">2023/08/10：upload笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/10/sstinote/">2023/08/10：ssti笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/03/upload-lab/">2023/08/03：upload-lab记录</a>
+          </li>
+        
+          <li>
+            <a href="/2023/07/28/sstilab/">2023/7/28：sstilab记录</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

