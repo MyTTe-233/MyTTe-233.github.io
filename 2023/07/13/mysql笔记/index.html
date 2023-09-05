@@ -1,0 +1,728 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="MySQL课堂笔记0.标题暂定关于语句大小写MySQL 在 windows 下是不区分大小写的，将 script 文件导入 MySQL 后表名也会自动转化为小写，结果再 想要将数据库导出放到 linux 服务器中使用时就出错了。因为在 linux 下表名区分大小写而找不到表，查了很多都是说在 linux 下更改 MySQL 的设置使其也不区分大小写，但是有没有办法反过来让 windows 下大小写">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2023&#x2F;07&#x2F;10：夏令营week1记录:mysql笔记">
+<meta property="og:url" content="http://example.com/2023/07/13/mysql%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="MySQL课堂笔记0.标题暂定关于语句大小写MySQL 在 windows 下是不区分大小写的，将 script 文件导入 MySQL 后表名也会自动转化为小写，结果再 想要将数据库导出放到 linux 服务器中使用时就出错了。因为在 linux 下表名区分大小写而找不到表，查了很多都是说在 linux 下更改 MySQL 的设置使其也不区分大小写，但是有没有办法反过来让 windows 下大小写">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-07-13T14:50:14.000Z">
+<meta property="article:modified_time" content="2023-07-15T15:23:05.582Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>2023/07/10：夏令营week1记录:mysql笔记 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="2023/07/10：夏令营week1记录:mysql笔记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-07-13 22:50" pubdate>
+          July 13, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          12k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          99 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">2023/07/10：夏令营week1记录:mysql笔记</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="MySQL课堂笔记"><a href="#MySQL课堂笔记" class="headerlink" title="MySQL课堂笔记"></a>MySQL课堂笔记</h1><h2 id="0-标题暂定"><a href="#0-标题暂定" class="headerlink" title="0.标题暂定"></a>0.标题暂定</h2><h3 id="关于语句大小写"><a href="#关于语句大小写" class="headerlink" title="关于语句大小写"></a>关于语句大小写</h3><p>MySQL 在 windows 下是不区分大小写的，将 script 文件导入 MySQL 后表名也会自动转化为小写，结果再 想要将数据库导出放到 linux 服<br>务器中使用时就出错了。因为在 linux 下表名区分大小写而找不到表，查了很多都是说在 linux 下更改 MySQL 的设置使其也不区分大小写，但是<br>有没有办法反过来让 windows 下大小写敏感呢。其实方法是一样的，相应的更改 windows 中 MySQL 的设置就行了。</p>
+<p>具体操作：<br>在 MySQL 的配置文件 my.ini 中增加一行：<br>lower_case_table_names = 0<br>其中 0：区分大小写，1：不区分大小写<br>MySQL 在 Linux 下数据库名、表名、列名、别名大小写规则是这样的：<br> 1、数据库名与表名是严格区分大小写的；<br> 2、表的别名是严格区分大小写的；<br> 3、列名与列的别名在所有的情况下均是忽略大小写的；<br> 4、变量名也是严格区分大小写的； MySQL 在 Windows 下都不区分大小写</p>
+<h3 id="使用source-地址显示“Failed-to-open-file-‘…’-error-2”的可能原因"><a href="#使用source-地址显示“Failed-to-open-file-‘…’-error-2”的可能原因" class="headerlink" title="使用source + 地址显示“Failed to open file ‘…’, error: 2”的可能原因"></a>使用source + 地址显示“Failed to open file ‘…’, error: 2”的可能原因</h3><p>1.未先创建并”use”数据库；<br>2.在windows中，路径不能包含空格，中文字符，需使用“/”连接路径，且最好选择绝对路径；不可使用“.”以及“&lt;”和“&gt;”<br>3.该语句结尾不需分号<br>原文<a target="_blank" rel="noopener" href="https://sebhastian.com/mysql-failed-to-open-file-error-2/">https://sebhastian.com/mysql-failed-to-open-file-error-2/</a><br><a target="_blank" rel="noopener" href="https://philip.yurchuk.com/software/mysql-failed-to-open-file-error-2-and-22-on-windows/">https://philip.yurchuk.com/software/mysql-failed-to-open-file-error-2-and-22-on-windows/</a></p>
+<h2 id="1-查看MYSQL版本"><a href="#1-查看MYSQL版本" class="headerlink" title="1.查看MYSQL版本"></a>1.查看MYSQL版本</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ mysql --version<br>$ mysql -V<br></code></pre></td></tr></table></figure>
+<h2 id="2-创建及使用"><a href="#2-创建及使用" class="headerlink" title="2.创建及使用"></a>2.创建及使用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ create database/table [name]<br>$ use [name]<br></code></pre></td></tr></table></figure>
+<h2 id="3-查询使用的数据库"><a href="#3-查询使用的数据库" class="headerlink" title="3.查询使用的数据库"></a>3.查询使用的数据库</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ select database()<br></code></pre></td></tr></table></figure>
+<h2 id="4-查询数据库版本"><a href="#4-查询数据库版本" class="headerlink" title="4.查询数据库版本"></a>4.查询数据库版本</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ select version()<br></code></pre></td></tr></table></figure>
+<h2 id="5-终止输入语句"><a href="#5-终止输入语句" class="headerlink" title="5.终止输入语句"></a>5.终止输入语句</h2><p>键入 \c</p>
+<h2 id="6-退出mysql"><a href="#6-退出mysql" class="headerlink" title="6.退出mysql"></a>6.退出mysql</h2><p>\q QUIT\EXIT<br>也可CTRL+C</p>
+<h2 id="7-导入数据库"><a href="#7-导入数据库" class="headerlink" title="7.导入数据库"></a>7.导入数据库</h2><p>（创建并使用数据库后）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ <span class="hljs-built_in">source</span> [文件路径]（无需;）<br></code></pre></td></tr></table></figure>
+<h2 id="8-查看"><a href="#8-查看" class="headerlink" title="8.查看"></a>8.查看</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ 表的结构 desc [table name]<br>$ 数据库 show databases<br>$ 查看表创建语句 show create table [table name]<br></code></pre></td></tr></table></figure>
+<h2 id="9-简单查询"><a href="#9-简单查询" class="headerlink" title="9.简单查询"></a>9.简单查询</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ select [column name],[column name] from [table name]<br>$ select * from [table name]<br></code></pre></td></tr></table></figure>
+<h2 id="10-别名"><a href="#10-别名" class="headerlink" title="10.别名"></a>10.别名</h2><p>可以采用 as 关键字重命名表字段，其实 as 也可以省略，如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ select empno <span class="hljs-string">&quot;员工编号&quot;</span>, ename <span class="hljs-string">&quot;员工姓名&quot;</span>, sal*12 （as）<span class="hljs-string">&quot;年薪&quot;</span> from emp<br></code></pre></td></tr></table></figure>
+<h2 id="11-条件查询"><a href="#11-条件查询" class="headerlink" title="11.条件查询"></a>11.条件查询</h2><p>条件查询需要用到 where 语句，where 必须放到 from 语句表的后面<br>支持如下运算符<br>运算符             说明<br>=                  等于<br>&lt;&gt;或!=             不等于<br>&lt;                  小于<br>&lt;=                 小于等于<br>&gt;                 大于<br>&gt;=                 大于等于<br>between …and …. 两个值之间,等同于 &gt;= and &lt;=<br>is null         为 null（is not null 不为空）<br>and             并且<br>or                 或者<br>in                 包含，相当于多个 or（not in 不在这个范围中）如:select * from emp where job in (‘manager’,’salesman’);<br>not not            可以取非，主要用在 is 或 in 中<br>like             like称为模糊查询，支持%或下划线匹配<br>                %匹配任意个字符<br>                下划线，一个下划线只匹配一个字符<br>                例如：select * from emp where ename like ‘_A%’;</p>
+<h2 id="12-排序"><a href="#12-排序" class="headerlink" title="12.排序"></a>12.排序</h2><p>排序采用 order by 子句，order by 后面跟上排序字段，排序字段可以放多个，多个采用逗号间隔，order by 默认采用升<br>序，如果存在 where 子句那么 order by 必须放到 where 语句的后面</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ 升序：order by [column name] asc<br>$ 降序：order by [column name] desc<br></code></pre></td></tr></table></figure>
+<h2 id="13-数据处理函数-单行处理函数"><a href="#13-数据处理函数-单行处理函数" class="headerlink" title="13.数据处理函数/单行处理函数"></a>13.数据处理函数/单行处理函数</h2><p>Lower         转换小写<br>upper         转换大写 如：upper(‘manager’)<br>substr        取子串（substr(被截取的字符串//[table name],起始下标,截取的长度)）<br>length           取长度 如：length([table name])<br>trim          去空格<br>str_to_date   将字符串转换成日期<br>                   如：select * from emp where HIREDATE=’1981-02-20’；<br>                （第二种方法，将字符串转换成 date 类型）<br>                select * from emp where HIREDATE=str_to_date(‘1981-02-20’,’%Y-%m-%d’);<br>                select * from emp where HIREDATE=str_to_date(‘02-20-1981’,’%m-%d-%Y’);<br>date_format   格式化日期 如：select empno, ename, date_format(hiredate, ‘%Y-%m-%d %H:%i:%s’) as hiredate from emp<br>format        设置千分位 如：select empno, ename, Format(sal, 0) from emp;<br>round         四舍五入  round(123.123)<br>rand()        生成随机数<br>Ifnull        可以将 null 转换成一个具体值<br>                如：ifnull(comm,0)<br>                  当comm为null替换为0</p>
+<h2 id="14-日期格式"><a href="#14-日期格式" class="headerlink" title="14.日期格式"></a>14.日期格式</h2><p>now() 获得当前时间</p>
+<h3 id="格式的说明"><a href="#格式的说明" class="headerlink" title="格式的说明"></a>格式的说明</h3><p>%Y：代表 4 位的年份<br>%y：代表 2 位的年份<br>%m：代表月, 格式为(01……12)<br>%c：代表月, 格式为(1……12)<br>%H：代表小时,格式为(00……23)<br>%h：代表小时,格式为(01……12)<br>%i：代表分钟, 格式为(00……59)<br>%r：代表 时间,格式为 12 小时(hh:mm:ss [AP]M)<br>%T：代表 时间,格式为 24 小时(hh:mm:ss)<br>%S：代表 秒,格式为(00……59)<br>%s：代表 秒,格式为(00……59)</p>
+<h2 id="15-case-…-when-…-then-…-else-…end"><a href="#15-case-…-when-…-then-…-else-…end" class="headerlink" title="15.case … when … then …..else …end"></a>15.case … when … then …..else …end</h2><p>例如：<br>如果 job 为 MANAGERG 薪水上涨 10%,如果 job 为 SALESMAN 工资上涨 50%<br> select empno, ename, job, sal, case job when ‘MANAGER’ then sal<em>1.1 when ‘SALESMAN’ then sal</em>1.5 end as newsal from emp;</p>
+<h2 id="16-分组函数-聚合函数-多行处理函数"><a href="#16-分组函数-聚合函数-多行处理函数" class="headerlink" title="16.分组函数/聚合函数/多行处理函数"></a>16.分组函数/聚合函数/多行处理函数</h2><p>未进行分组时整张表默认为一组<br>count      取得记录数   例如:count([table name]或*) *为一整行一个数据，这里相当于统计行数<br>sum        求和     注意：当例如select sum(sal+comm) from emp中comm中出现null,需替换null<br>avg        取平均<br>max        取最大的数<br>min        取最小的数</p>
+<h3 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h3><p>1.分组函数自动忽略空值(null)，不需要手动的加 where 条件排除空值。<br>select count(*) from emp where xxx;     符合条件的所有记录总数。(一行数据，只要不全为null则count++，当然不存在全为null的数据，有一位不是null则数据有效)<br>select count(comm) from emp;            comm 这个字段中不为空的元素总数。<br>2.分组函数不能直接使用在 where 关键字后面。<br>错误示范： mysql&gt; select ename,sal from emp where sal &gt; avg(sal);<br>原因见分组查询<br>3.所有分组函数可组合使用</p>
+<h2 id="17-分组查询（重点）"><a href="#17-分组查询（重点）" class="headerlink" title="17.分组查询（重点）"></a>17.分组查询（重点）</h2><h3 id="什么是分组"><a href="#什么是分组" class="headerlink" title="什么是分组"></a>什么是分组</h3><p>   在实际的应用中，可能有这样的需求，需要先进行分组，然后对每一组的数据进行操作。</p>
+<h3 id="关键字执行顺序"><a href="#关键字执行顺序" class="headerlink" title="关键字执行顺序"></a>关键字执行顺序</h3><pre><code class="hljs">1. from
+2. where
+3. group by
+4. select
+5. order by
+</code></pre>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><p>1.分组函数不能在where后：因为分组函数在使用的时候必须先分组之后才能使用，where执行的时候，还没有分组。所以where后面不能出现分组函数。<br>2.select sum(sal) from emp; 这个没有分组，为啥sum()函数可以用呢？   因为select在group by之后执行。<br>3.在一条select语句当中，如果有group by语句的话，select后面只能跟：参加分组的字段，以及分组函数。其它的一律不能跟。<br>4.可多个字段联合分组</p>
+<h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><h4 id="1-group-by"><a href="#1-group-by" class="headerlink" title="1.group by"></a>1.group by</h4><p>   例：select job,deptno,sum(sal) from emp group by job,deptno;</p>
+<h4 id="2-having"><a href="#2-having" class="headerlink" title="2.having"></a>2.having</h4><p>   对分组数据再进行过滤需要使用 having 子句<br>     优先考虑where过滤<br>   例：select job, avg(sal) from emp group by job having avg(sal) &gt;2000;<br>   顺序：根据条件查询数据 分组 采用 having 过滤，取得正确的数据</p>
+<h2 id="18-distinct"><a href="#18-distinct" class="headerlink" title="18.distinct"></a>18.distinct</h2><p>把查询结果去除重复记录<br>distinct只能出现在所有字段的最前方:<br>select ename,distinct job from emp为错误形式<br>允许该形式：<br>count(distinct job) </p>
+<h2 id="19-连接查询"><a href="#19-连接查询" class="headerlink" title="19.连接查询"></a>19.连接查询</h2><p>也可以叫跨表查询，需要关联多个表进行查询</p>
+<h3 id="连接分类"><a href="#连接分类" class="headerlink" title="连接分类"></a>连接分类</h3><p>可分为：<br>        内连接：  （无主次，平等）<br>            等值连接        例：select e.ename,d.dname from emp e join dept d on e.deptno = d.deptno;<br>            非等值连接    例：select e.ename, e.sal, s.grade from emp e join salgrade s on e.sal between s.losal and s.hisal; // 条件不是一个等量关系，称为非等值连接。<br>            自连接（技巧：视为多张表）例：select a.ename as ‘员工名’, b.ename as ‘领导名’ from emp a join emp b on a.mgr = b.empno; //员工的领导编号 = 领导的员工编号<br>        外连接：          （可在join前加outer,如right outer join ）<br>            左外连接（左连接）<br>            右外连接（右连接）right代表什么：表示将join关键字右边的这张表看成主表，主要是为了将<br>                                                                     这张表的数据全部查询出来，捎带着关联查询左边的表。<br>                                                                     在外连接当中，两张表连接，产生了主次关系。<br>        全连接</p>
+<h3 id="SQL92与SQLl99"><a href="#SQL92与SQLl99" class="headerlink" title="SQL92与SQLl99"></a>SQL92与SQLl99</h3><h4 id="SQL92语法："><a href="#SQL92语法：" class="headerlink" title="SQL92语法："></a>SQL92语法：</h4><pre><code class="hljs">select 
+    e.ename,d.dname
+ from
+     emp e, dept d
+where
+    e.deptno = d.deptno;
+sql92的缺点：结构不清晰，表的连接条件，和后期进一步筛选的条件，都放到了where后面。
+</code></pre>
+<h4 id="SQL99语法："><a href="#SQL99语法：" class="headerlink" title="SQL99语法："></a>SQL99语法：</h4><pre><code class="hljs">     select 
+         ...
+     from
+        a
+    (inner) join    //inner可以省略（带着inner可读性更好！！！一眼就能看出来是内连接）
+        b
+     on
+        a和b的连接条件
+    where
+        筛选条件
+sql99优点：表连接的条件是独立的，连接之后，如果还需要进一步筛选，再往后继续添加where
+</code></pre>
+<h2 id="20-多张表的连接查询"><a href="#20-多张表的连接查询" class="headerlink" title="20.多张表的连接查询"></a>20.多张表的连接查询</h2><p>语法：<br>select<br>    …<br> from<br>    a<br> join<br>    b<br> on<br>    a和b的连接条件<br> join<br>    c<br> on<br>    a和c的连接条件<br> right join<br>    d<br> on<br>    a和d的连接条件<br>   b,c,d并列<br>一条SQL中内连接和外连接可以混合。都可以出现</p>
+<h2 id="21-子查询"><a href="#21-子查询" class="headerlink" title="21.子查询"></a>21.子查询</h2><p>子查询就是嵌套的 select 语句，可以理解为子查询是一张表</p>
+<h3 id="where子查询"><a href="#where子查询" class="headerlink" title="where子查询"></a>where子查询</h3><p>格式：<br>select<br>        ..(select).<br>    from<br>        ..(select).<br>    where<br>        ..(select).<br>例：<br>第一步：查询最低工资是多少<br>select min(sal) from emp;<br>结果实例：<br>            +———-+<br>            | min(sal) |<br>            +———-+<br>            |   800.00 |<br>            +———-+<br>第二步：找出&gt;800的<br>select ename,sal from emp where sal &gt; 800;<br>第三步：合并<br>select ename,sal from emp where sal &gt; (select min(sal) from emp);</p>
+<h3 id="from子查询"><a href="#from子查询" class="headerlink" title="from子查询"></a>from子查询</h3><p>注意：from后面的子查询，可以将子查询的查询结果当做一张临时表。<br>例：找出每个岗位的平均工资的薪资等级。<br>第一步：找出每个岗位的平均工资（按照岗位分组求平均值）<br>        select job,avg(sal) from emp group by job;<br>        +———–+————-+<br>        | job       | avgsal      |<br>        +———–+————-+   t表<br>        | ANALYST   | 3000.000000 |<br>        …<br>        +———–+————-+<br>第二步：克服心理障碍，把以上的查询结果就当做一张真实存在的表t。<br>        select * from salgrade;<br>    +——-+——-+——-+<br>    | GRADE | LOSAL | HISAL |<br>    +——-+——-+——-+   s表<br>    |     1 |   700 |  1200 |<br>    |     2 |  1201 |  1400 |<br>    …<br>    t表和s表进行表连接，条件：t表avg(sal) between s.losal and s.hisal;<br>        select<br>            t.*, s.grade<br>        from<br>            (select job,avg(sal) as avgsal from emp group by job) t<br>        join<br>            salgrade s<br>        on<br>            t.avgsal between s.losal and s.hisal;  // 技巧：avg(sal) as avgsal,否则t.avg(sal)报错</p>
+<h3 id="select子查询（非重点）"><a href="#select子查询（非重点）" class="headerlink" title="select子查询（非重点）"></a>select子查询（非重点）</h3><p>对于select后面的子查询来说，这个子查询只能一次返回1条结果(就是括号里面那个)<br>例：<br> select e.ename,e.deptno,(select d.dname from dept d where e.deptno = d.deptno) as dname from emp e;</p>
+<h2 id="22-union"><a href="#22-union" class="headerlink" title="22.union"></a>22.union</h2><p>union可以减少匹配的次数。在减少匹配次数的情况下，还可以完成两个结果集的拼接。<br>例：<br>select ename,job from emp where job = ‘MANAGER’<br>union<br>select ename,job from emp where job = ‘SALESMAN’;</p>
+<h3 id="注意事项："><a href="#注意事项：" class="headerlink" title="注意事项："></a>注意事项：</h3><p>1.union在进行结果集合并的时候，要求两个结果集的列数相同（查询字段对应个数相同）。<br>2.不同于oracle，mysql允许结果集合并时列和列的数据类型不一致。</p>
+<h2 id="23-limit"><a href="#23-limit" class="headerlink" title="23.limit"></a>23.limit</h2><p>将查询结果集的一部分取出来。通常使用在分页查询当中。分页的作用是为了提高用户的体验。</p>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>完整用法：limit startIndex, length<br>        startIndex是起始下标，length是长度。<br>        起始下标从0开始。<br>缺省用法：limit 5; 这是取前5<br>     limit 1,2; 从第二条（下标为1）开始取两条数据<br>注意：mysql当中limit在order by之后执行</p>
+<h3 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h3><p>每页显示3条记录<br>    第1页：limit 0,3        [0 1 2]<br>    第2页：limit 3,3        [3 4 5]<br>    …<br>每页显示pageSize条记录<br>    第pageNo页：limit (pageNo - 1) * pageSize  , pageSize<br>    public static void main(String[] args){<br>        // 用户提交过来一个页码，以及每页显示的记录条数<br>        int pageNo = 5; //第5页<br>        int pageSize = 10; //每页显示10条</p>
+<pre><code class="hljs">    int startIndex = (pageNo - 1) * pageSize;
+    String sql = &quot;select ...limit &quot; + startIndex + &quot;, &quot; + pageSize;
+&#125;
+</code></pre>
+<p>记公式：limit (pageNo-1)*pageSize , pageSize</p>
+<h2 id="24-语句总结与运行顺序"><a href="#24-语句总结与运行顺序" class="headerlink" title="24.语句总结与运行顺序"></a>24.语句总结与运行顺序</h2><p>总：select … from … where … group by … having … order by … limit …<br>顺序：1.from 2.where 3.group by 4.having 5.select 6.order by 7.limit..</p>
+<h2 id="25-建表"><a href="#25-建表" class="headerlink" title="25.建表"></a>25.建表</h2><h3 id="格式："><a href="#格式：" class="headerlink" title="格式："></a>格式：</h3><p>create table tableName(<br> columnName dataType(length),<br> ………………..<br> columnName dataType(length)<br>);</p>
+<h3 id="MySQL常用数据类型"><a href="#MySQL常用数据类型" class="headerlink" title="MySQL常用数据类型"></a>MySQL常用数据类型</h3><p>类型<br>Char(长度)                            定长字符串，存储空间大小固定，适合作为主键或外键<br>Varchar(长度)                        变长字符串，存储空间等于实际数据空间<br>double(有效数字位数，小数位)     数值型<br>Float(有效数字位数，小数位)      数值型<br>Int(长度)                          整型<br>bigint(长度)                     长整型<br>Date                               日期型<br>BLOB                             Binary Large OBject（二进制大对象）<br>CLOB                             Character Large OBject（字符大对象）</p>
+<h3 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h3><p>添加修改字段：alter table [table name] add [column name] <a href="length">datatype</a>;<br>            alter table [table name] modify [column name] <a href="length">datatype</a> ;<br>         alter table [table name] drop [column name];<br>表复制：create table … as …<br>删除表：drop table if [table name];// 如果这张表存在的话，删除<br>插入数据：insert into 表名(字段名1,字段名2,字段名3…) values(值1,值2,值3);字段名和值数量数据类型对应，没有给其它字段指定值的话，默认值是NULL。若省略前面的字段名，等于都写上，所以值也要都写上</p>
+<h3 id="插入日期注意格式转换"><a href="#插入日期注意格式转换" class="headerlink" title="插入日期注意格式转换"></a>插入日期注意格式转换</h3><p>str_to_date(‘字符串日期’, ‘日期格式’)：将字符串varchar类型转换成date类型<br>date_format(日期类型数据, ‘日期格式’)：将date类型转换成具有一定格式的varchar字符串类型。<br>命名规范：所有的标识符都是全部小写，单词和单词之间使用下划线进行衔接。<br>mysql默认的日期格式：’%Y-%m-%d’<br>date是短日期：只包括年月日信息。默认：%Y-%m-%d<br>datetime是长日期：包括年月日时分秒信息。默认:%Y-%m-%d %h:%i:%s</p>
+<h2 id="26-表的修改与删除"><a href="#26-表的修改与删除" class="headerlink" title="26.表的修改与删除"></a>26.表的修改与删除</h2><p>修改：update 表名 set 字段名称 1=需要修改的值 1, 字段名称 2=需要修改的值 2 where …<br>删除：Delete from 表名 where … 数据在硬盘上的真实存储空间不会被释放，可恢复<br>      truncate table 表名;  不可恢复，快速</p>
+<h2 id="27-约束（重点）"><a href="#27-约束（重点）" class="headerlink" title="27.约束（重点）"></a>27.约束（重点）</h2><p>目的：创建表的时候，给表中的字段加上一些约束保证表中的数据有效完整</p>
+<h3 id="类型："><a href="#类型：" class="headerlink" title="类型："></a>类型：</h3><p>非空约束：not null<br>唯一性约束: unique<br>主键约束: primary key （简称PK）<br>外键约束：foreign key（简称FK）<br>检查约束：check（mysql不支持，oracle支持）</p>
+<h3 id="非空约束"><a href="#非空约束" class="headerlink" title="非空约束"></a>非空约束</h3><p>非空约束not null约束的字段不能为NULL。<br>例：create table t_vip(<br>        id int,<br>        name varchar(255) not null  // not null只有列级约束，没有表级约束！<br>    );</p>
+<h3 id="唯一性约束"><a href="#唯一性约束" class="headerlink" title="唯一性约束"></a>唯一性约束</h3><p>唯一性约束unique约束的字段不能重复，但是可以为NULL。<br>例：create table t_vip(<br>        id int,<br>        name varchar(255) unique,<br>        email varchar(255)<br>    );</p>
+<h3 id="表级约束"><a href="#表级约束" class="headerlink" title="表级约束"></a>表级约束</h3><p>需要给多个字段联合起来添加某一个约束的时候，需要使用表级约束。<br>例：create table t_vip(<br>                id int,<br>                name varchar(255),<br>                email varchar(255),<br>                unique(name,email)<br>)<br>在MySQL中，unique 和not null联合自动变成主键字段。例：name varchar(255) not null unique</p>
+<h3 id="列级约束"><a href="#列级约束" class="headerlink" title="列级约束"></a>列级约束</h3><p>例：id int primary key</p>
+<h3 id="主键约束（primary-key，简称PK）"><a href="#主键约束（primary-key，简称PK）" class="headerlink" title="主键约束（primary key，简称PK）"></a>主键约束（primary key，简称PK）</h3><p>主键字段：该字段上添加了主键约束，这样的字段叫做：主键字段<br>主键值：主键字段中的每一个值都叫做主键值，一般数字且定长<br>作用：主键值是每一行记录的唯一标识，相当于身份证号，任何一张表都应该有主键，没有主键，表无效<br>复合主键：primary key(id,name)多个字段联合起来做约束（不建议使用）<br>在mysql当中，有一种机制，可以帮助我们自动维护一个主键值<br>create table t_vip(<br>            id int primary key auto_increment, //auto_increment表示自增，从1开始，以1递增！<br>            name varchar(255)<br>        );</p>
+<h3 id="外键约束"><a href="#外键约束" class="headerlink" title="外键约束"></a>外键约束</h3><p>外键主要是维护表之间的关系的，主要是为了保证参照完整性，如果表中的某个字段为外键字段，那么该字段的值必须来源于参照的表的字段<br>存在外键的表就是子表，参照的表就是父表，所以存在一个父子关系，也就是主从关系<br>删除表的顺序：先删子，再删父；<br>创建表的顺序：先创建父，再创建子。<br>删除数据的顺序：先删子，再删父。<br>插入数据的顺序：先插入父，再插入子。<br>子表中的外键引用的父表中的某个字段，被引用的这个字段不一定是主键，但至少具有unique约束。<br>外键值可为null<br>例：constraint [table name] foreign key([column name]) references [table name]([column name])<br>更改删除父表数据，子表也会变动</p>
+<h3 id="约束的更改"><a href="#约束的更改" class="headerlink" title="约束的更改"></a>约束的更改</h3><p>删除：外键：alter table 表名 drop foreign key 外键字段;<br>     主键：alter table 表名 drop primary key;<br>         唯一：alter table 表名 drop index 字段名<br>添加： alter table 表名 add constraint 约束名 约束类型(字段名) [外键的引用]</p>
+<h2 id="28-存储引擎（了解）"><a href="#28-存储引擎（了解）" class="headerlink" title="28.存储引擎（了解）"></a>28.存储引擎（了解）</h2><p>存储引擎是MySQL中特有的一个术语，实际上存储引擎是一个表存储/组织数据的方式。不同的存储引擎，表存储数据的方式不同。<br>在创建表时，可使用 ENGINE 选项为 CREATE TABLE 语句显式指定存储引擎。未指定则默认<br>常用引擎：MyISAM InnoDB MEMORY</p>
+<h2 id="29-事务（重点）"><a href="#29-事务（重点）" class="headerlink" title="29.事务（重点）"></a>29.事务（重点）</h2><p>一个事务其实就是一个完整的业务逻辑。是一个最小的工作单元。不可再分。<br>本质上事务就是批量的DML语句（insert、delete、update 对数据进行更改）同时成功，或者同时失败</p>
+<h3 id="事务工作过程"><a href="#事务工作过程" class="headerlink" title="事务工作过程"></a>事务工作过程</h3><p>InnoDB存储引擎：提供一组用来记录事务性活动的日志文件<br>在事务的执行过程中，每一条DML的操作都会记录到“事务性活动的日志文件”中。在事务的执行过程中，我们可以提交事务，也可以回滚事务。<br>提交事务：清空事务性活动的日志文件，将数据全部彻底持久化到数据库表中。标志着事务的结束。并且是一种全部成功的结束。<br>回滚事务：将之前所有的DML操作全部撤销，并且清空事务性活动的日志文件。标志着事务的结束。并且是一种全部失败的结束。</p>
+<h3 id="事务执行"><a href="#事务执行" class="headerlink" title="事务执行"></a>事务执行</h3><p>开始事务：start transaction（关闭DML自动提交，此句开始保持上一次提交点）;<br>提交事务：commit; 语句<br>回滚事务：rollback; 语句（回滚永远都是只能回滚到上一次的提交点）<br>默认每执行一条DML自动提交</p>
+<h3 id="事务特性"><a href="#事务特性" class="headerlink" title="事务特性"></a>事务特性</h3><p>原子性：说明事务是最小的工作单元。不可再分。<br>一致性：所有事务要求，在同一个事务当中，所有操作必须同时成功，或者同时失败，以保证数据的一致性。<br>隔离性：A事务和B事务之间具有一定的隔离。教室A和教室B之间有一道墙，这道墙就是隔离性。A事务在操作一张表的时候，另一个事务B也操作这张表会那样<br>持久性：事务最终结束的一个保障。事务提交，就相当于将没有保存到硬盘上的数据保存到硬盘上</p>
+<h3 id="事务隔离性"><a href="#事务隔离性" class="headerlink" title="事务隔离性"></a>事务隔离性</h3><p>4个级别<br>读未提交：read uncommitted（最低的隔离级别）事务A可以读取到事务B未提交的数据。<br>读已提交：read committed （数据库隔离级别默认从此开始）事务A只能读取到事务B提交之后的数据。数据真实<br>可重复读：repeatable read （mysql中默认）事务A开启之后，不管是多久，每一次在事务A中读取到的数据都是一致的。即使事务B将数据已经修改，并且提交了，事务A读取到的数据还是没有发生改变<br>序列化/串行化：serializable（最高的隔离级别）事务排队，不能并发（我操作你停） synchronized，线程同步（事务同步）将一个事务与其他事务完全地隔离。效率最低</p>
+<h3 id="一致性问题"><a href="#一致性问题" class="headerlink" title="一致性问题"></a>一致性问题</h3><p>脏读现象：读到脏数据（未提交的数据）<br>不可重复读：事务A开启之后，不管是多久，每一次在事务A中读取到的数据都是一致的。即使事务B将数据已经修改，并且提交了<br>幻像读：读到的数据可能不够绝对真实，即使事务B将数据已经修改，并且提交了，事务A读取到的数据还是没有发生改变</p>
+<h3 id="隔离级别与一致性问题关系"><a href="#隔离级别与一致性问题关系" class="headerlink" title="隔离级别与一致性问题关系"></a>隔离级别与一致性问题关系</h3><p>隔离级别     脏读取     不可重复读        幻像读<br>读未提交     可能          可能            可能<br>读已提交    不可能       可能            可能<br>可重复读     不可能      不可能        对InnoDB不可能<br>序列化       不可能        不可能        不可能</p>
+<h3 id="设置隔离级别"><a href="#设置隔离级别" class="headerlink" title="设置隔离级别"></a>设置隔离级别</h3><p>会话级：mysql&gt; SET TRANSACTION ISOLATION …；<br>            或：<br>       mysql&gt; SET SESSION TRANSACTION ISOLATION LEVEL …；<br>全局级：mysql&gt; SET GLOBAL TRANSACTION ISOLATION LEVEL …；</p>
+<h3 id="查看隔离级别"><a href="#查看隔离级别" class="headerlink" title="查看隔离级别"></a>查看隔离级别</h3><p>mysql&gt; SELECT @@tx_isolation;或：<br>mysql&gt; SELECT @@session.tx_isolation;<br>– 查看全局级的当前隔离级别：<br>mysql&gt; SELECT @@global.tx_isolation;</p>
+<h2 id="30-索引"><a href="#30-索引" class="headerlink" title="30.索引"></a>30.索引</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>索引是在数据库表的字段上添加的，是为了提高查询效率存在的一种机制。索引被用来快速找出在一个列上用一特定值的行。一张表的一个字段可以添加一个索引，当然，多个字段联合起来也可以添加索引。索引相当于一本书的目录，是为了缩小扫描范围而存在的一种机制。<br>MySQL在查询方面主要就是两种方式：第一种方式：全表扫描（无索引时的查找方式，效率较低）；第二种方式：根据索引检索。</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>在mysql当中索引是一个B-Tree数据结构。<br>遵循左小又大原则存放。采用中序遍历方式遍历取数据。<br>底层是一个自平衡的二叉树<br>注意：1.任何数据库主键自动添加索引，mysql如果有unique约束也会自动创建<br>2.在任何数据库当中，任何一张表的任何一条记录在硬盘存储上都有一个硬盘的物理存储编号<br>3.在mysql当中，索引是一个单独的对象，在mysql当中都是一个树的形式存在。（自平衡二叉树：B-Tree）不同存储引擎形式不同</p>
+<h3 id="应用条件"><a href="#应用条件" class="headerlink" title="应用条件"></a>应用条件</h3><p>1.表中该字段中的数据量庞大<br>2.经常被检索，经常出现在 where 子句中的字段<br>3.经常被 DML 操作的字段不建议添加索引（增删改后要重新排序）<br>4.索引需维护，不随意添加<br>5.唯一性比较弱的字段上添加索引用处不大。</p>
+<h3 id="索引应用"><a href="#索引应用" class="headerlink" title="索引应用"></a>索引应用</h3><p>建立：create index 索引名 on 表名(字段名);<br>     alter table 表名 add unique index 索引名 (列名);<br>删除：DROP INDEX 索引名 ON 表名<br>         ALTER TABLE 表名 DROP INDEX 索引名<br>查看索引：show index from 表名;<br>通过扫描次数判断是否使用索引</p>
+<h3 id="explain语句"><a href="#explain语句" class="headerlink" title="explain语句"></a>explain语句</h3><p>语法：explain select …<br>用来查看SQL语句执行效果</p>
+<h3 id="索引失效"><a href="#索引失效" class="headerlink" title="索引失效"></a>索引失效</h3><p>1.模糊匹配当中以“%”开头 如：select * from emp where ename like ‘%T’;<br>2.使用or的时候其中一边有一个字段没有索引（union不会失效）<br>3.使用复合索引（两个字段，或者更多的字段联合起来添加一个索引）的时候，没有使用左侧的列查找<br>4.在where当中索引列参加了运算<br>5.在where当中索引列使用了函数<br>…<br>(没有直接匹配结果则失效？)</p>
+<h3 id="索引分类"><a href="#索引分类" class="headerlink" title="索引分类"></a>索引分类</h3><p>单一索引：一个字段上添加索引。<br>复合索引：两个字段或者更多的字段上添加索引。<br>主键索引：主键上添加索引。<br>唯一性索引：具有unique约束的字段上添加索引。<br>…..</p>
+<h2 id="31-视图"><a href="#31-视图" class="headerlink" title="31.视图"></a>31.视图</h2><p>视图（虚拟表）：站在不同的角度去看待同一份数据，是一种根据查询（也就是 SELECT 表达式）定义的数据库对象，用于获取想要看到和使用的局部数据。用来提高检索效率，隐藏表的实现细节（面向视图检索）</p>
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><p>创建：create view 视图名 as select …;（mysql 不支持子查询创建视图）<br>删除：drop view (if exists) 视图名 ;<br>修改：alter view 视图名 as select …;</p>
+<h3 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h3><p>可以面向视图对象进行增删改查（看作一张表），对视图对象的增删改查，会导致原表被操作！（视图的特点：通过对视图的操作，会影响到原表数据。）方便，简化开发，利于维护</p>
+<h2 id="32-DBA"><a href="#32-DBA" class="headerlink" title="32.DBA"></a>32.DBA</h2><p>重点数据导入导出（数据备份）</p>
+<h3 id="导入"><a href="#导入" class="headerlink" title="导入"></a>导入</h3><p>登录 MYSQL 数据库管理系统之后执行：source D:\ bjpowernode.sql</p>
+<h3 id="导出"><a href="#导出" class="headerlink" title="导出"></a>导出</h3><p>导出整个数据库：在 windows 的 dos 命令窗口中执行：mysqldump bjpowernode&gt;D:\bjpowernode.sql -uroot -p123<br>导出指定库下的指定表：在 windows 的 dos 命令窗口中执行：mysqldump bjpowernode emp&gt; D:\ bjpowernode.sql -uroot –p123</p>
+<h2 id="33-数据库设计三范式"><a href="#33-数据库设计三范式" class="headerlink" title="33.数据库设计三范式"></a>33.数据库设计三范式</h2><p>第一范式：有主键，具有原子性，字段不可分割<br>第二范式：完全依赖，没有部分依赖<br>第三范式：没有传递依赖</p>
+<h3 id="表设计总结"><a href="#表设计总结" class="headerlink" title="表设计总结"></a>表设计总结</h3><p>一对多：一对多，两张表，多的表加外键<br>多对多：多对多，三张表，关系表两个外键<br>一对一：一张表字段太多，太庞大就拆分表，外键唯一</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>2023/07/10：夏令营week1记录:mysql笔记</div>
+      <div>http://example.com/2023/07/13/mysql笔记/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>July 13, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/16/sql-lab/" title="2023/07/16：夏令营week1记录:sql-lab">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">2023/07/16：夏令营week1记录:sql-lab</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/04/28/warmup/" title="2023/04/18：FCTF2023：warmup&amp;正式比赛">
+                        <span class="hidden-mobile">2023/04/18：FCTF2023：warmup&amp;正式比赛</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

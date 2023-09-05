@@ -1,0 +1,637 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="来源https:&#x2F;&#x2F;cloud.tencent.com&#x2F;developer&#x2F;article&#x2F;1055505?from&#x3D;15425https:&#x2F;&#x2F;cloud.tencent.com&#x2F;developer&#x2F;article&#x2F;2127498 要求变量原值不同但md5或sha1相同的情况下sha1()和md5()都用于计算字符串的散列值，但是两者都无法处理数组，不会抛出异常而是直接返回NULL 1.0e开头的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2023&#x2F;08&#x2F;12：php的一些记录">
+<meta property="og:url" content="http://example.com/2023/08/12/somephp/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="来源https:&#x2F;&#x2F;cloud.tencent.com&#x2F;developer&#x2F;article&#x2F;1055505?from&#x3D;15425https:&#x2F;&#x2F;cloud.tencent.com&#x2F;developer&#x2F;article&#x2F;2127498 要求变量原值不同但md5或sha1相同的情况下sha1()和md5()都用于计算字符串的散列值，但是两者都无法处理数组，不会抛出异常而是直接返回NULL 1.0e开头的">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-08-12T03:46:39.000Z">
+<meta property="article:modified_time" content="2023-08-12T15:57:57.603Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>2023/08/12：php的一些记录 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="2023/08/12：php的一些记录"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-08-12 11:46" pubdate>
+          August 12, 2023 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.6k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          30 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">2023/08/12：php的一些记录</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>来源<br><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1055505?from=15425">https://cloud.tencent.com/developer/article/1055505?from=15425</a><br><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2127498">https://cloud.tencent.com/developer/article/2127498</a></p>
+<h4 id="要求变量原值不同但md5或sha1相同的情况下"><a href="#要求变量原值不同但md5或sha1相同的情况下" class="headerlink" title="要求变量原值不同但md5或sha1相同的情况下"></a>要求变量原值不同但md5或sha1相同的情况下</h4><p><code>sha1()</code>和<code>md5()</code>都用于计算字符串的散列值，但是两者都无法处理数组，不会抛出异常而是直接返回NULL</p>
+<h5 id="1-0e开头的全部相等（-判断）"><a href="#1-0e开头的全部相等（-判断）" class="headerlink" title="1.0e开头的全部相等（==判断）"></a>1.0e开头的全部相等（==判断）</h5><p>240610708 和 QNKCDZO md5值类型相似，但并不相同，在”==”相等操作符的运算下，结果返回了true。Md5和sha1一样</p>
+<h5 id="2-利用数组绕过（-判断）"><a href="#2-利用数组绕过（-判断）" class="headerlink" title="2.利用数组绕过（===判断）"></a>2.利用数组绕过（===判断）</h5><p>Md5和sha1对一个数组进行加密将返回NULL；而NULL===NULL返回true，所以可绕过判断</p>
+<h4 id="strcmp-函数"><a href="#strcmp-函数" class="headerlink" title="strcmp()函数"></a>strcmp()函数</h4><p>当输入的两个值为不是字符串时就会产生不预期的返回值，比如数组（php版本5.3.3至5.5中，不包含5.5）<br><code>ereg()</code>和<code>strpos</code>处理数组也会异常，返回NULL</p>
+<h4 id="parse-str-函数"><a href="#parse-str-函数" class="headerlink" title="parse_str()函数"></a>parse_str()函数</h4><p>解析字符串并注册成变量，在注册变量之前不会验证当前变量是否存在，所以直接覆盖掉已有变量<br>当parse_str()函数的参数值可以被用户控制时，则存在变量覆盖漏洞</p>
+<h4 id="intval-函数"><a href="#intval-函数" class="headerlink" title="intval()函数"></a>intval()函数</h4><p>用于获取变量的整数值<br>在转换时，函数会从字符串起始处进行转换直到遇到一个非数字的字符<br>即使出现无法转换的字符串也不会报错而是返回0</p>
+<h4 id="in-array-函数"><a href="#in-array-函数" class="headerlink" title="in_array()函数"></a>in_array()函数</h4><p>用来判断一个值是否在某一个数组列表里面。其缺陷在于存在自动类型转换，当输入数字1后再紧跟其他字符串能够Bypass检测数组的功能</p>
+<h4 id="json-decode-函数"><a href="#json-decode-函数" class="headerlink" title="json_decode()函数"></a>json_decode()函数</h4><p>用于对json格式数据进行json解码操作，对于一个json类型的字符串，会解密成一个数组，其存在一个<code>0==&quot;efeaf&quot;</code>的Bypass</p>
+<h4 id="preg-match-函数"><a href="#preg-match-函数" class="headerlink" title="preg_match()函数"></a>preg_match()函数</h4><p>执行一个正则表达式匹配<br><code>int preg_match ( string $pattern , string $subject [, array &amp;$matches [, int $flags = 0 [, int $offset = 0 ]]] )</code><br>1.<code>$pattern</code>：要搜索的模式，字符串形式<br>2.<code>$subject</code>：要搜索检测的目标字符串<br>3.<code>matches</code>：如果提供了参数<code>matches</code>，它将被填充为搜索结果<code>matches[0]</code>将包含完整模式匹配到的文本<br>4.<code>$flags</code>：可设置标记值<br>5.<code>$offset</code>：可选参数<code>offset</code>用于指定从目标字符串的某个未知开始搜索(单位是字节)<br><code>/i</code>修饰符，大小写不敏感<br><code>/m</code>修饰符，多行匹配，当出现换行符<code>%0a</code>的时候，会被当做两行处理，此时只可以匹配第1行，后面的行就会被忽略</p>
+<h4 id="preg-replace-函数"><a href="#preg-replace-函数" class="headerlink" title="preg_replace()函数"></a>preg_replace()函数</h4><p>执行一个正则表达式的搜索和替换<br><code>preg_replace ( mixed $pattern , mixed $replacement , mixed $subject [, int $limit = -1 [, int &amp;$count ]] ) : mixed</code><br>1.<code>$pattern</code>：要搜索的模式，可以是字符串或一个字符串数组<br>2.<code>$replacement</code>：用于替换的字符串或字符串数组<br>3.<code>$subject</code>：要搜索替换的目标字符串或字符串数组<br>4.<code>$limit</code>：可选，对于每个模式用于每个 subject 字符串的最大可替换次数。默认是-1（无限制）<br>5.<code>$count</code>：可选，为替换执行的次数<br><code>/e</code>修饰符<br>使preg_replace()将replacement参数当作 PHP 代码</p>
+<h4 id="register-globals全局变量覆盖"><a href="#register-globals全局变量覆盖" class="headerlink" title="register_globals全局变量覆盖"></a>register_globals全局变量覆盖</h4><p>php.ini中有一项为register_globals，即注册全局变量<br>register_globals=On时，传递过来的值会被直接的注册为全局变量直接使用<br>register_globals=Off时，我们需要到特定的数组里去得到它<br>（PHP 5.3.0 起废弃并将自 PHP 5.4.0 起移除）<br>当register_globals=On，变量未被初始化且能够用户所控制时，就会存在变量覆盖漏洞</p>
+<h4 id="extract-变量覆盖"><a href="#extract-变量覆盖" class="headerlink" title="extract()变量覆盖"></a>extract()变量覆盖</h4><p>从数组中将变量导入到当前的符号表<br>使用数组键名作为变量名，使用数组键值作为变量值<br>针对数组中的每个元素，将在当前符号表中创建对应的一个变量<br><code>int extract ( array $var_array [, int $extract_type [, string $prefix ]] )</code><br>第二个参数指定函数将变量导入符号表时的行为:<br>1.当值为EXTR_OVERWRITE时，在将变量导入符号表的过程中，如果变量名发生冲突，则覆盖所有变量<br>2.值为EXTR_SKIP则表示跳过不覆盖<br>3.若第二个参数未指定，则在默认情况下使用EXTR_OVERWRITE<br>当extract()函数从用户可以控制的数组中导出变量且第二个参数未设置或设置为EXTR_OVERWRITE时，就存在变量覆盖漏洞</p>
+<h4 id="import-request-variables-变量覆盖"><a href="#import-request-variables-变量覆盖" class="headerlink" title="import_request_variables()变量覆盖"></a>import_request_variables()变量覆盖</h4><p>将GET、POST、Cookies中的变量导入到全局(4.1.0 &lt;= PHP &lt; 5.4.0)<br><code>bool import_request_variables (string $types [, string $prefix])</code><br>1.<code>$type</code>代表要注册的变量，G代表GET，P代表POST，C代表COOKIE<br>2.第二个参数为要注册变量的前缀</p>
+<h4 id="导致的变量覆盖"><a href="#导致的变量覆盖" class="headerlink" title="$$导致的变量覆盖"></a>$$导致的变量覆盖</h4><p>1.<code>\$var</code>是一个正常变量，名称为：var，存储任何值，如：string，integer，float等<br>2.<code>\var</code>是一个引用变量，用于存储斜杠</p>
+<h4 id="strstr-函数"><a href="#strstr-函数" class="headerlink" title="strstr()函数"></a>strstr()函数</h4><p>大小写敏感</p>
+<h4 id="mt-rand-函数"><a href="#mt-rand-函数" class="headerlink" title="mt_rand()函数"></a>mt_rand()函数</h4><p>随机数生成工具<br>问题在于每个php cgi进程期间，只有第一次调用mt_rand()会自动播种，接下来都会根据这个第一次播种的种子来生成随机数<br>所以可以通过逆向得到随机种子，然后获取后面其他随机数，如路径之类的信息就有了<br>使用php_mt_seed工具</p>
+<h4 id="当有两个is-numeric判断并用and连接时，and后面的is-numeric可以绕过"><a href="#当有两个is-numeric判断并用and连接时，and后面的is-numeric可以绕过" class="headerlink" title="当有两个is_numeric判断并用and连接时，and后面的is_numeric可以绕过"></a>当有两个is_numeric判断并用and连接时，and后面的is_numeric可以绕过</h4><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs ruby"><span class="hljs-variable">$a</span>=<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;a&#x27;</span>];<br><span class="hljs-variable">$b</span>=<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;b&#x27;</span>];<br><span class="hljs-variable">$c</span>=is_numeric(<span class="hljs-variable">$a</span>) <span class="hljs-keyword">and</span> is_numeric(<span class="hljs-variable">$b</span>);<br>var_dump(is_numeric(<span class="hljs-variable">$a</span>));<br>var_dump(is_numeric(<span class="hljs-variable">$b</span>)); <br>var_dump(<span class="hljs-variable">$c</span>); <span class="hljs-regexp">//</span><span class="hljs-variable">$b</span>可以不是数字，同样返回<span class="hljs-literal">true</span><br><span class="hljs-variable">$test</span>=<span class="hljs-literal">false</span> <span class="hljs-keyword">and</span> <span class="hljs-literal">true</span>;<br>var_dump(<span class="hljs-variable">$test</span>); <span class="hljs-regexp">//</span>返回<span class="hljs-literal">true</span><br></code></pre></td></tr></table></figure>
+<h4 id="NULL-0-”0″-array-使用-和false比较时，都是会返回true的"><a href="#NULL-0-”0″-array-使用-和false比较时，都是会返回true的" class="headerlink" title="NULL,0,”0″,array()使用==和false比较时，都是会返回true的"></a>NULL,0,”0″,array()使用==和false比较时，都是会返回true的</h4><h4 id="eregi匹配"><a href="#eregi匹配" class="headerlink" title="eregi匹配"></a>eregi匹配</h4><p>ereg()有区分大小写，eregi()与大小写无关<br>使用指定的模式搜索一个字符串中指定的字符串，如果匹配成功则返回true，否则返回false</p>
+<h5 id="1-数组绕过"><a href="#1-数组绕过" class="headerlink" title="1.数组绕过"></a>1.数组绕过</h5><p>ereg是处理字符串，传入数组之后，ereg是返回NULL</p>
+<h5 id="2-00截断绕过"><a href="#2-00截断绕过" class="headerlink" title="2.%00截断绕过"></a>2.%00截断绕过</h5><p>读到%00截止</p>
+<h4 id="接收参数-a得存在，并且-a-0可用-绕过（非数字都可绕过）"><a href="#接收参数-a得存在，并且-a-0可用-绕过（非数字都可绕过）" class="headerlink" title="接收参数$a得存在，并且$a==0可用.绕过（非数字都可绕过）"></a>接收参数$a得存在，并且$a==0可用.绕过（非数字都可绕过）</h4><p>如：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-variable">$a</span>=<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;a&#x27;</span>];<br><span class="hljs-keyword">if</span> (<span class="hljs-variable">$a</span>==<span class="hljs-number">0</span>) &#123;<br>    <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;1&quot;</span>;<br>&#125;<br><span class="hljs-keyword">if</span> (<span class="hljs-variable">$a</span>) &#123;<br>    <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;must&quot;</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="is-numeric绕过"><a href="#is-numeric绕过" class="headerlink" title="is_numeric绕过"></a>is_numeric绕过</h4><p>用于检测变量是否为数字或数字字符串，可被十六进制的值进行绕过<br>空格、\t、\n、\r、\v、\f、+、-能够出现在参数开头，“点”能够在参数任何位置，E、e只能出现在参数中间。</p>
+<h4 id="php5-3-29-这里可以直接用-0b绕过-s（空白字符）的匹配"><a href="#php5-3-29-这里可以直接用-0b绕过-s（空白字符）的匹配" class="headerlink" title="php5,3,29,这里可以直接用%0b绕过\s（空白字符）的匹配"></a>php5,3,29,这里可以直接用%0b绕过\s（空白字符）的匹配</h4><h4 id="既是0又是1的情况"><a href="#既是0又是1的情况" class="headerlink" title="既是0又是1的情况"></a>既是0又是1的情况</h4><p><code>$a==1&amp;$test[$a]=t</code>时；<br>php精度（16以上）<code>var_dump(9999999999999999999==1);//true</code><br>科学计数法 <code>.1e1 echo $b[‘.1e1’]//输出t</code><br>.是字符串所以在数组里面变成0，但在is_numeric中有点则正常输出为数字</p>
+<h4 id="伪协议"><a href="#伪协议" class="headerlink" title="伪协议"></a>伪协议</h4><h4 id="反序列化"><a href="#反序列化" class="headerlink" title="反序列化"></a>反序列化</h4><h4 id="当switch没有break时可以继续往下执行"><a href="#当switch没有break时可以继续往下执行" class="headerlink" title="当switch没有break时可以继续往下执行"></a>当switch没有break时可以继续往下执行</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span> ( <span class="hljs-variable">$_GET</span> [<span class="hljs-string">&#x27;which&#x27;</span>] )) &#123;<br> <span class="hljs-variable">$which</span> = <span class="hljs-variable">$_GET</span> [<span class="hljs-string">&#x27;which&#x27;</span>];<br> <span class="hljs-keyword">switch</span> (<span class="hljs-variable">$which</span>) &#123;<br> <span class="hljs-keyword">case</span> <span class="hljs-number">0</span> :<br> <span class="hljs-keyword">case</span> <span class="hljs-number">1</span> :<br> <span class="hljs-keyword">case</span> <span class="hljs-number">2</span> :<br> <span class="hljs-keyword">echo</span> <span class="hljs-variable">$which</span> . <span class="hljs-string">&#x27;.php&#x27;</span>;<br> <span class="hljs-keyword">break</span>;<br> <span class="hljs-keyword">default</span> :<br> <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;1&quot;</span>;<br> <span class="hljs-keyword">break</span>;<br> &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>$which进入循环时没有break则按顺序继续往下执行</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>2023/08/12：php的一些记录</div>
+      <div>http://example.com/2023/08/12/somephp/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>August 12, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/08/11/LITCTF/" title="2023/08/11：LITCTF2023">
+                        <span class="hidden-mobile">2023/08/11：LITCTF2023</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

