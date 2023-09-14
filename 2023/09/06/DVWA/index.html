@@ -24,7 +24,7 @@
 <meta property="og:description" content="Brute Force这里要求爆破 LOW直接爆破，猜到弱密码admin&#x2F;password也可通关，没啥防护 Command InjectionLOW无防护的命令注入，使用|连接想要的命令即可 File InclusionLOW查看源码，直接GET传参即可，如http:&#x2F;&#x2F;127.0.0.1&#x2F;1.php这里allow_url_include被禁用，需手动开启 Cross Site Request">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-09-06T05:59:14.000Z">
-<meta property="article:modified_time" content="2023-09-10T05:18:08.175Z">
+<meta property="article:modified_time" content="2023-09-10T10:48:49.782Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -219,7 +219,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          548 words
+          763 words
         
       </span>
     
@@ -230,7 +230,7 @@
         
         
         
-          5 mins
+          7 mins
         
       </span>
     
@@ -276,13 +276,15 @@
 <h3 id="LOW"><a href="#LOW" class="headerlink" title="LOW"></a>LOW</h3><p>直接爆破，猜到弱密码admin/password也可通关，没啥防护</p>
 <h2 id="Command-Injection"><a href="#Command-Injection" class="headerlink" title="Command Injection"></a>Command Injection</h2><h3 id="LOW-1"><a href="#LOW-1" class="headerlink" title="LOW"></a>LOW</h3><p>无防护的命令注入，使用<code>|</code>连接想要的命令即可</p>
 <h2 id="File-Inclusion"><a href="#File-Inclusion" class="headerlink" title="File Inclusion"></a>File Inclusion</h2><h3 id="LOW-2"><a href="#LOW-2" class="headerlink" title="LOW"></a>LOW</h3><p>查看源码，直接GET传参即可，如<code>http://127.0.0.1/1.php</code><br>这里<code>allow_url_include</code>被禁用，需手动开启</p>
-<h2 id="Cross-Site-Request-Forgery-CSRF"><a href="#Cross-Site-Request-Forgery-CSRF" class="headerlink" title="Cross Site Request Forgery (CSRF)"></a>Cross Site Request Forgery (CSRF)</h2><h3 id="LOW-3"><a href="#LOW-3" class="headerlink" title="LOW"></a>LOW</h3><p>这里仅检测新密码在验证时是否相同，保证二者相同即可修改密码</p>
+<h2 id="Cross-Site-Request-Forgery-CSRF"><a href="#Cross-Site-Request-Forgery-CSRF" class="headerlink" title="Cross Site Request Forgery (CSRF)"></a>Cross Site Request Forgery (CSRF)</h2><h3 id="LOW-3"><a href="#LOW-3" class="headerlink" title="LOW"></a>LOW</h3><p>这里仅检测新密码在验证时是否相同，保证二者相同即可修改密码<br>诱导点击连接<code>http://127.0.0.1/DVWA/vulnerabilities/csrf/?password_new=1&amp;password_conf=1&amp;Change=Change#</code>，需使用短链接伪装</p>
 <h2 id="File-Upload"><a href="#File-Upload" class="headerlink" title="File Upload"></a>File Upload</h2><h3 id="LOW-4"><a href="#LOW-4" class="headerlink" title="LOW"></a>LOW</h3><p>无任何过滤，直接上传即可</p>
 <h2 id="SQL-Injection"><a href="#SQL-Injection" class="headerlink" title="SQL Injection"></a>SQL Injection</h2><h3 id="LOW-5"><a href="#LOW-5" class="headerlink" title="LOW"></a>LOW</h3><p>测试可得单引号闭合，无过滤</p>
 <h2 id="Weak-Session-IDs"><a href="#Weak-Session-IDs" class="headerlink" title="Weak Session IDs"></a>Weak Session IDs</h2><h3 id="LOW-6"><a href="#LOW-6" class="headerlink" title="LOW"></a>LOW</h3><p>burp抓取请求包，将其黏贴到重新打开的DVWA界面，可实现登录</p>
 <h2 id="Reflected-Cross-Site-Scripting-XSS"><a href="#Reflected-Cross-Site-Scripting-XSS" class="headerlink" title="Reflected Cross Site Scripting (XSS)"></a>Reflected Cross Site Scripting (XSS)</h2><h3 id="LOW-7"><a href="#LOW-7" class="headerlink" title="LOW"></a>LOW</h3><p>无过滤，直接字符拼接<br><code>&lt;script&gt;alert(1)&lt;/script&gt;</code></p>
 <h2 id="DOM-Based-Cross-Site-Scripting-XSS"><a href="#DOM-Based-Cross-Site-Scripting-XSS" class="headerlink" title="DOM Based Cross Site Scripting (XSS)"></a>DOM Based Cross Site Scripting (XSS)</h2><h3 id="LOW-8"><a href="#LOW-8" class="headerlink" title="LOW"></a>LOW</h3><p>观察url，存在GET传参，修改default参数为<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></p>
-<h2 id="Stored-Cross-Site-Scripting-XSS"><a href="#Stored-Cross-Site-Scripting-XSS" class="headerlink" title="Stored Cross Site Scripting (XSS)"></a>Stored Cross Site Scripting (XSS)</h2><h3 id="LOW-9"><a href="#LOW-9" class="headerlink" title="LOW"></a>LOW</h3>
+<h2 id="Stored-Cross-Site-Scripting-XSS"><a href="#Stored-Cross-Site-Scripting-XSS" class="headerlink" title="Stored Cross Site Scripting (XSS)"></a>Stored Cross Site Scripting (XSS)</h2><h3 id=""><a href="#" class="headerlink" title=""></a></h3><h2 id="Open-HTTP-Redirect"><a href="#Open-HTTP-Redirect" class="headerlink" title="Open HTTP Redirect"></a>Open HTTP Redirect</h2><p>开放重定向攻击</p>
+<h3 id="LOW-9"><a href="#LOW-9" class="headerlink" title="LOW"></a>LOW</h3><p>输入<code> /vulnerabilities/open_redirect/source/low.php?redirect=https://digi.ninja</code>实现重定向</p>
+
                 
               </div>
             
@@ -295,49 +297,6 @@
 
 
               
-  
-
-  <div class="license-box my-3">
-    <div class="license-title">
-      <div>2023/09/06:DVWA记录</div>
-      <div>http://example.com/2023/09/06/DVWA/</div>
-    </div>
-    <div class="license-meta">
-      
-        <div class="license-meta-item">
-          <div>Author</div>
-          <div>John Doe</div>
-        </div>
-      
-      
-        <div class="license-meta-item license-meta-date">
-          <div>Posted on</div>
-          <div>September 6, 2023</div>
-        </div>
-      
-      
-      
-        <div class="license-meta-item">
-          <div>Licensed under</div>
-          <div>
-            
-              
-              
-                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
-                    <i class="iconfont icon-by"></i>
-                  </span>
-                </a>
-              
-            
-          </div>
-        </div>
-      
-    </div>
-    <div class="license-icon iconfont"></div>
-  </div>
-
-
 
               
                 <div class="post-prevnext my-3">
