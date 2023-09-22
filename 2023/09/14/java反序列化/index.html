@@ -16,17 +16,22 @@
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
-    <meta name="description" content="基础">
+    <meta name="description" content="基础序列化：将java对象转换为字节序列，在两个Java进程进行通信时实现进程间对象传送 反射   通过反射创建对象：  原文件： 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849import java.io.IOException;import java.io.Obj">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2023&#x2F;09&#x2F;14：java反序列化入门记录">
 <meta property="og:url" content="http://example.com/2023/09/14/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="基础">
+<meta property="og:description" content="基础序列化：将java对象转换为字节序列，在两个Java进程进行通信时实现进程间对象传送 反射   通过反射创建对象：  原文件： 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849import java.io.IOException;import java.io.Obj">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/09/14/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/fanshe.png">
+<meta property="og:image" content="http://example.com/2023/09/14/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/fanshe1.png">
+<meta property="og:image" content="http://example.com/2023/09/14/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/fanshe2.png">
+<meta property="og:image" content="http://example.com/2023/09/14/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/fanshe3.png">
 <meta property="article:published_time" content="2023-09-14T08:45:42.000Z">
-<meta property="article:modified_time" content="2023-09-14T08:48:21.660Z">
+<meta property="article:modified_time" content="2023-09-16T09:15:09.769Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/09/14/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/fanshe.png">
   
   
   
@@ -219,7 +224,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2 words
+          1.8k words
         
       </span>
     
@@ -230,7 +235,7 @@
         
         
         
-          1 mins
+          15 mins
         
       </span>
     
@@ -272,7 +277,16 @@
             
               <div class="markdown-body">
                 
-                <h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2>
+                <h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><p>序列化：将java对象转换为字节序列，在两个Java进程进行通信时实现进程间对象传送</p>
+<h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><img src="/2023/09/14/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/fanshe.png" srcset="/img/loading.gif" lazyload class="">
+<img src="/2023/09/14/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/fanshe1.png" srcset="/img/loading.gif" lazyload class="">
+<img src="/2023/09/14/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/fanshe2.png" srcset="/img/loading.gif" lazyload class="">
+<p>通过反射创建对象：</p>
+<img src="/2023/09/14/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/fanshe3.png" srcset="/img/loading.gif" lazyload class="">
+<p>原文件：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.io.IOException;<br><span class="hljs-keyword">import</span> java.io.ObjectInputStream;<br><span class="hljs-keyword">import</span> java.io.Serializable;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Serializable</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> age;<br>    <span class="hljs-keyword">private</span> String name;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">Person</span><span class="hljs-params">(<span class="hljs-type">int</span> age, String name)</span> &#123;<br>        <span class="hljs-built_in">this</span>.age = age;<br>        <span class="hljs-built_in">this</span>.name = name;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getAge</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> age;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setAge</span><span class="hljs-params">(<span class="hljs-type">int</span> age)</span> &#123;<br>        <span class="hljs-built_in">this</span>.age = age;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">Person</span><span class="hljs-params">()</span> &#123;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">toString</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Person&#123;&quot;</span> +<br>                <span class="hljs-string">&quot;age=&quot;</span> + age +<br>                <span class="hljs-string">&quot;, name=&#x27;&quot;</span> + name + <span class="hljs-string">&#x27;\&#x27;&#x27;</span> +<br>                <span class="hljs-string">&#x27;&#125;&#x27;</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">getName</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> name;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test</span><span class="hljs-params">(String name)</span>&#123;<br>        System.out.println(name);<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setName</span><span class="hljs-params">(String name)</span> &#123;<br>        <span class="hljs-built_in">this</span>.name = name;<br>    &#125;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">readObject</span><span class="hljs-params">(ObjectInputStream ois)</span> <span class="hljs-keyword">throws</span> IOException, ClassNotFoundException &#123;<br>        ois.defaultReadObject();<br>        Runtime.getRuntime().exec(<span class="hljs-string">&quot;calc&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>反射：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.lang.reflect.Method;<br><span class="hljs-keyword">import</span> java.lang.reflect.Field;<br><span class="hljs-keyword">import</span> java.lang.reflect.Constructor;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">fanshe</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception&#123;<br>        <span class="hljs-type">Person</span> <span class="hljs-variable">person</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Person</span>(); <span class="hljs-comment">//静态加载</span><br><br>        <span class="hljs-type">Class</span> <span class="hljs-variable">c1</span> <span class="hljs-operator">=</span> Class.forName(<span class="hljs-string">&quot;Person&quot;</span>);<span class="hljs-comment">//类加载</span><br><br>        <span class="hljs-comment">//实例化：</span><br>        <span class="hljs-comment">//c1.newInstance();</span><br>        <span class="hljs-type">Constructor</span> <span class="hljs-variable">s1</span> <span class="hljs-operator">=</span> c1.getConstructor(<span class="hljs-type">int</span>.class,String.class);<span class="hljs-comment">//获得构造器</span><br>        <span class="hljs-type">Person</span> <span class="hljs-variable">p</span> <span class="hljs-operator">=</span> (Person)s1.newInstance(<span class="hljs-number">111</span>,<span class="hljs-string">&quot;aaa&quot;</span>);<br>        <span class="hljs-comment">//完成实例化，再强制转换赋值</span><br>        System.out.println(p);<br><br>        <span class="hljs-type">Field</span> <span class="hljs-variable">a</span> <span class="hljs-operator">=</span> c1.getDeclaredField(<span class="hljs-string">&quot;name&quot;</span>);<span class="hljs-comment">//私有属性name</span><br>        a.setAccessible(<span class="hljs-literal">true</span>);<span class="hljs-comment">//设置为可以访问（？）</span><br>        a.set(p,<span class="hljs-string">&quot;bbbbb&quot;</span>);<span class="hljs-comment">//访问私有的name修改</span><br>        System.out.println(p);<span class="hljs-comment">//验证，修改成功</span><br><br>        <span class="hljs-type">Method</span> <span class="hljs-variable">m</span> <span class="hljs-operator">=</span> c1.getMethod(<span class="hljs-string">&quot;test&quot;</span>,String.class);<span class="hljs-comment">//调用方法public void test(String name)</span><br>        m.invoke(p,<span class="hljs-string">&quot;test&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
                 
               </div>
             
@@ -290,6 +304,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2023/09/15/moectf2023/" title="2023/9/17：Moectf2023">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">2023/9/17：Moectf2023</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
