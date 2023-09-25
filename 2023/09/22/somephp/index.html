@@ -19,12 +19,12 @@
     <meta name="description" content="来源https:&#x2F;&#x2F;cloud.tencent.com&#x2F;developer&#x2F;article&#x2F;1055505?from&#x3D;15425https:&#x2F;&#x2F;cloud.tencent.com&#x2F;developer&#x2F;article&#x2F;2127498 要求变量原值不同但md5或sha1相同的情况下sha1()和md5()都用于计算字符串的散列值，但是两者都无法处理数组，不会抛出异常而是直接返回NULL 1.0e开头的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2023&#x2F;08&#x2F;12：php的一些记录">
-<meta property="og:url" content="http://example.com/2023/08/12/somephp/index.html">
+<meta property="og:url" content="http://example.com/2023/09/22/somephp/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="来源https:&#x2F;&#x2F;cloud.tencent.com&#x2F;developer&#x2F;article&#x2F;1055505?from&#x3D;15425https:&#x2F;&#x2F;cloud.tencent.com&#x2F;developer&#x2F;article&#x2F;2127498 要求变量原值不同但md5或sha1相同的情况下sha1()和md5()都用于计算字符串的散列值，但是两者都无法处理数组，不会抛出异常而是直接返回NULL 1.0e开头的">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-08-12T03:46:39.000Z">
-<meta property="article:modified_time" content="2023-08-12T15:57:57.603Z">
+<meta property="article:published_time" content="2023-09-22T03:46:39.000Z">
+<meta property="article:modified_time" content="2023-09-22T13:24:00.478Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -207,8 +207,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-08-12 11:46" pubdate>
-          August 12, 2023 am
+        <time datetime="2023-09-22 11:46" pubdate>
+          September 22, 2023 am
         </time>
       </span>
     
@@ -219,7 +219,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.6k words
+          3.8k words
         
       </span>
     
@@ -230,7 +230,7 @@
         
         
         
-          30 mins
+          32 mins
         
       </span>
     
@@ -298,7 +298,8 @@
 <h4 id="is-numeric绕过"><a href="#is-numeric绕过" class="headerlink" title="is_numeric绕过"></a>is_numeric绕过</h4><p>用于检测变量是否为数字或数字字符串，可被十六进制的值进行绕过<br>空格、\t、\n、\r、\v、\f、+、-能够出现在参数开头，“点”能够在参数任何位置，E、e只能出现在参数中间。</p>
 <h4 id="php5-3-29-这里可以直接用-0b绕过-s（空白字符）的匹配"><a href="#php5-3-29-这里可以直接用-0b绕过-s（空白字符）的匹配" class="headerlink" title="php5,3,29,这里可以直接用%0b绕过\s（空白字符）的匹配"></a>php5,3,29,这里可以直接用%0b绕过\s（空白字符）的匹配</h4><h4 id="既是0又是1的情况"><a href="#既是0又是1的情况" class="headerlink" title="既是0又是1的情况"></a>既是0又是1的情况</h4><p><code>$a==1&amp;$test[$a]=t</code>时；<br>php精度（16以上）<code>var_dump(9999999999999999999==1);//true</code><br>科学计数法 <code>.1e1 echo $b[‘.1e1’]//输出t</code><br>.是字符串所以在数组里面变成0，但在is_numeric中有点则正常输出为数字</p>
 <h4 id="伪协议"><a href="#伪协议" class="headerlink" title="伪协议"></a>伪协议</h4><h4 id="反序列化"><a href="#反序列化" class="headerlink" title="反序列化"></a>反序列化</h4><h4 id="当switch没有break时可以继续往下执行"><a href="#当switch没有break时可以继续往下执行" class="headerlink" title="当switch没有break时可以继续往下执行"></a>当switch没有break时可以继续往下执行</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span> ( <span class="hljs-variable">$_GET</span> [<span class="hljs-string">&#x27;which&#x27;</span>] )) &#123;<br> <span class="hljs-variable">$which</span> = <span class="hljs-variable">$_GET</span> [<span class="hljs-string">&#x27;which&#x27;</span>];<br> <span class="hljs-keyword">switch</span> (<span class="hljs-variable">$which</span>) &#123;<br> <span class="hljs-keyword">case</span> <span class="hljs-number">0</span> :<br> <span class="hljs-keyword">case</span> <span class="hljs-number">1</span> :<br> <span class="hljs-keyword">case</span> <span class="hljs-number">2</span> :<br> <span class="hljs-keyword">echo</span> <span class="hljs-variable">$which</span> . <span class="hljs-string">&#x27;.php&#x27;</span>;<br> <span class="hljs-keyword">break</span>;<br> <span class="hljs-keyword">default</span> :<br> <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;1&quot;</span>;<br> <span class="hljs-keyword">break</span>;<br> &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>$which进入循环时没有break则按顺序继续往下执行</p>
+<p><code>$which</code>进入循环时没有break则按顺序继续往下执行</p>
+<h4 id="PHP-RCE：滥用对象创建"><a href="#PHP-RCE：滥用对象创建" class="headerlink" title="PHP-RCE：滥用对象创建"></a>PHP-RCE：滥用对象创建</h4><p><a target="_blank" rel="noopener" href="https://book.hacktricks.xyz/network-services-pentesting/pentesting-web/php-tricks-esp/php-rce-abusing-object-creation-new-usd_get-a-usd_get-b">https://book.hacktricks.xyz/network-services-pentesting/pentesting-web/php-tricks-esp/php-rce-abusing-object-creation-new-usd_get-a-usd_get-b</a><br>某天晚上土豆提到了<br><a target="_blank" rel="noopener" href="http://39.108.86.101:10001/">http://39.108.86.101:10001/</a><br>这个需要内置类</p>
 
                 
               </div>
@@ -318,18 +319,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/09/06/DVWA/" title="2023/09/06:DVWA记录">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">2023/09/06:DVWA记录</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/08/11/LITCTF/" title="2023/08/11：LITCTF2023">
-                        <span class="hidden-mobile">2023/08/11：LITCTF2023</span>
+                      <a href="/2023/09/19/CSAW2023/" title="2023/09/19：CSAW2023">
+                        <span class="hidden-mobile">2023/09/19：CSAW2023</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
