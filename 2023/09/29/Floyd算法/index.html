@@ -16,21 +16,31 @@
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="website">
-<meta property="og:title" content="Archives">
-<meta property="og:url" content="http://example.com/archives/2023/index.html">
+    <meta name="description" content="不知道为啥记了这个https:&#x2F;&#x2F;blog.csdn.net&#x2F;Jasonchen1224&#x2F;article&#x2F;details&#x2F;131276343 前言龟兔赛跑算法，是一个可以在有限状态机、迭代函数或者链表上判断是否存在环，以及判断环的起点与长度的算法，需要使用两个指针，人为规定移动较快的快指针速度是移动较慢的慢指针的2倍 环的判定可能出现两种情形：1.快速指针达到链表尾，此时无环2.快速指针在遍历时赶">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2023&#x2F;09&#x2F;29：Floyd算法">
+<meta property="og:url" content="http://example.com/2023/09/29/Floyd%E7%AE%97%E6%B3%95/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="不知道为啥记了这个https:&#x2F;&#x2F;blog.csdn.net&#x2F;Jasonchen1224&#x2F;article&#x2F;details&#x2F;131276343 前言龟兔赛跑算法，是一个可以在有限状态机、迭代函数或者链表上判断是否存在环，以及判断环的起点与长度的算法，需要使用两个指针，人为规定移动较快的快指针速度是移动较慢的慢指针的2倍 环的判定可能出现两种情形：1.快速指针达到链表尾，此时无环2.快速指针在遍历时赶">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-09-29T11:32:43.000Z">
+<meta property="article:modified_time" content="2023-09-29T12:01:39.240Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>Archives - Hexo</title>
+  <title>2023/09/29：Floyd算法 - Hexo</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
 
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
 
 
 
@@ -80,7 +90,7 @@
   <header>
     
 
-<div class="header-inner" style="height: 60vh;">
+<div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
@@ -186,9 +196,49 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Archives"></span>
+            <span id="subtitle" data-typed-text="2023/09/29：Floyd算法"></span>
           
         </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-09-29 19:32" pubdate>
+          September 29, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          464 words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          4 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
 
         
       </div>
@@ -204,100 +254,116 @@
 
   <main>
     
-      <div class="container nopadding-x-md">
-        <div id="board"
-          >
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-  <p class="h4">32 posts in total</p>
-  <hr>
-  
-  
-    
       
-      <p class="h5">2023</p>
-    
-    <a href="/2023/09/29/Floyd%E7%AE%97%E6%B3%95/" class="list-group-item list-group-item-action">
-      <time>09-29</time>
-      <div class="list-group-item-title">2023/09/29：Floyd算法</div>
-    </a>
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">2023/09/29：Floyd算法</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>不知道为啥记了这个<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/Jasonchen1224/article/details/131276343">https://blog.csdn.net/Jasonchen1224/article/details/131276343</a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>龟兔赛跑算法，是一个可以在有限状态机、迭代函数或者链表上判断是否存在环，以及判断环的起点与长度的算法，需要使用两个指针，人为规定移动较快的快指针速度是移动较慢的慢指针的2倍</p>
+<h2 id="环的判定"><a href="#环的判定" class="headerlink" title="环的判定"></a>环的判定</h2><p>可能出现两种情形：<br>1.快速指针达到链表尾，此时无环<br>2.快速指针在遍历时赶上慢指针，此时有环</p>
+<h2 id="算法逻辑"><a href="#算法逻辑" class="headerlink" title="算法逻辑"></a>算法逻辑</h2><p>设a为链表头到环起点的距离，b为环起点到两指针第一次相遇的距离，c为环周长<br>相遇时，慢指针移动距离S1：<br>S1=a+b+n<em>c;<br>快指针移动距离S2：<br>S2=a+b+m</em>c;<br>在两指针移动次数相同时，S2=2<em>S1;<br>此时，可得：<br>a+b+m</em>c=2*(a+b+n<em>c);<br>a+b=m</em>c-2<em>n</em>c=(m-2<em>n)<em>c=k</em>c;<br>进行简化，可得：<br>a+b=k</em>c;<br>a=k<em>c-b;<br>通过以上寻找环起点位置:<br>如果两指针相遇后，将头节点赋值给慢指针，快指针位置不变，以每次步长为1移动，快慢指针最后相遇在环起点位置，此时慢指针走过a，快指针走过k</em>c-b=a</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
   
-    
-    <a href="/2023/09/28/BRICS2023/" class="list-group-item list-group-item-action">
-      <time>09-28</time>
-      <div class="list-group-item-title">2023/09/28：BRICS2023</div>
-    </a>
-  
-    
-    <a href="/2023/09/28/ASISCTF/" class="list-group-item list-group-item-action">
-      <time>09-28</time>
-      <div class="list-group-item-title">ASISCTF</div>
-    </a>
-  
-    
-    <a href="/2023/09/28/HITCON2023/" class="list-group-item list-group-item-action">
-      <time>09-28</time>
-      <div class="list-group-item-title">2023/09/19：HITCON2023</div>
-    </a>
-  
-    
-    <a href="/2023/09/22/somephp/" class="list-group-item list-group-item-action">
-      <time>09-22</time>
-      <div class="list-group-item-title">2023/08/12：php的一些记录</div>
-    </a>
-  
-    
-    <a href="/2023/09/19/CSAW2023/" class="list-group-item list-group-item-action">
-      <time>09-19</time>
-      <div class="list-group-item-title">2023/09/19：CSAW2023</div>
-    </a>
-  
-    
-    <a href="/2023/09/18/seccon2023/" class="list-group-item list-group-item-action">
-      <time>09-18</time>
-      <div class="list-group-item-title">2023/09/18：SECCON2023</div>
-    </a>
-  
-    
-    <a href="/2023/09/15/moectf2023/" class="list-group-item list-group-item-action">
-      <time>09-15</time>
-      <div class="list-group-item-title">2023/9/17：Moectf2023</div>
-    </a>
-  
-    
-    <a href="/2023/09/14/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" class="list-group-item list-group-item-action">
-      <time>09-14</time>
-      <div class="list-group-item-title">2023/09/14：java反序列化入门记录</div>
-    </a>
-  
-    
-    <a href="/2023/09/10/java0to1/" class="list-group-item list-group-item-action">
-      <time>09-10</time>
-      <div class="list-group-item-title">2023/09/10：java 0 to 1</div>
-    </a>
   
 </div>
 
 
-  <nav aria-label="navigation">
-    <span class="pagination" id="pagination">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/2023/page/2/#board">2</a><a class="page-number" href="/archives/2023/page/3/#board">3</a><a class="page-number" href="/archives/2023/page/4/#board">4</a><a class="extend next" rel="next" href="/archives/2023/page/2/#board"><i class="iconfont icon-arrowright"></i></a>
-    </span>
-  </nav>
+              
 
-
-
-
-              </div>
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/09/28/BRICS2023/" title="2023/09/28：BRICS2023">
+                        <span class="hidden-mobile">2023/09/28：BRICS2023</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
             </div>
-          </div>
+
+            
+          </article>
         </div>
       </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
     
 
     
@@ -391,6 +457,99 @@
 
 
 
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
 
   <script  src="/js/local-search.js" ></script>
 

@@ -224,6 +224,105 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
+        <a href="/2023/09/09/morexss/" target="_self">
+          2023/09/09：canvas，png和xss
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/09/09/morexss/" target="_self">
+        <div>
+          《利用canvas将js代码隐藏到png中实现xss——关于HITCON CTF 2023一题都写不出来在网上找到一篇文章这件事》https://choudalao.com/article/267一些别的：https://hackernoon.com/host-a-web-app-on-twitter-in-a-single-tweet-9aed28bdb350https://www.runoob
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-09-09 23:10" pubdate>
+              2023-09-09
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2023/09/07/WACON2023/" target="_self">
+          2023/09/07：WACONCTF2023
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/09/07/WACON2023/" target="_self">
+        <div>
+          https://hackmd.io/@sahuang/rkHD37ZA3啥也没写出来，留个记录 warmup-revenge文件上传+xss 查看源代码，注意到有bot.js，打开文件有setCookie函数，确认xss可能有两个关键页面：download.php：用来下载上传的文件 123456789101112131415161718192021222324252627282930313233
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-09-07 15:50" pubdate>
+              2023-09-07
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2023/09/06/DVWA/" target="_self">
+          2023/09/06:DVWA记录
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/09/06/DVWA/" target="_self">
+        <div>
+          Brute Force这里要求爆破 LOW直接爆破，猜到弱密码admin/password也可通关，没啥防护 Command InjectionLOW无防护的命令注入，使用|连接想要的命令即可 File InclusionLOW查看源码，直接GET传参即可，如http://127.0.0.1/1.php这里allow_url_include被禁用，需手动开启 Cross Site Request
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-09-06 13:59" pubdate>
+              2023-09-06
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
         <a href="/2023/08/11/LITCTF/" target="_self">
           2023/08/11：LITCTF2023
         </a>
@@ -449,110 +548,11 @@
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2023/07/28/haxonbox/" target="_self">
-          2023/7/28：hack the box记录
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/07/28/haxonbox/" target="_self">
-        <div>
-          Challenges-&gt;active challenges Templated非常简单的Flask/jinja2模板注入 1234&#123;% for c in &#x27;&#x27;.__class__.__base__.__subclasses__() %&#125;&#123;% if c.__name__==&#x27;catch_warnings&#x27; %&#125;&#
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-07-28 16:38" pubdate>
-              2023-07-28
-            </time>
-          </div>
-        
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2023/07/21/xsslab/" target="_self">
-          2023/7/21：夏令营week2记录:xsslab
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/07/21/xsslab/" target="_self">
-        <div>
-          1&lt;script &quot;  &#x27;Oonn&gt; 可以用来测闭合 level 1将上面的test改为 1&lt;script&gt;alert(1)&lt;/script&gt; level 2检测搜索框内为双引号闭合 1&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt; level 3“&gt;”被替换了 1keyword=1&#x
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-07-21 09:35" pubdate>
-              2023-07-21
-            </time>
-          </div>
-        
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2023/07/16/week1plus/" target="_self">
-          2023/07/15：夏令营week1记录:出题
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/07/16/week1plus/" target="_self">
-        <div>
-          目前应该还没法用参考（照搬了不少其实）了大佬的代码终于正常运行了，代码的问题估计比代码还多还是有不少语法错误，这次真能用了结构： 123456$ sqltry/$ ├── docker-compose.yml$ ├── Dockerfile$ └── web$      ├── db.sql$      └── index.php   index.php: 12345678910111213141
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-07-16 23:22" pubdate>
-              2023-07-16
-            </time>
-          </div>
-        
-        
-        
-      </div>
-    </article>
-  </div>
-
 
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/#board">3</a><a class="extend next" rel="next" href="/page/3/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/#board">3</a><a class="page-number" href="/page/4/#board">4</a><a class="extend next" rel="next" href="/page/3/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 
