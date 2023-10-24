@@ -23,22 +23,22 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="相关工具：ysoserial 参见b站up白日梦组长 以及来源于韩顺平的基础知识 基础https:&#x2F;&#x2F;blog.csdn.net&#x2F;mocas_wang&#x2F;article&#x2F;details&#x2F;107621010 序列化：将java对象转换为字节序列，在两个Java进程进行通信时实现进程间对象传送常见序列化与反序列化协议：XML&amp;SOAP JSON Protobuf 序列化实现这里是原生的只有实现了">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="d:/githubblog/githubblog/source_posts/java反序列化/class.png">
-<meta property="og:image" content="d:/githubblog/githubblog/source_posts/java反序列化/leijiazai1.png">
-<meta property="og:image" content="d:/githubblog/githubblog/source_posts/java反序列化/guocheng.png">
-<meta property="og:image" content="d:/githubblog/githubblog/source_posts/java反序列化/3ge.png">
-<meta property="og:image" content="d:/githubblog/githubblog/source_posts/java反序列化/load.png">
-<meta property="og:image" content="d:/githubblog/githubblog/source_posts/java反序列化/connect1.png">
-<meta property="og:image" content="d:/githubblog/githubblog/source_posts/java反序列化/初始化.png">
+<meta property="og:image" content="http://example.com/2023/10/20/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/class.png">
+<meta property="og:image" content="http://example.com/2023/10/20/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/leijiazai1.png">
+<meta property="og:image" content="http://example.com/2023/10/20/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/guocheng.png">
+<meta property="og:image" content="http://example.com/2023/10/20/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/3ge.png">
+<meta property="og:image" content="http://example.com/2023/10/20/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/load.png">
+<meta property="og:image" content="http://example.com/2023/10/20/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/connect1.png">
+<meta property="og:image" content="http://example.com/2023/10/20/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/%E5%88%9D%E5%A7%8B%E5%8C%96.png">
 <meta property="og:image" content="http://example.com/2023/10/20/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/fanshe.png">
 <meta property="og:image" content="http://example.com/2023/10/20/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/fanshe1.png">
 <meta property="og:image" content="http://example.com/2023/10/20/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/fanshe2.png">
 <meta property="og:image" content="http://example.com/2023/10/20/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/fanshe3.png">
 <meta property="article:published_time" content="2023-10-20T08:45:42.000Z">
-<meta property="article:modified_time" content="2023-10-21T05:30:36.029Z">
+<meta property="article:modified_time" content="2023-10-24T12:46:55.099Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="d:/githubblog/githubblog/source_posts/java反序列化/class.png">
+<meta name="twitter:image" content="http://example.com/2023/10/20/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/class.png">
   
   
   
@@ -231,7 +231,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          6k words
+          9.6k words
         
       </span>
     
@@ -242,7 +242,7 @@
         
         
         
-          50 mins
+          80 mins
         
       </span>
     
@@ -304,7 +304,8 @@
 <p>5.通过Class对象可以完整得到一个类的结构</p>
 <p>6.Class存放在堆</p>
 <p>7.类的字节码二进制数据存放在方法区，有的地方称之为类的元数据（包括方法代码，变量名，方法名，访问权限等）</p>
-<p><img src="D:\githubblog\githubblog\source_posts\java反序列化\class.png" srcset="/img/loading.gif" lazyload></p>
+<img src="/2023/10/20/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/class.png" srcset="/img/loading.gif" lazyload class="">
+
 <p>如下存在Class对象：</p>
 <p>1.外部类，成员内部类，静态内部类，局部内部类，匿名内部类</p>
 <p>2.interface：接口</p>
@@ -314,22 +315,28 @@
 <p>6.基本数据类型</p>
 <p>7.void</p>
 <h3 id="类加载"><a href="#类加载" class="headerlink" title="类加载"></a>类加载</h3><p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000023876273">Java类加载机制和对象创建过程 - 个人文章 - SegmentFault 思否</a></p>
-<h4 id="基本说明"><a href="#基本说明" class="headerlink" title="基本说明"></a>基本说明</h4><p><img src="D:\githubblog\githubblog\source_posts\java反序列化\leijiazai1.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="基本说明"><a href="#基本说明" class="headerlink" title="基本说明"></a>基本说明</h4><img src="/2023/10/20/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/leijiazai1.png" srcset="/img/loading.gif" lazyload class="">
+
 <h4 id="类加载时机"><a href="#类加载时机" class="headerlink" title="类加载时机"></a>类加载时机</h4><p>1.创建对象时（new）：静态加载</p>
 <p>2.当子类被加载时，父类也加载：静态加载</p>
 <p>3.调用类中的静态成员时：静态加载</p>
 <p>4.反射：动态加载</p>
 <p>如：<code>Class.forName(&quot;com.test.Cat&quot;)</code></p>
-<h4 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h4><p><img src="D:\githubblog\githubblog\source_posts\java反序列化\guocheng.png" srcset="/img/loading.gif" lazyload></p>
-<h4 id="类加载三个阶段"><a href="#类加载三个阶段" class="headerlink" title="类加载三个阶段"></a>类加载三个阶段</h4><p><img src="D:\githubblog\githubblog\source_posts\java反序列化\3ge.png" srcset="/img/loading.gif" lazyload></p>
-<h4 id="加载阶段"><a href="#加载阶段" class="headerlink" title="加载阶段"></a>加载阶段</h4><p><img src="D:\githubblog\githubblog\source_posts\java反序列化\load.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h4><img src="/2023/10/20/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/guocheng.png" srcset="/img/loading.gif" lazyload class="">
+
+<h4 id="类加载三个阶段"><a href="#类加载三个阶段" class="headerlink" title="类加载三个阶段"></a>类加载三个阶段</h4><img src="/2023/10/20/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/3ge.png" srcset="/img/loading.gif" lazyload class="">
+
+<h4 id="加载阶段"><a href="#加载阶段" class="headerlink" title="加载阶段"></a>加载阶段</h4><img src="/2023/10/20/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/load.png" srcset="/img/loading.gif" lazyload class="">
+
 <h4 id="连接阶段"><a href="#连接阶段" class="headerlink" title="连接阶段"></a>连接阶段</h4><p>验证：</p>
-<p><img src="D:\githubblog\githubblog\source_posts\java反序列化\connect1.png" srcset="/img/loading.gif" lazyload></p>
+<img src="/2023/10/20/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/connect1.png" srcset="/img/loading.gif" lazyload class="">
+
 <p>准备：</p>
 <p>JVM会在该阶段对静态变量，分配内存并默认初始化（对应数据类型的默认初始值，如0，0L，null，false等）。这些变量使用的内存都在方法区分配</p>
 <p>解析：</p>
 <p>虚拟机将常量池内的符号引用替换为直接引用的过程（？？？）</p>
-<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p><img src="D:\githubblog\githubblog\source_posts\java反序列化\初始化.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><img src="/2023/10/20/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/%E5%88%9D%E5%A7%8B%E5%8C%96.png" srcset="/img/loading.gif" lazyload class="">
+
 <h3 id="反射基础"><a href="#反射基础" class="headerlink" title="反射基础"></a>反射基础</h3><img src="/2023/10/20/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/fanshe.png" srcset="/img/loading.gif" lazyload class="">
 <img src="/2023/10/20/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/fanshe1.png" srcset="/img/loading.gif" lazyload class="">
 <img src="/2023/10/20/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/fanshe2.png" srcset="/img/loading.gif" lazyload class="">
@@ -340,7 +347,23 @@
 <p>反射：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">import</span> java.lang.reflect.Method;<br><span class="hljs-keyword">import</span> java.lang.reflect.Field;<br><span class="hljs-keyword">import</span> java.lang.reflect.Constructor;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">fanshe</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception&#123;<br>        <span class="hljs-type">Person</span> <span class="hljs-variable">person</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Person</span>(); <span class="hljs-comment">//静态加载</span><br><br>        <span class="hljs-type">Class</span> <span class="hljs-variable">c1</span> <span class="hljs-operator">=</span> Class.forName(<span class="hljs-string">&quot;Person&quot;</span>);<span class="hljs-comment">//类加载</span><br><br>        <span class="hljs-comment">//实例化：</span><br>        <span class="hljs-comment">//c1.newInstance();</span><br>        <span class="hljs-type">Constructor</span> <span class="hljs-variable">s1</span> <span class="hljs-operator">=</span> c1.getConstructor(<span class="hljs-type">int</span>.class,String.class);<span class="hljs-comment">//获得构造器</span><br>        <span class="hljs-type">Person</span> <span class="hljs-variable">p</span> <span class="hljs-operator">=</span> (Person)s1.newInstance(<span class="hljs-number">111</span>,<span class="hljs-string">&quot;aaa&quot;</span>);<br>        <span class="hljs-comment">//完成实例化，再强制转换赋值</span><br>        System.out.println(p);<br><br>        <span class="hljs-type">Field</span> <span class="hljs-variable">a</span> <span class="hljs-operator">=</span> c1.getDeclaredField(<span class="hljs-string">&quot;name&quot;</span>);<span class="hljs-comment">//私有属性name</span><br>        a.setAccessible(<span class="hljs-literal">true</span>);<span class="hljs-comment">//设置为可以访问（？）</span><br>        a.set(p,<span class="hljs-string">&quot;bbbbb&quot;</span>);<span class="hljs-comment">//访问私有的name修改</span><br>        System.out.println(p);<span class="hljs-comment">//验证，修改成功</span><br><br>        <span class="hljs-type">Method</span> <span class="hljs-variable">m</span> <span class="hljs-operator">=</span> c1.getMethod(<span class="hljs-string">&quot;test&quot;</span>,String.class);<span class="hljs-comment">//调用方法public void test(String name)</span><br>        m.invoke(p,<span class="hljs-string">&quot;test&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p>反射修改final static:</p>
+<h3 id="反射plus：static-final修饰"><a href="#反射plus：static-final修饰" class="headerlink" title="反射plus：static final修饰"></a>反射plus：static final修饰</h3><p>[一种适用于 Java 8 至 Java 17 的反射修改 static final 属性的方法_java 反射修改<a href="mailto:&#x66;&#x69;&#x6e;&#x61;&#x6c;&#x5f;&#x77;&#x75;&#119;&#x65;&#x69;&#106;&#105;&#101;&#x40;&#x61;&#x70;&#97;&#99;&#104;&#101;&#46;&#x6f;&#x72;&#103;">&#x66;&#x69;&#x6e;&#x61;&#x6c;&#x5f;&#x77;&#x75;&#119;&#x65;&#x69;&#106;&#105;&#101;&#x40;&#x61;&#x70;&#97;&#99;&#104;&#101;&#46;&#x6f;&#x72;&#103;</a>的博客-CSDN博客](<a target="_blank" rel="noopener" href="https://blog.csdn.net/wu_weijie/article/details/129251045#:~:text=%E5%A6%82%E4%BD%95%E4%BF%AE%E6%94%B9">https://blog.csdn.net/wu_weijie/article/details/129251045#:~:text=如何修改</a> static final 字段的值 1 通过反射获取 java.lang.reflect.Field 内部的,modifiers 修改为非 final ； 4 通过修改目标字段的 Field 设置新的值，至此完成修改。)</p>
+<p>Java12需要指定模块：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs 我不知道">--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED<br></code></pre></td></tr></table></figure>
+
+<h4 id="JDK12前"><a href="#JDK12前" class="headerlink" title="JDK12前"></a>JDK12前</h4><p>原文件：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.io.IOException;<br><span class="hljs-keyword">import</span> java.io.ObjectInputStream;<br><span class="hljs-keyword">import</span> java.io.Serializable;<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">name</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Serializable</span>&#123;<br>    <span class="hljs-keyword">private</span>  <span class="hljs-keyword">final</span> <span class="hljs-keyword">static</span> <span class="hljs-type">String</span>  <span class="hljs-variable">Name</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(<span class="hljs-string">&quot;111&quot;</span>);<br>    <span class="hljs-comment">//private  final static String  Name = &quot;111&quot;; 此形式无法以此方法反射修改</span><br>    <span class="hljs-comment">//JVM在编译时期, 就把final类型的String进行了优化, 在编译时期就会把String处理成常量</span><br>    <span class="hljs-comment">//虽然可以成功赋值，但只能输出原来的值</span><br>    <span class="hljs-comment">//https://www.cnblogs.com/noKing/p/9038234.html</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">toString</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot; name=&quot;</span> + Name ;<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">print</span><span class="hljs-params">()</span>&#123;<br>        System.out.println(Name);<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title function_">get</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">return</span> Name;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>反射：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.lang.reflect.Field;<br><span class="hljs-keyword">import</span> java.lang.reflect.Modifier;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Main</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-type">name</span> <span class="hljs-variable">a</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">name</span>();<br><br>        <span class="hljs-type">Class</span> <span class="hljs-variable">b</span> <span class="hljs-operator">=</span> Class.forName(<span class="hljs-string">&quot;name&quot;</span>);<br><br>        <span class="hljs-type">Field</span> <span class="hljs-variable">modifiersField</span> <span class="hljs-operator">=</span> Field.class.getDeclaredField(<span class="hljs-string">&quot;modifiers&quot;</span>);<br>        modifiersField.setAccessible(<span class="hljs-literal">true</span>);<br>        <span class="hljs-comment">//通过反射获取私有方法</span><br><br>        <span class="hljs-type">Field</span> <span class="hljs-variable">nameField</span> <span class="hljs-operator">=</span> b.getDeclaredField(<span class="hljs-string">&quot;Name&quot;</span>);<br>       <br>        modifiersField.setInt(nameField, nameField.getModifiers() &amp; ~Modifier.FINAL);<span class="hljs-comment">//去除final</span><br>        nameField.setAccessible(<span class="hljs-literal">true</span>);<br>        nameField.set(<span class="hljs-literal">null</span>,<span class="hljs-string">&quot;222&quot;</span>);<span class="hljs-comment">//修改静态变量</span><br>        <span class="hljs-comment">//https://blog.csdn.net/afdafvdaa/article/details/115277268</span><br>        <br>        System.out.println(name.get());<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h4 id="JDK12后"><a href="#JDK12后" class="headerlink" title="JDK12后"></a>JDK12后</h4><p>JDK12以后，直接获取<code>modifiers</code>会报错，不允许直接获取 Field 类中的字段</p>
+<p>从 <code>jdk.internal.reflect.Reflection</code> 第 58 行可以看到，<code>fieldFilterMap</code> 增加了 <code>Field.class</code> 的所有成员，即 Field 下的任何字段都不能直接通过公共反射方法获取。</p>
+<p>调用私有方法 <code>getDeclaredFields0</code>可以获得想要的对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">Method</span> <span class="hljs-variable">getDeclaredFields0</span> <span class="hljs-operator">=</span> Class.class.getDeclaredMethod(<span class="hljs-string">&quot;getDeclaredFields0&quot;</span>, <span class="hljs-type">boolean</span>.class);<br><span class="hljs-comment">//使用反射获取 Class 类的 getDeclaredMethod 方法，该方法通常用于获取类的方法</span><br>        getDeclaredFields0.setAccessible(<span class="hljs-literal">true</span>);<span class="hljs-comment">//设置为可以访问</span><br>        Field[] fields = (Field[]) getDeclaredFields0.invoke(Field.class, <span class="hljs-literal">false</span>);<span class="hljs-comment">//通过反射调用 getDeclaredFields0 方法，以获取 Field 类的字段</span><br>        <span class="hljs-type">Field</span> <span class="hljs-variable">modifiers</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>        <span class="hljs-keyword">for</span> (Field each : fields) &#123;<br>            <span class="hljs-keyword">if</span> (<span class="hljs-string">&quot;modifiers&quot;</span>.equals(each.getName())) &#123;<br>                modifiers = each;<br>            &#125;<br>        &#125;<span class="hljs-comment">//遍历查找名为 &quot;modifiers&quot; 的字段，找到了就存储</span><br></code></pre></td></tr></table></figure>
+
+
+
 <h2 id="JDK动态代理"><a href="#JDK动态代理" class="headerlink" title="JDK动态代理"></a>JDK动态代理</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/72644638">设计模式（四）——搞懂什么是代理模式 - 知乎 (zhihu.com)</a></p>
 <p>用途：不修改原代码进行拓展，功能附加增强，对其执行操作，用其他对象控制这个对象</p>
 <p>注意：代理类和被代理类应该公用一个接口，或共同继承某个类</p>
@@ -362,6 +385,17 @@
 
 <h2 id="动态类加载"><a href="#动态类加载" class="headerlink" title="动态类加载"></a>动态类加载</h2><p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000023876273">Java类加载机制和对象创建过程 - 个人文章 - SegmentFault 思否</a></p>
 <p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903838927814669">面试官：说说双亲委派模型？ - 掘金 (juejin.cn)</a></p>
+<p>使用<code>ClassLoader.loadClass</code>不初始化</p>
+<p>加载任意类原理（双亲委派）：</p>
+<p>ClassLoader-&gt;SecureClassLoader-&gt;URLClassLoader-&gt;AppClassLoader</p>
+<p>loadClass-&gt;findClass（重写的方法）-&gt;defineClass（从字节码加载类）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//第一种：URLClassLoader任意类加载：file/http/jar</span><br><span class="hljs-type">URLClassLoader</span> <span class="hljs-variable">urlClassLoader</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">URLClassLoader</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">URL</span>[]&#123;<span class="hljs-keyword">new</span> <span class="hljs-title class_">URL</span>(<span class="hljs-string">&quot;file:///D:\\tmp\\classes\\&quot;</span>)&#125;);<span class="hljs-comment">//支持其他协议，如http</span><br>Class&lt;?&gt; c = urlClassLoader.loadClass(<span class="hljs-string">&quot;Test&quot;</span>);<br>c.newInstance();<span class="hljs-comment">//初始化</span><br></code></pre></td></tr></table></figure>
+
+<p>可以直接调用<code>D:\tmp\classes\</code>文件夹下的Test.class</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//第二种：ClassLoader.defineClass字节码加载任意类 私有</span><br><span class="hljs-type">Method</span> <span class="hljs-variable">defineClassMethod</span> <span class="hljs-operator">=</span> ClassLoader.class.getDeclaredMethod(<span class="hljs-string">&quot;defineClass&quot;</span>,String.class,<span class="hljs-type">byte</span>[],<span class="hljs-type">int</span> .class,<span class="hljs-type">int</span>.class);<br>defineClassMethod.setAccessible(<span class="hljs-literal">true</span>);<br><span class="hljs-type">byte</span>[] code = Files.readAllBytes(Path.get(<span class="hljs-string">&quot;D:\\tep\\classes\\Test.class&quot;</span>));<br><span class="hljs-type">Class</span> <span class="hljs-variable">c</span> <span class="hljs-operator">=</span> (Class) defineClassMethod.invoke(cl,<span class="hljs-string">&quot;Test&quot;</span>,code,<span class="hljs-number">0</span>,code.length);<br>c.newInstance();<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//第三种：字节码加载，public类，但不能直接生成</span><br><span class="hljs-type">Class</span> <span class="hljs-variable">c</span> <span class="hljs-operator">=</span> Unsafe.class;<br><span class="hljs-type">Field</span> <span class="hljs-variable">theUnsafeField</span> <span class="hljs-operator">=</span> c.getDeclareField(<span class="hljs-string">&quot;theUnsafe&quot;</span>);<br>theUnsafeField.setAccessible(<span class="hljs-literal">true</span>);<br><span class="hljs-type">Unsafe</span> <span class="hljs-variable">unsafe</span> <span class="hljs-operator">=</span> (Unsafe) theUnsafeField.get(<span class="hljs-literal">null</span>);<br><span class="hljs-type">Class</span> <span class="hljs-variable">c2</span> <span class="hljs-operator">=</span> (Class)unsafe.defineClass(<span class="hljs-string">&quot;Test&quot;</span>,code,<span class="hljs-number">0</span>,code.length,cl,<span class="hljs-literal">null</span>);<br>c2.newInstance();<br><span class="hljs-comment">//Spring 可以直接生成的，有public</span><br></code></pre></td></tr></table></figure>
+
 
                 
               </div>
