@@ -1,0 +1,608 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="感谢土豆分享 参考：信呼oa命令执行分析分析(CVE-2023-1773) (qq.com) 信呼OA在2.3.3版本之前存在代码注入漏洞。该漏洞影响到组件配置文件处理程序的webmainConfig.php文件的代码。篡改导致代码注入。 首先当然是先搭好框架，默认登录可以用admin&#x2F;123456   文件分析&#x2F;src&#x2F;index.php这里是主程序入口 12345678910111213141">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2023&#x2F;12&#x2F;25：一次审计尝试CVE-2023-1773">
+<meta property="og:url" content="http://example.com/2023/12/25/%E5%AE%A1%E8%AE%A1/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="感谢土豆分享 参考：信呼oa命令执行分析分析(CVE-2023-1773) (qq.com) 信呼OA在2.3.3版本之前存在代码注入漏洞。该漏洞影响到组件配置文件处理程序的webmainConfig.php文件的代码。篡改导致代码注入。 首先当然是先搭好框架，默认登录可以用admin&#x2F;123456   文件分析&#x2F;src&#x2F;index.php这里是主程序入口 12345678910111213141">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/12/25/%E5%AE%A1%E8%AE%A1/yilan.png">
+<meta property="og:image" content="http://example.com/2023/12/25/%E5%AE%A1%E8%AE%A1/config.png">
+<meta property="article:published_time" content="2023-12-25T07:45:29.000Z">
+<meta property="article:modified_time" content="2023-12-26T08:01:09.628Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/12/25/%E5%AE%A1%E8%AE%A1/yilan.png">
+  
+  
+  
+  <title>2023/12/25：一次审计尝试CVE-2023-1773 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="2023/12/25：一次审计尝试CVE-2023-1773"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-12-25 15:45" pubdate>
+          December 25, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          9.2k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          77 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">2023/12/25：一次审计尝试CVE-2023-1773</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>感谢土豆分享</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/25IpbhFLNcgEfiAC-vZltQ">信呼oa命令执行分析分析(CVE-2023-1773) (qq.com)</a></p>
+<p>信呼OA在2.3.3版本之前存在代码注入漏洞。该漏洞影响到组件配置文件处理程序的webmainConfig.php文件的代码。篡改导致代码注入。</p>
+<p>首先当然是先搭好框架，默认登录可以用admin/123456</p>
+<img src="/2023/12/25/%E5%AE%A1%E8%AE%A1/yilan.png" srcset="/img/loading.gif" lazyload class="">
+
+<h2 id="文件分析"><a href="#文件分析" class="headerlink" title="文件分析"></a>文件分析</h2><h3 id="src-index-php"><a href="#src-index-php" class="headerlink" title="/src/index.php"></a>/src/index.php</h3><p>这里是主程序入口</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span> <br><span class="hljs-comment">/**</span><br><span class="hljs-comment">*	系统主要入口</span><br><span class="hljs-comment">*	主页：http://www.rockoa.com/</span><br><span class="hljs-comment">*	软件：信呼</span><br><span class="hljs-comment">*	作者：雨中磐石(rainrock)</span><br><span class="hljs-comment">*/</span><br><span class="hljs-keyword">include_once</span>(<span class="hljs-string">&#x27;config/config.php&#x27;</span>);<span class="hljs-comment">//包含了config文件</span><br><span class="hljs-variable">$_uurl</span> 		= <span class="hljs-variable">$rock</span>-&gt;<span class="hljs-title function_ invoke__">get</span>(<span class="hljs-string">&#x27;rewriteurl&#x27;</span>);<br><span class="hljs-comment">//跟踪到get方法底下，只传递了一个参数</span><br><span class="hljs-comment">//public function get($name,$dev=&#x27;&#x27;, $lx=0)</span><br><span class="hljs-comment">//可以获得$GET[$name]，也就是所有调用get()方法的地方都可以GET传参赋值</span><br><span class="hljs-comment">//进行字符串解密 转换 xss过滤等操作</span><br><span class="hljs-variable">$d</span> 			= <span class="hljs-string">&#x27;&#x27;</span>;<br><span class="hljs-variable">$m</span> 			= <span class="hljs-string">&#x27;index&#x27;</span>;<br><span class="hljs-variable">$a</span> 			= <span class="hljs-string">&#x27;default&#x27;</span>;<br><span class="hljs-comment">//设置了3个变量的值，用途暂时不知道</span><br><br><span class="hljs-keyword">if</span>(<span class="hljs-variable">$_uurl</span> != <span class="hljs-string">&#x27;&#x27;</span>)&#123;<br>	<span class="hljs-keyword">unset</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;m&#x27;</span>]);<span class="hljs-keyword">unset</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;d&#x27;</span>]);<span class="hljs-keyword">unset</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;a&#x27;</span>]);<span class="hljs-comment">//销毁变量的关键字 释放该变量的内存，并且后续对该变量的引用将不再有效</span><br>	<span class="hljs-variable">$m</span>		= <span class="hljs-variable">$_uurl</span>;<br>	<span class="hljs-variable">$_uurla</span> = <span class="hljs-title function_ invoke__">explode</span>(<span class="hljs-string">&#x27;_&#x27;</span>, <span class="hljs-variable">$_uurl</span>);<br>    <span class="hljs-comment">//使用_分割了变量，在下面赋值</span><br>	<span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_uurla</span>[<span class="hljs-number">1</span>]))&#123;<span class="hljs-variable">$d</span> = <span class="hljs-variable">$_uurla</span>[<span class="hljs-number">0</span>];<span class="hljs-variable">$m</span> = <span class="hljs-variable">$_uurla</span>[<span class="hljs-number">1</span>];&#125;<br>	<span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_uurla</span>[<span class="hljs-number">2</span>]))&#123;<span class="hljs-variable">$d</span> = <span class="hljs-variable">$_uurla</span>[<span class="hljs-number">0</span>];<span class="hljs-variable">$m</span> = <span class="hljs-variable">$_uurla</span>[<span class="hljs-number">1</span>];<span class="hljs-variable">$a</span> = <span class="hljs-variable">$_uurla</span>[<span class="hljs-number">2</span>];&#125;<br>	<span class="hljs-variable">$_uurla</span> = <span class="hljs-title function_ invoke__">explode</span>(<span class="hljs-string">&#x27;?&#x27;</span>,<span class="hljs-variable">$_SERVER</span>[<span class="hljs-string">&#x27;REQUEST_URI&#x27;</span>]);<br>	<span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_uurla</span>[<span class="hljs-number">1</span>]))&#123;<br>		<span class="hljs-variable">$_uurla</span> = <span class="hljs-title function_ invoke__">explode</span>(<span class="hljs-string">&#x27;&amp;&#x27;</span>, <span class="hljs-variable">$_uurla</span>[<span class="hljs-number">1</span>]);<span class="hljs-keyword">foreach</span>(<span class="hljs-variable">$_uurla</span> <span class="hljs-keyword">as</span> <span class="hljs-variable">$_uurlas</span>)&#123;<br>			<span class="hljs-variable">$_uurlasa</span> = <span class="hljs-title function_ invoke__">explode</span>(<span class="hljs-string">&#x27;=&#x27;</span>, <span class="hljs-variable">$_uurlas</span>);<br>			<span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_uurlasa</span>[<span class="hljs-number">1</span>]))<span class="hljs-variable">$_GET</span>[<span class="hljs-variable">$_uurlasa</span>[<span class="hljs-number">0</span>]]=<span class="hljs-variable">$_uurlasa</span>[<span class="hljs-number">1</span>];<br>		&#125;<br>	&#125;<br>&#125;<span class="hljs-keyword">else</span>&#123;<br>	<span class="hljs-variable">$m</span>			= <span class="hljs-variable">$rock</span>-&gt;jm-&gt;<span class="hljs-title function_ invoke__">gettoken</span>(<span class="hljs-string">&#x27;m&#x27;</span>, <span class="hljs-string">&#x27;index&#x27;</span>);<br>	<span class="hljs-variable">$d</span>			= <span class="hljs-variable">$rock</span>-&gt;jm-&gt;<span class="hljs-title function_ invoke__">gettoken</span>(<span class="hljs-string">&#x27;d&#x27;</span>);<br>	<span class="hljs-variable">$a</span>			= <span class="hljs-variable">$rock</span>-&gt;jm-&gt;<span class="hljs-title function_ invoke__">gettoken</span>(<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;default&#x27;</span>);<br>&#125;<br><span class="hljs-variable">$ajaxbool</span>	= <span class="hljs-variable">$rock</span>-&gt;jm-&gt;<span class="hljs-title function_ invoke__">gettoken</span>(<span class="hljs-string">&#x27;ajaxbool&#x27;</span>, <span class="hljs-string">&#x27;false&#x27;</span>);<br><span class="hljs-variable">$mode</span>		= <span class="hljs-variable">$rock</span>-&gt;<span class="hljs-title function_ invoke__">get</span>(<span class="hljs-string">&#x27;m&#x27;</span>, <span class="hljs-variable">$m</span>);<br><span class="hljs-comment">//主要功能就是在给m d a ajaxbool mode赋值，在后面用到</span><br><span class="hljs-keyword">if</span>(!<span class="hljs-variable">$config</span>[<span class="hljs-string">&#x27;install&#x27;</span>] &amp;&amp; <span class="hljs-variable">$mode</span> != <span class="hljs-string">&#x27;install&#x27;</span>)<span class="hljs-variable">$rock</span>-&gt;<span class="hljs-title function_ invoke__">location</span>(<span class="hljs-string">&#x27;?m=install&#x27;</span>);<br><span class="hljs-keyword">include_once</span>(<span class="hljs-string">&#x27;include/View.php&#x27;</span>);<br></code></pre></td></tr></table></figure>
+
+<h3 id="src-config-config-php"><a href="#src-config-config-php" class="headerlink" title="/src/config/config.php"></a>/src/config/config.php</h3><img src="/2023/12/25/%E5%AE%A1%E8%AE%A1/config.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>主要就是定义了不少常量，包含了3个文件</p>
+<h3 id="src-include-View-php"><a href="#src-include-View-php" class="headerlink" title="/src/include/View.php"></a>/src/include/View.php</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-keyword">if</span>(!<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$ajaxbool</span>))<span class="hljs-variable">$ajaxbool</span> = <span class="hljs-variable">$rock</span>-&gt;jm-&gt;<span class="hljs-title function_ invoke__">gettoken</span>(<span class="hljs-string">&#x27;ajaxbool&#x27;</span>, <span class="hljs-string">&#x27;false&#x27;</span>);<br><span class="hljs-variable">$ajaxbool</span>	= <span class="hljs-variable">$rock</span>-&gt;<span class="hljs-title function_ invoke__">get</span>(<span class="hljs-string">&#x27;ajaxbool&#x27;</span>, <span class="hljs-variable">$ajaxbool</span>);<br><span class="hljs-variable">$p</span>			= PROJECT;<br><span class="hljs-comment">//跟进到config.php里</span><br><span class="hljs-comment">//if(!defined(&#x27;PROJECT&#x27;))define(&#x27;PROJECT&#x27;, $rock-&gt;get(&#x27;p&#x27;, &#x27;webmain&#x27;));</span><br><span class="hljs-comment">//p也是可控的</span><br><span class="hljs-keyword">if</span>(!<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$m</span>))<span class="hljs-variable">$m</span>=<span class="hljs-string">&#x27;index&#x27;</span>;<br><span class="hljs-keyword">if</span>(!<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$a</span>))<span class="hljs-variable">$a</span>=<span class="hljs-string">&#x27;default&#x27;</span>;<br><span class="hljs-keyword">if</span>(!<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$d</span>))<span class="hljs-variable">$d</span>=<span class="hljs-string">&#x27;&#x27;</span>;<br><span class="hljs-variable">$m</span>			= <span class="hljs-variable">$rock</span>-&gt;<span class="hljs-title function_ invoke__">get</span>(<span class="hljs-string">&#x27;m&#x27;</span>, <span class="hljs-variable">$m</span>);<br><span class="hljs-variable">$a</span>			= <span class="hljs-variable">$rock</span>-&gt;<span class="hljs-title function_ invoke__">get</span>(<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-variable">$a</span>);<br><span class="hljs-variable">$d</span>			= <span class="hljs-variable">$rock</span>-&gt;<span class="hljs-title function_ invoke__">get</span>(<span class="hljs-string">&#x27;d&#x27;</span>, <span class="hljs-variable">$d</span>);<br><span class="hljs-comment">//index.php定义的3变量在这里用到了</span><br><span class="hljs-title function_ invoke__">define</span>(<span class="hljs-string">&#x27;M&#x27;</span>, <span class="hljs-variable">$m</span>);<br><span class="hljs-title function_ invoke__">define</span>(<span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-variable">$a</span>);<br><span class="hljs-title function_ invoke__">define</span>(<span class="hljs-string">&#x27;D&#x27;</span>, <span class="hljs-variable">$d</span>);<br><span class="hljs-title function_ invoke__">define</span>(<span class="hljs-string">&#x27;P&#x27;</span>, <span class="hljs-variable">$p</span>);<br><br><span class="hljs-variable">$_m</span>			= <span class="hljs-variable">$m</span>;<br><span class="hljs-keyword">if</span>(<span class="hljs-variable">$rock</span>-&gt;<span class="hljs-title function_ invoke__">contain</span>(<span class="hljs-variable">$m</span>, <span class="hljs-string">&#x27;|&#x27;</span>))&#123;<br>	<span class="hljs-variable">$_mas</span> 	= <span class="hljs-title function_ invoke__">explode</span>(<span class="hljs-string">&#x27;|&#x27;</span>, <span class="hljs-variable">$m</span>);<span class="hljs-comment">//|分割$m</span><br>	<span class="hljs-variable">$m</span> 		= <span class="hljs-variable">$_mas</span>[<span class="hljs-number">0</span>];<br>	<span class="hljs-variable">$_m</span>		= <span class="hljs-variable">$_mas</span>[<span class="hljs-number">1</span>];<br>&#125;<br><span class="hljs-keyword">include_once</span>(<span class="hljs-variable">$rock</span>-&gt;<span class="hljs-title function_ invoke__">strformat</span>(<span class="hljs-string">&#x27;?0/?1/?1Action.php&#x27;</span>,ROOT_PATH, <span class="hljs-variable">$p</span>));<span class="hljs-comment">//strformat最后会替换字符串中的占位符 ?0, ?1</span><br><span class="hljs-comment">//在这里，会替换为&quot;ROOT_PATH/&quot;.$p.&quot;/&quot;.$p.&quot;Action.php&quot;</span><br><span class="hljs-comment">//ROOT_PATH见config.php</span><br><span class="hljs-variable">$rand</span>		= <span class="hljs-title function_ invoke__">date</span>(<span class="hljs-string">&#x27;YmdHis&#x27;</span>).<span class="hljs-title function_ invoke__">rand</span>(<span class="hljs-number">1000</span>,<span class="hljs-number">9999</span>);<br><span class="hljs-keyword">if</span>(<span class="hljs-title function_ invoke__">substr</span>(<span class="hljs-variable">$d</span>,-<span class="hljs-number">1</span>)!=<span class="hljs-string">&#x27;/&#x27;</span> &amp;&amp; <span class="hljs-variable">$d</span>!=<span class="hljs-string">&#x27;&#x27;</span>)<span class="hljs-variable">$d</span>.=<span class="hljs-string">&#x27;/&#x27;</span>;<br><span class="hljs-variable">$errormsg</span>	= <span class="hljs-string">&#x27;&#x27;</span>;<br><span class="hljs-variable">$methodbool</span>	= <span class="hljs-literal">true</span>;<br><br><span class="hljs-variable">$actpath</span>	= <span class="hljs-variable">$rock</span>-&gt;<span class="hljs-title function_ invoke__">strformat</span>(<span class="hljs-string">&#x27;?0/?1/?2?3&#x27;</span>,ROOT_PATH, <span class="hljs-variable">$p</span>, <span class="hljs-variable">$d</span>, <span class="hljs-variable">$_m</span>);<br><span class="hljs-title function_ invoke__">define</span>(<span class="hljs-string">&#x27;ACTPATH&#x27;</span>, <span class="hljs-variable">$actpath</span>);<br><span class="hljs-variable">$actfile</span>	= <span class="hljs-variable">$rock</span>-&gt;<span class="hljs-title function_ invoke__">strformat</span>(<span class="hljs-string">&#x27;?0/?1Action.php&#x27;</span>,<span class="hljs-variable">$actpath</span>, <span class="hljs-variable">$m</span>);<br><span class="hljs-variable">$actfile1</span>	= <span class="hljs-variable">$rock</span>-&gt;<span class="hljs-title function_ invoke__">strformat</span>(<span class="hljs-string">&#x27;?0/?1Action.php&#x27;</span>,<span class="hljs-variable">$actpath</span>, <span class="hljs-variable">$_m</span>);<br><span class="hljs-comment">//包含了文件路径，能控制文件路径$p提供了包含的可能</span><br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">以ROOT_PATH=/var/www/html为例</span><br><span class="hljs-comment">传入?a=homedata&amp;m=mode_bianjian|input&amp;d=flow</span><br><span class="hljs-comment">$actpath=/var/www/html/webmain/flow/input</span><br><span class="hljs-comment">$actfile=/var/www/html/webmain/flow/input/mode_bianjianAction.php</span><br><span class="hljs-comment">$actfile1=/var/www/html/webmain/flow/input/inputAction.php</span><br><span class="hljs-comment">*/</span><br><br><span class="hljs-variable">$actbstr</span> 	= <span class="hljs-literal">null</span>;<br><span class="hljs-keyword">if</span>(<span class="hljs-title function_ invoke__">file_exists</span>(<span class="hljs-variable">$actfile1</span>))<span class="hljs-keyword">include_once</span>(<span class="hljs-variable">$actfile1</span>);<br><span class="hljs-keyword">if</span>(<span class="hljs-title function_ invoke__">file_exists</span>(<span class="hljs-variable">$actfile</span>))&#123;<br>	<span class="hljs-keyword">include_once</span>(<span class="hljs-variable">$actfile</span>);<br>	<span class="hljs-variable">$clsname</span>	= <span class="hljs-string">&#x27;&#x27;</span>.<span class="hljs-variable">$m</span>.<span class="hljs-string">&#x27;ClassAction&#x27;</span>;<span class="hljs-comment">//默认indexClassAction 不一定是这个</span><br>    <span class="hljs-comment">//可以通过m的拼接来选择要调用的类</span><br>	<span class="hljs-variable">$xhrock</span>		= <span class="hljs-keyword">new</span> <span class="hljs-variable">$clsname</span>();<br>	<span class="hljs-variable">$actname</span>	= <span class="hljs-string">&#x27;&#x27;</span>.<span class="hljs-variable">$a</span>.<span class="hljs-string">&#x27;Action&#x27;</span>;<br>    <span class="hljs-comment">//这里可以控制要调用的方法</span><br>	<span class="hljs-keyword">if</span>(<span class="hljs-variable">$ajaxbool</span> == <span class="hljs-string">&#x27;true&#x27;</span>)<span class="hljs-variable">$actname</span>	= <span class="hljs-string">&#x27;&#x27;</span>.<span class="hljs-variable">$a</span>.<span class="hljs-string">&#x27;Ajax&#x27;</span>;<br>    <span class="hljs-comment">//ajaxbool为真时改变调用的方法</span><br>	<span class="hljs-keyword">if</span>(<span class="hljs-title function_ invoke__">method_exists</span>(<span class="hljs-variable">$xhrock</span>, <span class="hljs-variable">$actname</span>))&#123;<span class="hljs-comment">//检测当前类有没有这个方法</span><br>		<span class="hljs-variable">$xhrock</span>-&gt;<span class="hljs-title function_ invoke__">beforeAction</span>();<br>        <span class="hljs-comment">//Action.php下有这个方法，Action.php相当于抽象类，由不同的类实现这个方法</span><br>		<span class="hljs-variable">$actbstr</span> = <span class="hljs-variable">$xhrock</span>-&gt;<span class="hljs-variable">$actname</span>();<br>		<span class="hljs-variable">$xhrock</span>-&gt;bodyMessage = <span class="hljs-variable">$actbstr</span>;<br>		<span class="hljs-keyword">if</span>(<span class="hljs-title function_ invoke__">is_string</span>(<span class="hljs-variable">$actbstr</span>))&#123;<span class="hljs-keyword">echo</span> <span class="hljs-variable">$actbstr</span>;<span class="hljs-variable">$xhrock</span>-&gt;display=<span class="hljs-literal">false</span>;&#125;<br>		<span class="hljs-keyword">if</span>(<span class="hljs-title function_ invoke__">is_array</span>(<span class="hljs-variable">$actbstr</span>))&#123;<span class="hljs-keyword">echo</span> <span class="hljs-title function_ invoke__">json_encode</span>(<span class="hljs-variable">$actbstr</span>);<span class="hljs-variable">$xhrock</span>-&gt;display=<span class="hljs-literal">false</span>;&#125;<br>	&#125;<span class="hljs-keyword">else</span>&#123;<br>		<span class="hljs-variable">$methodbool</span> = <span class="hljs-literal">false</span>;<br>		<span class="hljs-keyword">if</span>(<span class="hljs-variable">$ajaxbool</span> == <span class="hljs-string">&#x27;false&#x27;</span>)<span class="hljs-keyword">echo</span> <span class="hljs-string">&#x27;&#x27;</span>.<span class="hljs-variable">$actname</span>.<span class="hljs-string">&#x27; not found;&#x27;</span>;<br>	&#125;<br>	<span class="hljs-variable">$xhrock</span>-&gt;<span class="hljs-title function_ invoke__">afterAction</span>();<br>&#125;<span class="hljs-keyword">else</span>&#123;<br>	<span class="hljs-keyword">echo</span> <span class="hljs-string">&#x27;actionfile not exists;&#x27;</span>;<br>	<span class="hljs-variable">$xhrock</span>		= <span class="hljs-keyword">new</span> <span class="hljs-title class_">Action</span>();<br>&#125;<br><br><span class="hljs-variable">$_showbool</span> = <span class="hljs-literal">false</span>;<br><span class="hljs-comment">//以下主要进行模板渲染</span><br><span class="hljs-keyword">if</span>(<span class="hljs-variable">$xhrock</span>-&gt;display &amp;&amp; (<span class="hljs-variable">$ajaxbool</span> == <span class="hljs-string">&#x27;html&#x27;</span> || <span class="hljs-variable">$ajaxbool</span> == <span class="hljs-string">&#x27;false&#x27;</span>))&#123;<br>	<span class="hljs-variable">$xhrock</span>-&gt;smartydata[<span class="hljs-string">&#x27;p&#x27;</span>]	= <span class="hljs-variable">$p</span>;<span class="hljs-comment">//smartydata模板数据</span><br>	<span class="hljs-variable">$xhrock</span>-&gt;smartydata[<span class="hljs-string">&#x27;a&#x27;</span>]	= <span class="hljs-variable">$a</span>;<br>	<span class="hljs-variable">$xhrock</span>-&gt;smartydata[<span class="hljs-string">&#x27;m&#x27;</span>]	= <span class="hljs-variable">$m</span>;<br>	<span class="hljs-variable">$xhrock</span>-&gt;smartydata[<span class="hljs-string">&#x27;d&#x27;</span>]	= <span class="hljs-variable">$d</span>;<br>	<span class="hljs-variable">$xhrock</span>-&gt;smartydata[<span class="hljs-string">&#x27;rand&#x27;</span>]	= <span class="hljs-variable">$rand</span>;<br>	<span class="hljs-variable">$xhrock</span>-&gt;smartydata[<span class="hljs-string">&#x27;qom&#x27;</span>]	= QOM;<br>	<span class="hljs-variable">$xhrock</span>-&gt;smartydata[<span class="hljs-string">&#x27;path&#x27;</span>]	= PATH;<br>	<span class="hljs-variable">$xhrock</span>-&gt;smartydata[<span class="hljs-string">&#x27;sysurl&#x27;</span>]= SYSURL;<br>	<span class="hljs-variable">$temppath</span>					= <span class="hljs-string">&#x27;&#x27;</span>.ROOT_PATH.<span class="hljs-string">&#x27;/&#x27;</span>.<span class="hljs-variable">$p</span>.<span class="hljs-string">&#x27;/&#x27;</span>;<br>	<span class="hljs-variable">$tplpaths</span>					= <span class="hljs-string">&#x27;&#x27;</span>.<span class="hljs-variable">$temppath</span>.<span class="hljs-string">&#x27;&#x27;</span>.<span class="hljs-variable">$d</span>.<span class="hljs-string">&#x27;&#x27;</span>.<span class="hljs-variable">$m</span>.<span class="hljs-string">&#x27;/&#x27;</span>;<br>	<span class="hljs-variable">$tplname</span>					= <span class="hljs-string">&#x27;tpl_&#x27;</span>.<span class="hljs-variable">$m</span>.<span class="hljs-string">&#x27;&#x27;</span>;<br>	<span class="hljs-keyword">if</span>(<span class="hljs-variable">$a</span>!=<span class="hljs-string">&#x27;default&#x27;</span>)<span class="hljs-variable">$tplname</span>  .= <span class="hljs-string">&#x27;_&#x27;</span>.<span class="hljs-variable">$a</span>.<span class="hljs-string">&#x27;&#x27;</span>;<br>	<span class="hljs-variable">$tplname</span>				   .= <span class="hljs-string">&#x27;.&#x27;</span>.<span class="hljs-variable">$xhrock</span>-&gt;tpldom.<span class="hljs-string">&#x27;&#x27;</span>;<br>	<span class="hljs-variable">$mpathname</span>					= <span class="hljs-variable">$tplpaths</span>.<span class="hljs-variable">$tplname</span>;<br>	<span class="hljs-keyword">if</span>(<span class="hljs-variable">$xhrock</span>-&gt;displayfile!=<span class="hljs-string">&#x27;&#x27;</span> &amp;&amp; <span class="hljs-title function_ invoke__">file_exists</span>(<span class="hljs-variable">$xhrock</span>-&gt;displayfile))<span class="hljs-variable">$mpathname</span> = <span class="hljs-variable">$xhrock</span>-&gt;displayfile;<br>	<span class="hljs-keyword">if</span>(!<span class="hljs-title function_ invoke__">file_exists</span>(<span class="hljs-variable">$mpathname</span>) || !<span class="hljs-variable">$methodbool</span>)&#123;<br>		<span class="hljs-keyword">if</span>(!<span class="hljs-variable">$methodbool</span>)&#123;<br>			<span class="hljs-variable">$errormsg</span>	= <span class="hljs-string">&#x27;in (&#x27;</span>.<span class="hljs-variable">$m</span>.<span class="hljs-string">&#x27;) not found Method(&#x27;</span>.<span class="hljs-variable">$a</span>.<span class="hljs-string">&#x27;);&#x27;</span>;<br>		&#125;<span class="hljs-keyword">else</span>&#123;<br>			<span class="hljs-variable">$errormsg</span>	= <span class="hljs-string">&#x27;&#x27;</span>.<span class="hljs-variable">$tplname</span>.<span class="hljs-string">&#x27; not exists;&#x27;</span>;<br>		&#125;<br>		<span class="hljs-keyword">echo</span> <span class="hljs-variable">$errormsg</span>;<br>	&#125;<span class="hljs-keyword">else</span>&#123;<br>		<span class="hljs-variable">$_showbool</span> = <span class="hljs-literal">true</span>;<br>	&#125;<br>&#125;<br><span class="hljs-keyword">if</span>(<span class="hljs-variable">$xhrock</span>-&gt;display &amp;&amp; (<span class="hljs-variable">$ajaxbool</span> == <span class="hljs-string">&#x27;html&#x27;</span> || <span class="hljs-variable">$xhrock</span>-&gt;tpltype==<span class="hljs-string">&#x27;html&#x27;</span> || <span class="hljs-variable">$ajaxbool</span> == <span class="hljs-string">&#x27;false&#x27;</span>) &amp;&amp; <span class="hljs-variable">$_showbool</span>)&#123;<br>	<span class="hljs-variable">$xhrock</span>-&gt;<span class="hljs-title function_ invoke__">setHtmlData</span>();<br>	<span class="hljs-variable">$da</span> = <span class="hljs-variable">$xhrock</span>-&gt;smartydata;<br>	<span class="hljs-keyword">foreach</span>(<span class="hljs-variable">$xhrock</span>-&gt;assigndata <span class="hljs-keyword">as</span> <span class="hljs-variable">$_k</span>=&gt;<span class="hljs-variable">$_v</span>)<span class="hljs-variable">$$_k</span>=<span class="hljs-variable">$_v</span>;<br>	<span class="hljs-keyword">include_once</span>(<span class="hljs-variable">$mpathname</span>);<br>	<span class="hljs-variable">$_showbool</span> = <span class="hljs-literal">false</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="利用尝试"><a href="#利用尝试" class="headerlink" title="利用尝试"></a>利用尝试</h2><p>由以上可知，可以通过<code>$m</code>，<code>$a</code>，<code>$p</code>，<code>$p</code>控制被包含文件的路径，看起来有两个选择：<code>$actfile</code>和<code>$actfile1</code></p>
+<p>不过很显然只能选择<code>actfile</code>，原因如下：</p>
+<p>1.</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-variable">$actfile1</span>	= <span class="hljs-variable">$rock</span>-&gt;<span class="hljs-title function_ invoke__">strformat</span>(<span class="hljs-string">&#x27;?0/?1Action.php&#x27;</span>,<span class="hljs-variable">$actpath</span>, <span class="hljs-variable">$_m</span>);<br></code></pre></td></tr></table></figure>
+
+<p>这个变量由<code>$_m</code>拼接，会有类似<code>$actfile1=/var/www/html/webmain/flow/input/inputAction.php</code>的结果，即要求文件名下同名php文件，选择面太小了</p>
+<p>2.查看<code>actfile1</code>的用法，其用法为：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">if</span>(<span class="hljs-title function_ invoke__">file_exists</span>(<span class="hljs-variable">$actfile1</span>))<span class="hljs-keyword">include_once</span>(<span class="hljs-variable">$actfile1</span>);<br></code></pre></td></tr></table></figure>
+
+<p>而对于<code>actfile</code>可以在下面的代码通过控制<code>$a</code>和<code>$ajaxbool</code>来控制想要的方法</p>
+<h2 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h2><h3 id="配置文件写入"><a href="#配置文件写入" class="headerlink" title="配置文件写入"></a>配置文件写入</h3><p>在cogAction.php的savecongAjax()有文件写入：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs php">...<br>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span>(<span class="hljs-variable language_">$this</span>-&gt;adminname)) &#123;<span class="hljs-comment">//这里读取了adminname，修改了配置文件</span><br>            <span class="hljs-variable">$str</span> = <span class="hljs-string">&#x27;&lt;?php</span><br><span class="hljs-string">if(!defined(\&#x27;HOST\&#x27;))die(\&#x27;not access\&#x27;);</span><br><span class="hljs-string">//[&#x27;</span>.<span class="hljs-variable language_">$this</span>-&gt;adminname.<span class="hljs-string">&#x27;]在&#x27;</span>.<span class="hljs-variable language_">$this</span>-&gt;now.<span class="hljs-string">&#x27;通过[系统→系统工具→系统设置]，保存修改了配置文件</span><br><span class="hljs-string">return array(</span><br><span class="hljs-string">&#x27;</span>.<span class="hljs-variable">$str1</span>.<span class="hljs-string">&#x27;</span><br><span class="hljs-string">);&#x27;</span>;<br>        &#125;<br>		@<span class="hljs-variable">$bo</span> = <span class="hljs-title function_ invoke__">file_put_contents</span>(<span class="hljs-variable">$_confpath</span>, <span class="hljs-variable">$str</span>);<br>        <span class="hljs-comment">//$_confpath = $this-&gt;rock-&gt;strformat(&#x27;?0/?1/?1Config.php&#x27;, ROOT_PATH, PROJECT); 默认写入webmainConfig.php中</span><br>		<span class="hljs-keyword">if</span>(<span class="hljs-variable">$bo</span>)&#123;<br>			<span class="hljs-keyword">echo</span> <span class="hljs-string">&#x27;ok&#x27;</span>;<br>		&#125;<span class="hljs-keyword">else</span>&#123;<br>			<span class="hljs-keyword">echo</span> <span class="hljs-string">&#x27;保存失败无法写入：&#x27;</span>.<span class="hljs-variable">$_confpath</span>.<span class="hljs-string">&#x27;&#x27;</span>;<br>		&#125;<br>...<br></code></pre></td></tr></table></figure>
+
+<p>注意到<code>$this-&gt;adminname</code>，此字段会从数据库中取admin的name</p>
+<h3 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a>SQL注入</h3><p>reimplatAction.php有sql注入</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs php">...<br>    <span class="hljs-variable">$body</span> = <span class="hljs-variable language_">$this</span>-&gt;<span class="hljs-title function_ invoke__">getpostdata</span>();<br>	<span class="hljs-comment">//用$GLOBALS[&#x27;HTTP_RAW_POST_DATA&#x27;]传值</span><br>	<span class="hljs-comment">//PHP 中用于获取原始的 POST 数据的全局变量</span><br>	<span class="hljs-keyword">if</span>(!<span class="hljs-variable">$body</span>)<span class="hljs-keyword">return</span>;<br>	<span class="hljs-variable">$db</span> 	 = <span class="hljs-title function_ invoke__">m</span>(<span class="hljs-string">&#x27;reimplat:dept&#x27;</span>);<br>	<span class="hljs-comment">//最终/model/reimplat/deptModel.php</span><br>	<span class="hljs-variable">$key</span> 	 = <span class="hljs-variable">$db</span>-&gt;<span class="hljs-title function_ invoke__">gethkey</span>();<br>	<span class="hljs-comment">//返回md5($key)</span><br><br>            <span class="hljs-comment">//$ss = $this-&gt;jm-&gt;strlook($body,$key);</span><br>            <span class="hljs-comment">//echo $ss;</span><br><br>    <span class="hljs-variable">$bodystr</span> = <span class="hljs-variable language_">$this</span>-&gt;jm-&gt;<span class="hljs-title function_ invoke__">strunlook</span>(<span class="hljs-variable">$body</span>, <span class="hljs-variable">$key</span>);<br>        <span class="hljs-comment">//strunlook 字符串解密</span><br>        <span class="hljs-comment">//strlook 加密</span><br>		<span class="hljs-comment">//加密方式是用key与data变换后再base64</span><br>            <br>			<span class="hljs-comment">//echo $bodystr;</span><br><br>	<span class="hljs-keyword">if</span>(!<span class="hljs-variable">$bodystr</span>)<span class="hljs-keyword">return</span>;<br>	<br>	<span class="hljs-variable">$data</span> 	 = <span class="hljs-title function_ invoke__">json_decode</span>(<span class="hljs-variable">$bodystr</span>, <span class="hljs-literal">true</span>);<br>	<span class="hljs-variable">$msgtype</span> = <span class="hljs-title function_ invoke__">arrvalue</span>(<span class="hljs-variable">$data</span>,<span class="hljs-string">&#x27;msgtype&#x27;</span>);<br>	<span class="hljs-variable">$msgevent</span>= <span class="hljs-title function_ invoke__">arrvalue</span>(<span class="hljs-variable">$data</span>,<span class="hljs-string">&#x27;msgevent&#x27;</span>);<br>...<br>   <span class="hljs-comment">//修改手机号</span><br>		<span class="hljs-keyword">if</span>(<span class="hljs-variable">$msgtype</span>==<span class="hljs-string">&#x27;editmobile&#x27;</span>)&#123;<br>			<span class="hljs-variable">$user</span> 	= <span class="hljs-title function_ invoke__">arrvalue</span>(<span class="hljs-variable">$data</span>, <span class="hljs-string">&#x27;user&#x27;</span>);<span class="hljs-comment">//数组里读取变量</span><br>			<span class="hljs-variable">$mobile</span> = <span class="hljs-title function_ invoke__">arrvalue</span>(<span class="hljs-variable">$data</span>, <span class="hljs-string">&#x27;mobile&#x27;</span>);<br>			<span class="hljs-variable">$where</span>  = <span class="hljs-string">&quot;`user`=&#x27;<span class="hljs-subst">$user</span>&#x27;&quot;</span>;<br>			<span class="hljs-variable">$upstr</span>  = <span class="hljs-string">&quot;`mobile`=&#x27;<span class="hljs-subst">$mobile</span>&#x27;&quot;</span>;<br>			<span class="hljs-variable">$db</span>-&gt;<span class="hljs-title function_ invoke__">update</span>(<span class="hljs-variable">$upstr</span>, <span class="hljs-variable">$where</span>);<br>			<span class="hljs-variable">$dbs</span>	= <span class="hljs-title function_ invoke__">m</span>(<span class="hljs-string">&#x27;admin&#x27;</span>);<br>            <span class="hljs-comment">//包含adminClassModel</span><br>			<span class="hljs-variable">$dbs</span>-&gt;<span class="hljs-title function_ invoke__">update</span>(<span class="hljs-variable">$upstr</span>,<span class="hljs-variable">$where</span>);<br>			<span class="hljs-variable">$uid</span> 	= <span class="hljs-variable">$dbs</span>-&gt;<span class="hljs-title function_ invoke__">getmou</span>(<span class="hljs-string">&#x27;id&#x27;</span>,<span class="hljs-variable">$where</span>);<br>			<span class="hljs-title function_ invoke__">m</span>(<span class="hljs-string">&#x27;userinfo&#x27;</span>)-&gt;<span class="hljs-title function_ invoke__">update</span>(<span class="hljs-variable">$upstr</span>,<span class="hljs-string">&quot;`id`=&#x27;<span class="hljs-subst">$uid</span>&#x27;&quot;</span>);<br>		&#125; <br>...<br></code></pre></td></tr></table></figure>
+
+<p>对于<code>m()</code>：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">m</span>(<span class="hljs-params"><span class="hljs-variable">$name</span></span>)</span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-variable">$cls</span>		= <span class="hljs-literal">NULL</span>;<br>	<span class="hljs-variable">$pats</span>		= <span class="hljs-variable">$nac</span>	= <span class="hljs-string">&#x27;&#x27;</span>;<br>	<span class="hljs-variable">$nas</span>		= <span class="hljs-variable">$name</span>;<br>	<span class="hljs-variable">$asq</span>		= <span class="hljs-title function_ invoke__">explode</span>(<span class="hljs-string">&#x27;:&#x27;</span>, <span class="hljs-variable">$nas</span>);<br>	<span class="hljs-keyword">if</span>(<span class="hljs-title function_ invoke__">count</span>(<span class="hljs-variable">$asq</span>)&gt;<span class="hljs-number">1</span>)&#123;<br>		<span class="hljs-variable">$nas</span>	= <span class="hljs-variable">$asq</span>[<span class="hljs-number">1</span>];<br>		<span class="hljs-variable">$nac</span>	= <span class="hljs-variable">$asq</span>[<span class="hljs-number">0</span>];<br>		<span class="hljs-variable">$pats</span>	= <span class="hljs-variable">$nac</span>.<span class="hljs-string">&#x27;/&#x27;</span>;<br>		<span class="hljs-variable">$_pats</span>	= <span class="hljs-string">&#x27;&#x27;</span>.ROOT_PATH.<span class="hljs-string">&#x27;/&#x27;</span>.PROJECT.<span class="hljs-string">&#x27;/model/&#x27;</span>.<span class="hljs-variable">$nac</span>.<span class="hljs-string">&#x27;/&#x27;</span>.<span class="hljs-variable">$nac</span>.<span class="hljs-string">&#x27;.php&#x27;</span>;<br>		<span class="hljs-keyword">if</span>(<span class="hljs-title function_ invoke__">file_exists</span>(<span class="hljs-variable">$_pats</span>))&#123;<br>			<span class="hljs-keyword">include_once</span>(<span class="hljs-variable">$_pats</span>);<br>			<span class="hljs-variable">$class</span>	= <span class="hljs-string">&#x27;&#x27;</span>.<span class="hljs-variable">$nac</span>.<span class="hljs-string">&#x27;Model&#x27;</span>;<br>			<span class="hljs-variable">$cls</span>	= <span class="hljs-keyword">new</span> <span class="hljs-variable">$class</span>(<span class="hljs-variable">$nas</span>);<br>		&#125;	<br>	&#125;<br>	<span class="hljs-variable">$class</span>		= <span class="hljs-string">&#x27;&#x27;</span>.<span class="hljs-variable">$nas</span>.<span class="hljs-string">&#x27;ClassModel&#x27;</span>;<br>	<span class="hljs-variable">$path</span>		= <span class="hljs-string">&#x27;&#x27;</span>.ROOT_PATH.<span class="hljs-string">&#x27;/&#x27;</span>.PROJECT.<span class="hljs-string">&#x27;/model/&#x27;</span>.<span class="hljs-variable">$pats</span>.<span class="hljs-string">&#x27;&#x27;</span>.<span class="hljs-variable">$nas</span>.<span class="hljs-string">&#x27;Model.php&#x27;</span>;<br>	<span class="hljs-keyword">if</span>(<span class="hljs-title function_ invoke__">file_exists</span>(<span class="hljs-variable">$path</span>))&#123;<span class="hljs-comment">//文件包含</span><br>		<span class="hljs-keyword">include_once</span>(<span class="hljs-variable">$path</span>);<br>		<span class="hljs-keyword">if</span>(<span class="hljs-variable">$nac</span>!=<span class="hljs-string">&#x27;&#x27;</span>)<span class="hljs-variable">$class</span>= <span class="hljs-variable">$nac</span>.<span class="hljs-string">&#x27;_&#x27;</span>.<span class="hljs-variable">$class</span>;<br>		<span class="hljs-variable">$cls</span>	= <span class="hljs-keyword">new</span> <span class="hljs-variable">$class</span>(<span class="hljs-variable">$nas</span>);<br>	&#125;<br>	<span class="hljs-keyword">if</span>(<span class="hljs-variable">$cls</span>==<span class="hljs-literal">NULL</span>)<span class="hljs-variable">$cls</span> = <span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">sModel</span>(<span class="hljs-variable">$nas</span>);<br>	<span class="hljs-keyword">return</span> <span class="hljs-variable">$cls</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/11/30/muchxss/" title="2023/11/30：更多的xss：Script Gadgets">
+                        <span class="hidden-mobile">2023/11/30：更多的xss：Script Gadgets</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
