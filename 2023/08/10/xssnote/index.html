@@ -24,7 +24,7 @@
 <meta property="og:description" content="xss笔记原理将恶意脚本注入受害者浏览器，使其在浏览器中运行 分类1.存储型恶意代码上传至后端，当管理员查询信息时触发如：利用GET、POST或在Referer（xsslab 11）、Cookie（xsslab 13）植入2.反射型需要用户点击触发，在前端显示，一般盗取用户Cookie，较为常见如：假设有如下代码： 1&lt;?php echo $_GET[&amp;#x27;name&amp;#x27;]; ?">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-08-10T12:33:59.000Z">
-<meta property="article:modified_time" content="2023-08-10T12:42:45.830Z">
+<meta property="article:modified_time" content="2024-01-07T15:22:02.292Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -219,7 +219,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          11k words
+          12k words
         
       </span>
     
@@ -230,7 +230,7 @@
         
         
         
-          91 mins
+          97 mins
         
       </span>
     
@@ -359,26 +359,15 @@
 <figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript">&lt;<span class="hljs-keyword">div</span> data-role=popup <span class="hljs-built_in">id</span>=&#x27;&lt;<span class="hljs-keyword">script</span>&gt;alert(hack)&lt;/<span class="hljs-keyword">script</span>&gt;&#x27;&gt;&lt;/<span class="hljs-keyword">div</span>&gt;<br></code></pre></td></tr></table></figure>
 <p>5.利用meta标签实现url跳转<br>如：</p>
 <figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">&lt;meta <span class="hljs-attribute">http-equiv</span>=<span class="hljs-string">&quot;refresh&quot;</span> <span class="hljs-attribute">content</span>=<span class="hljs-string">&quot;3;url=https://example.com&quot;</span>&gt;<br></code></pre></td></tr></table></figure>
-<p>6.CRLF绕过<br>当一个页面存在CRLF漏洞时，且我们的可控点在CSP上方，就可以通过注入回车换行，将CSP挤到HTTP返回体中<br>7.站点可控静态资源绕过<br>要求站点存在可控静态资源，且站点在CSP白名单中<br>如：</p>
-<figure class="highlight plaintext"><figcaption><span>http-equiv</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs <meta">```<br>www.google-analytics.com中可以自定义JavaScript，以此绕过<br>8.站点可控JSONP绕过<br>站点存在可控的JSONP，且站点在CSP白名单中<br>有些站点会让jsonp不返回html类型防止直接的反射型XSS，但是如果将url插入到script标签中，除非设置x-content-type-options头，否者尽管返回类型不一致，浏览器依旧会当成js进行解析<br>9.Base-uri绕过<br>script-src只使用nonce，没有额外设置base-uri，页面引用存在相对路径的script标签<br>当服务器CSP script-src采用了nonce时，如果只设置了default-src没有额外设置base-uri，就可以使用base标签使当前页面上下文为自己的vps，如果页面中的合法script标签采用了相对路径，那么最终加载的js就是针对base标签中指定url的相对路径。如果页面的script-src不是采用的nonce而是self或者域名ip，则不能使用此方法<br>10.不完整script标签绕过nonce<br>适用于可控点在合法script标签上方,且其中没有其他标签，XSS页面的CSP script-src只采用了nonce方式<br><br>特性：<br> 1.当浏览器碰到一个左尖括号时，会变成标签开始状态，然后会一直持续到碰到右尖括号为止，在其中的数据都会被当成标签名或者属性<br> 2.当一个标签存在两个同名属性时，第二个属性的属性名及其属性值都会被浏览器忽略<br> 3.当标签未闭合时，html解析器会一直去寻找下一个引号，从而闭合src属性，所以说在下一个引号前的标签都不会被解析<br><br>例：<br></code></pre></td></tr></table></figure>
-<?php header("X-XSS-Protection:0");?>
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'nonce-xxxxx'">
-<?php echo $_GET['xss']?>
-<script nonce='xxxxx'>
-  //do some thing
-</script>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">可使用<br></code></pre></td></tr></table></figure>
-?xss=<script src=data:text/plain,alert(1)
-```
-nonce会进入不完整script标签成为其属性名
-11.借助外域资源绕过
-适用于可以进行外域资源引用，且注入点在CSP策略下方
-当设置的CSP策略指令img-src允许加载外域图片资源，可以尝试利用img标签XSS恶意代码，从而注入到该网页。当标签未闭合时，html解析器会一直去寻找下一个引号，从而闭合src属性，所以说在下一个引号前的标签都不会被解析，从而绕过CSP。
-12.PDF XSS绕过
-适用于没有设置object-src，或者object-src没有设置为'none'，pdf用的是chrome的默认解析器。
-原理为攻击者将恶意代码写入PDF文件中，将此图片利用文件上传或者创建在自己的VPS上，受害者访问从而进行XSS攻击。不能获取页面cookie，但是可以弹窗，url跳转等。
-13.SVG矢量图绕过
-原理同PDF XSS绕过
+<p>6.CRLF绕过<br>当一个页面存在CRLF漏洞时，且我们的可控点在CSP上方，就可以通过注入回车换行，将CSP挤到HTTP返回体中<br>7.站点可控静态资源绕过<br>要求站点存在可控静态资源，且站点在CSP白名单中</p>
+<p><a target="_blank" rel="noopener" href="http://www.google-analytics.com中可以自定义javascript,以此绕过/">www.google-analytics.com中可以自定义JavaScript，以此绕过</a><br>8.站点可控JSONP绕过<br>站点存在可控的JSONP，且站点在CSP白名单中<br>有些站点会让jsonp不返回html类型防止直接的反射型XSS，但是如果将url插入到script标签中，除非设置x-content-type-options头，否者尽管返回类型不一致，浏览器依旧会当成js进行解析<br>9.Base-uri绕过<br>script-src只使用nonce，没有额外设置base-uri，页面引用存在相对路径的script标签<br>当服务器CSP script-src采用了nonce时，如果只设置了default-src没有额外设置base-uri，就可以使用base标签使当前页面上下文为自己的vps，如果页面中的合法script标签采用了相对路径，那么最终加载的js就是针对base标签中指定url的相对路径。如果页面的script-src不是采用的nonce而是self或者域名ip，则不能使用此方法<br>10.不完整script标签绕过nonce<br>适用于可控点在合法script标签上方,且其中没有其他标签，XSS页面的CSP script-src只采用了nonce方式</p>
+<p>特性：<br> 1.当浏览器碰到一个左尖括号时，会变成标签开始状态，然后会一直持续到碰到右尖括号为止，在其中的数据都会被当成标签名或者属性<br> 2.当一个标签存在两个同名属性时，第二个属性的属性名及其属性值都会被浏览器忽略<br> 3.当标签未闭合时，html解析器会一直去寻找下一个引号，从而闭合src属性，所以说在下一个引号前的标签都不会被解析</p>
+<p>例：</p>
+<figure class="highlight php-template"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs php-template"><span class="language-php"><span class="hljs-meta">&lt;?php</span> <span class="hljs-title function_ invoke__">header</span>(<span class="hljs-string">&quot;X-XSS-Protection:0&quot;</span>);<span class="hljs-meta">?&gt;</span></span><span class="language-xml"></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;Content-Security-Policy&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;default-src &#x27;self&#x27;; script-src &#x27;nonce-xxxxx&#x27;&quot;</span>&gt;</span></span><br><span class="language-xml"></span><span class="language-php"><span class="hljs-meta">&lt;?php</span> <span class="hljs-keyword">echo</span> <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;xss&#x27;</span>]<span class="hljs-meta">?&gt;</span></span><span class="language-xml"></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">nonce</span>=<span class="hljs-string">&#x27;xxxxx&#x27;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="language-javascript"><span class="language-xml">  <span class="hljs-comment">//do some thing</span></span></span><br><span class="language-javascript"><span class="language-xml"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br></code></pre></td></tr></table></figure>
+<p>可使用</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">?<span class="hljs-attribute">xss</span>=&lt;script <span class="hljs-attribute">src</span>=data:text/plain,alert(1)<br></code></pre></td></tr></table></figure>
+<p>nonce会进入不完整script标签成为其属性名<br>11.借助外域资源绕过<br>适用于可以进行外域资源引用，且注入点在CSP策略下方<br>当设置的CSP策略指令img-src允许加载外域图片资源，可以尝试利用img标签XSS恶意代码，从而注入到该网页。当标签未闭合时，html解析器会一直去寻找下一个引号，从而闭合src属性，所以说在下一个引号前的标签都不会被解析，从而绕过CSP。<br>12.PDF XSS绕过<br>适用于没有设置object-src，或者object-src没有设置为’none’，pdf用的是chrome的默认解析器。<br>原理为攻击者将恶意代码写入PDF文件中，将此图片利用文件上传或者创建在自己的VPS上，受害者访问从而进行XSS攻击。不能获取页面cookie，但是可以弹窗，url跳转等。<br>13.SVG矢量图绕过<br>原理同PDF XSS绕过</p>
+
                 
               </div>
             
