@@ -224,6 +224,39 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
+        <a href="/2025/03/18/jsjsp/" target="_self">
+          2025/3/18：请求jsp获得servlet的过程
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2025/03/18/jsjsp/" target="_self">
+        <div>
+          最初想法是调试tomcat最近几个代码执行的洞，看到CVE-2024-50379用非标准后缀使请求通过DefaultServlet处理触发文件上传，于是看看这个请求在tomcat具体咋绑定到JspServlet上，当复习了 环境准备IDEA2024.2.3  java8u65 tomcat9.0.70 ant1.10.15 编译源码搭建环境大致参考这个：Tomcat IDEA源码调试环境搭建_企业
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2025-03-18 21:58" pubdate>
+              2025-03-18
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
         <a href="/2024/12/28/JSPjiexi/" target="_self">
           2024/12/28：JSP解析追踪尝试
         </a>
@@ -232,7 +265,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2024/12/28/JSPjiexi/" target="_self">
         <div>
-          试着追踪下tomcat解析jsp的流程，看看jsp最终怎么解析为java文件 环境：github上main分支直接克隆，commit更新至fdec436 windows11 java8u65 JspServlet.servicejsp在tomcat中默认使用这个类进行解析 12345678910111213141516171819202122public void service (HttpSe
+          试着追踪下tomcat解析jsp的流程，看看jsp最终怎么解析为java文件，试着理解下jsp编码和jsp马代码拼接绕过是咋实现的 环境：github上main分支直接克隆，commit更新至fdec436 windows11 java8u65 JspServlet.servicejsp在tomcat中默认使用这个类进行解析 12345678910111213141516171819202122
         </div>
       </a>
 
@@ -506,39 +539,6 @@
             <i class="iconfont icon-date"></i>
             <time datetime="2023-11-12 16:45" pubdate>
               2023-11-12
-            </time>
-          </div>
-        
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2023/11/06/Lakectf2023/" target="_self">
-          2023/11/06：Lakectf2023
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/11/06/Lakectf2023/" target="_self">
-        <div>
-          digestif题目提示了是digestif验证 关于digesitf一种身份验证机制 工作方式如下： 1.客户端请求资源，但未提供明文密码。服务器返回一个 HTTP 401 未授权响应，其中包括一个随机数（称为 “nonce”）以及要求客户端提供凭据。 2.客户端接收到 401 响应后，会使用用户名、密码和一些其他信息（包括服务器生成的 nonce）进行哈希运算，然后将结果包含在新的请求中。 3
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-11-06 20:31" pubdate>
-              2023-11-06
             </time>
           </div>
         
